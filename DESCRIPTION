@@ -1,0 +1,22 @@
+Package: origami
+Type: Package
+Title: origami - Cross-validation Framework
+Version: 0.5
+Date: 2014-08-17
+Author: Jeremy Coyle <jeremyrcoyle@gmail.com>
+Maintainer: Jeremy Coyle <jeremyrcoyle@gmail.com>
+Description: origami provides a general framework for the application of
+    cross-validation schemes to particular functions. By allowing arbitrary
+    lists of results, origami accommodates a range of cross-validation
+    applications. Some applications are implemented as examples.
+License: GPL-3
+Depends:
+    R (>= 3.1.0),
+    SuperLearner,
+    methods
+Imports:
+    foreach
+Suggests:
+    testthat,
+    class,
+    glmnet
