@@ -233,7 +233,7 @@ strata_folds <- function(fold_fun, cluster_ids, strata_ids, ...) {
     
     return(folds)
 }
- 
+
 
 #' @family fold_funs
 #' @title Rolling origin cross-validation

@@ -11,7 +11,7 @@ origami - Cross-validation Framework
 \tabular{ll}{
 Package: \tab origami\cr
 Type: \tab Package\cr
-Version: \tab 0.1\cr
+Version: \tab 0.5\cr
 Date: \tab 2014-08-17\cr
 License: \tab GPL-3\cr
 LazyLoad: \tab yes\cr

@@ -19,6 +19,8 @@ V-fold cross-validation.
 \seealso{
 Other fold_funs: \code{\link{folds_bootstrap}};
   \code{\link{folds_loo}}; \code{\link{folds_montecarlo}};
+  \code{\link{folds_rolling_origin}};
+  \code{\link{folds_rolling_window}};
   \code{\link{make_folds}}
 }
 

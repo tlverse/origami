@@ -6,7 +6,7 @@
 folds_montecarlo(n, V = 1000, pvalidation = 0.2)
 }
 \arguments{
-\item{n}{integer; number of observations.either an integer indicating the number of observations to cross-validate over, or an object from which to guess the number of observations. Can also be computed from strata_ids or cluster_ids.}
+\item{n}{integer; number of observations.}
 
 \item{V}{integer; number of folds to generate.}
 
@@ -17,7 +17,9 @@ Monte Carlo cross-validation.
 }
 \seealso{
 Other fold_funs: \code{\link{folds_bootstrap}};
-  \code{\link{folds_loo}}; \code{\link{folds_vfold}};
-  \code{\link{make_folds}}
+  \code{\link{folds_loo}};
+  \code{\link{folds_rolling_origin}};
+  \code{\link{folds_rolling_window}};
+  \code{\link{folds_vfold}}; \code{\link{make_folds}}
 }
 
