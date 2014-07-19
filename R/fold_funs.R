@@ -145,7 +145,7 @@ fold_montecarlo <- function(v, n, ntrain, replace) {
 #' @title Monte Carlo cross-validation
 #' @description Monte Carlo cross-validation.
 #' 
-#' @param n integer; number of observations.either an integer indicating the number of observations to cross-validate over, or an object from which to guess the number of observations. Can also be computed from strata_ids or cluster_ids.
+#' @param n integer; number of observations.
 #' @param V integer; number of folds to generate.
 #' @param pvalidation proportion of observation to be in validation fold.
 #' 
@@ -166,7 +166,7 @@ folds_montecarlo <- function(n, V = 1000, pvalidation = 0.2) {
 #' @title Bootstrap cross-validation
 #' @description Bootstrap cross-validation.
 #' 
-#' @param n integer; number of observations.either an integer indicating the number of observations to cross-validate over, or an object from which to guess the number of observations. Can also be computed from strata_ids or cluster_ids.
+#' @param n integer; number of observations
 #' @param V integer; number of folds to generate.
 #' 
 #' @export
@@ -234,3 +234,43 @@ strata_folds <- function(fold_fun, cluster_ids, strata_ids, ...) {
     return(folds)
 }
  
+
+#' @family fold_funs
+#' @title Rolling origin cross-validation
+#' @description Rolling origin cross-validation.
+#' 
+#' @param n integer; number of observations.
+#' @param first_window integer; number of observations in the first training sample.
+#' @param validation_size integer; number of points in the validation samples. Should be equal to the largest forecast horizon
+#' 
+#' @export
+folds_rolling_origin <- function(n, first_window, validation_size) {
+  last_window <- n-validation_size
+  origins <- first_window:last_window
+  folds <- lapply(seq_along(origins), function(i){
+    origin <- origins[i]
+    make_fold(v=i, training_set=1:origin, validation_set=origin+(1:validation_size))
+  })
+  
+  return(folds)
+}
+
+#' @family fold_funs
+#' @title Rolling window cross-validation
+#' @description Rolling window cross-validation.
+#' 
+#' @param n integer; number of observations.
+#' @param window_size integer; number of observations in the training samples.
+#' @param validation_size integer; number of points in the validation samples. Should be equal to the largest forecast horizon
+#' 
+#' @export
+folds_rolling_window <- function(n, window_size, validation_size) {
+  last_window <- n-validation_size
+  origins <- window_size:last_window
+  folds <- lapply(seq_along(origins), function(i){
+    origin <- origins[i]
+    make_fold(v=i, training_set=(1:window_size)+(i-1L), validation_set=origin+(1:validation_size))
+  })
+  
+  return(folds)
+}
