@@ -177,20 +177,21 @@ folds_bootstrap <- function(n, V = 1000) {
 }
 
 # generate folds for clusters, and then convert into folds for observations
+# this is kind of for a large number of ids. should improve.
 cluster_folds <- function(fold_fun, cluster_ids, ...) {
     # convert ids to numeric 1:n
     idfac <- factor(cluster_ids)
     nclusters <- length(levels(idfac))
     clusternums <- as.numeric(idfac)
+    id_indexes=by(seq_along(cluster_ids),list(id=clusternums),list)
     
     # generate folds for ids
-    nclusters <- length(unique(clusternums))
     idfolds <- make_folds(n = nclusters, fold_fun = fold_fun, cluster_ids = NULL, ...)
     
     # convert this into folds for observations
     folds <- lapply(idfolds, function(idfold) {
-        make_fold(v = fold_index(fold = idfold), training_set = which(clusternums %in% training(clusternums, idfold)), 
-            validation_set = which(clusternums %in% validation(clusternums, idfold)))
+        make_fold(v = fold_index(fold = idfold), training_set = unlist(training(id_indexes,idfold)), 
+            validation_set = unlist(validation(id_indexes,idfold)))
     })
     
     return(folds)
