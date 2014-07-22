@@ -11,7 +11,7 @@ Description: origami provides a general framework for the application of
     applications. Some applications are implemented as examples.
 License: GPL-3
 Depends:
-    R (>= 3.1.0),
+    R (>= 3.0.0),
     SuperLearner,
     methods
 Imports:
