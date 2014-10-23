@@ -108,7 +108,16 @@ folds_vfold <- function(n, V = 10) {
     return(folds)
 }
 
-# use full sample for both training and validation
+
+#' @family fold_funs
+#' @title Resubstution cross-validation
+#' @description Resubstution cross-validation
+#' 
+#' @param n integer; number of observations.
+#' 
+#' @return A single fold, using same data for both training and testing.
+#' 
+#' @export
 folds_resubstitution <- function(n) {
     list(make_fold(1L, seq_len(n), seq_len(n)))
 }

@@ -28,6 +28,7 @@ Generates a list of folds for a variety of cross-validation schemes.
 
 Other fold_funs: \code{\link{folds_bootstrap}};
   \code{\link{folds_loo}}; \code{\link{folds_montecarlo}};
+  \code{\link{folds_resubstitution}};
   \code{\link{folds_rolling_origin}};
   \code{\link{folds_rolling_window}};
   \code{\link{folds_vfold}}
