@@ -32,9 +32,12 @@ cross_validate <- function(cv_fun, folds, ..., .parallel = F, .foreach_control =
     }
 
     #remove error results
-    error_idx <- which(sapply(results,function(x)"error"%in%class(x)))
-    error_results <- list(index=error_idx,error=results[error_idx])
-    results <- results[-1*error_idx]
+    if(.foreach_control[".errorhandling"]=="pass"){
+      error_idx <- which(sapply(results,function(x)"error"%in%class(x)))
+      error_results <- list(index=error_idx,error=results[error_idx])
+      good_results <-setdiff(seq_along(folds),error_idx)
+      results <- results[good_results]
+    }
     
     # verify that the folds returned similar results
     if (length(unique(lapply(results, length))) > 1) 
@@ -51,8 +54,9 @@ cross_validate <- function(cv_fun, folds, ..., .parallel = F, .foreach_control =
     if (.combine) {
         results <- do.call(combine_results, c(list(results = results), .combine_control))
     }
-    
-    results$error_results=error_results
-    
+
+    if(.foreach_control[".errorhandling"]=="pass"){
+      results$errors=error_results
+    }
     return(results)
 } 
