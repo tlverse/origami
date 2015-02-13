@@ -41,7 +41,7 @@ get_from_fold <- function(slotname) {
             return(x[index])
         } else {
             # if dim, index on first dimension
-            return(x[index, ])
+            return(x[index, ,drop=F])
         }
     }
 }
