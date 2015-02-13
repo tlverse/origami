@@ -30,14 +30,20 @@ cross_validate <- function(cv_fun, folds, ..., .parallel = F, .foreach_control =
     results <- do.call(foreach, c(list(fold = folds), .foreach_control)) %do_op% {
         cv_fun(fold, ...)
     }
+
+    #remove error results
+    error_idx <- which(sapply(results,function(x)"error"%in%class(x)))
+    error_results <- list(index=error_idx,error=results[error_idx])
+    results <- results[-1*error_idx]
     
     # verify that the folds returned similar results
     if (length(unique(lapply(results, length))) > 1) 
-        stop("lists returned from folds are the same length")
+        stop("lists returned from folds are not the same length")
     if (length(unique(lapply(results, names))) > 1) 
         stop("names returned from folds are not consistent")
     
-    # invert results - go from a list containing one list per fold to a list containingone list per result returnned
+    
+    # invert results - go from a list containing one list per fold to a list containing one list per result returned
     # by cv_fun
     results <- apply(do.call(rbind, results), 2, as.list)
     
@@ -45,6 +51,8 @@ cross_validate <- function(cv_fun, folds, ..., .parallel = F, .foreach_control =
     if (.combine) {
         results <- do.call(combine_results, c(list(results = results), .combine_control))
     }
+    
+    results$error_results=error_results
     
     return(results)
 } 
