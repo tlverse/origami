@@ -7,7 +7,16 @@
 #do this robust to errors
 fitmods <- function(SL.library, Y, X, newX, family, obsWeights, id, ...) {
     fits <- lapply(SL.library, function(learner) {
-        do.call(learner, list(Y = Y, X = X, newX = newX, family = family, obsWeights = obsWeights, id = id, ...))
+        res=NULL
+        try({
+          res=do.call(learner, list(Y = Y, X = X, newX = newX, family = family, obsWeights = obsWeights, id = id, ...))
+        })
+        
+        if(is.null(res)){
+          res=SL.mean(Y = Y, X = X, newX = newX, family = family, obsWeights = obsWeights, id = id, ...)
+        }
+        
+        res
     })
     names(fits) <- SL.library
     return(fits)
@@ -142,6 +151,7 @@ predict.origami_SuperLearner_fit <- function(object, newdata, ...) {
     return(list(pred = pred, library_pred = library_pred))
 } 
 
+#' @export
 print.origami_SuperLearner <- function(object){
   print(data.frame(object$cvRisk,object$coef))
 }
