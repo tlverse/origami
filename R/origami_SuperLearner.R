@@ -142,9 +142,15 @@ predict.origami_SuperLearner <- function(object, newdata, ...) {
 #' @export
 predict.origami_SuperLearner_fit <- function(object, newdata, ...) {
     if (missing(newdata)) (stop("newdata must be specified"))
-  
-    library_pred <- sapply(object$library_fits, function(fitobj) {
+    
+    library_pred <- sapply(seq_along(object$library_fits), function(index) {
+        #we don't need to predict for library functions with 0 weight
+      if(object$coef[index]!=0){
+        fitobj=object$library_fits[[index]]
         predict(fitobj$fit, newdata = newdata, family = object$family)
+      } else {
+        rep(0,nrow(newdata))
+      }
     })
     pred <- object$method$computePred(library_pred, object$coef,control=object$control)
     
