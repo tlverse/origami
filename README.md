@@ -11,7 +11,7 @@ Download the latest version from here using devtools:
 
 ```
 library(devtools)
-devtools::install_github("origami", username = "jeremyrcoyle")
+devtools::install_github("jeremyrcoyle/origami")
 ```
 
 ### Usage

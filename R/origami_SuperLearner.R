@@ -119,7 +119,7 @@ origami_SuperLearner <- function(Y, X, newX = NULL, SL.library, family = gaussia
     
     # results
     out <- list(coef = coef, cvRisk = cvRisk, Z = Z, valY=valY,valWeights=valWeights,SL.library = SL.library, folds = folds, fullFit = fitObj, foldFits = foldFits)
-    class(out) <- "origami_SuperLearner"
+    class(out) <- c("origami_SuperLearner","SuperLearner")
     return(out)
 }
 
@@ -156,8 +156,3 @@ predict.origami_SuperLearner_fit <- function(object, newdata, ...) {
     
     return(list(pred = pred, library_pred = library_pred))
 } 
-
-#' @export
-print.origami_SuperLearner <- function(object){
-  print(data.frame(object$cvRisk,object$coef))
-}
