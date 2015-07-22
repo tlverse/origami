@@ -163,14 +163,9 @@ predict.origami_SuperLearner_fit <- function(object, newdata, ...) {
         (stop("newdata must be specified"))
     
     library_pred <- lapply(seq_along(object$library_fits), function(index) {
-        # we don't need to predict for library functions with 0 weight
+        
         fitobj <- object$library_fits[[index]]
-        if (object$coef[index] != 0) {
-            
-            pred <- predict(fitobj$fit, newdata = newdata, family = object$family)
-        } else {
-            pred <- matrix(0, nrow = nrow(newdata), ncol = ncol(fitobj$pred))  #fix for non multinomial (ncol=NULL)
-        }
+        pred <- predict(fitobj$fit, newdata = newdata, family = object$family)
         
         drop(pred)
     })

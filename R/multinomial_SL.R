@@ -18,6 +18,7 @@ mn_pred <- function(alpha, x) {
     return(Y_pred)
 }
 
+#' @export
 factor_to_indicators <- function(x) {
     model.matrix(~factor(x) - 1)
 }
