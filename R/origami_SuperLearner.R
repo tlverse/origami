@@ -1,19 +1,21 @@
-# benefits over SuperLearner package from gencv: arbitrary CV schemes foreach parallelization from SL
-# implementation: learners that return a vector of predictions for each observation, avoiding nested CV
-# (SL.glmnetall) can return fold specific SL fits for smart sequential super learner -> don't fully match SL
-# object
-# have to think about how to implement nested cvs
+# benefits over SuperLearner package from gencv: arbitrary CV schemes foreach
+# parallelization from SL implementation: learners that return a vector of
+# predictions for each observation, avoiding nested CV (SL.glmnetall) can return
+# fold specific SL fits for smart sequential super learner -> don't fully match
+# SL object have to think about how to implement nested cvs
 
-#do this robust to errors
+# do this robust to errors
 fitmods <- function(SL.library, Y, X, newX, family, obsWeights, id, ...) {
     fits <- lapply(SL.library, function(learner) {
-        res=NULL
+        res <- NULL
         try({
-          res=do.call(learner, list(Y = Y, X = X, newX = newX, family = family, obsWeights = obsWeights, id = id, ...))
+            res <- do.call(learner, list(Y = Y, X = X, newX = newX, family = family, 
+                obsWeights = obsWeights, id = id, ...))
         })
         
-        if(is.null(res)){
-          res=SL.mean(Y = Y, X = X, newX = newX, family = family, obsWeights = obsWeights, id = id, ...)
+        if (is.null(res)) {
+            res <- SL.mean(Y = Y, X = X, newX = newX, family = family, obsWeights = obsWeights, 
+                id = id, ...)
         }
         
         res
@@ -25,8 +27,7 @@ fitmods <- function(SL.library, Y, X, newX, family, obsWeights, id, ...) {
 #' @param fold a Fold to be passed to cv_SL.
 #' @export
 #' @rdname origami_SuperLearner
-cv_SL <- function(fold, Y, X, SL.library, family, obsWeights, 
-                  id, ...) {
+cv_SL <- function(fold, Y, X, SL.library, family, obsWeights, id, ...) {
     # training objects
     train_Y <- training(Y)
     train_X <- training(X)
@@ -38,24 +39,35 @@ cv_SL <- function(fold, Y, X, SL.library, family, obsWeights,
     valid_index <- validation()
     
     # fit on training and predict on validation
-    fits <- fitmods(SL.library, Y = train_Y, X = train_X, newX = valid_X, family = family, obsWeights = train_obsWeights, 
-        id = train_id, ...)
+    fits <- fitmods(SL.library, Y = train_Y, X = train_X, newX = valid_X, family = family, 
+        obsWeights = train_obsWeights, id = train_id, ...)
     
-    # extract and collapse predictions
-    preds <- lapply(fits, function(fit) fit$pred)
-    Z <- do.call(cbind, preds)
+    # extract and collapse predictions preds <- lapply(fits, function(fit) fit$pred)
+    preds <- lapply(fits, function(fit) drop(fit$pred))
+    Z <- do.call(abind, c(preds, rev.along = 0))
     
-    results <- list(Z = Z, valid_index = valid_index, valY=validation(Y), valWeights=validation(obsWeights),fits = fits)
+    results <- list(Z = Z, valid_index = valid_index, valY = validation(Y), valWeights = validation(obsWeights), 
+        fits = fits)
     
     return(results)
+}
+
+#' sort n-dimensional array (for multinomial SL support)
+aorder <- function(mat, index, along = 1) {
+    
+    dims <- dim(mat)
+    args <- ifelse(along == seq_along(dims), "index", "")
+    indexer <- paste(c(args, "drop=F"), collapse = ",")
+    call <- sprintf("mat[%s]", indexer)
+    result <- eval(parse(text = call))
+    
+    return(result)
 }
 
 #' @title origami_SuperLearner
 #' @description SuperLearner implemented using orgami cross-validation. Leverages a lot of code from Eric Polley's 
 #' SuperLearner package. Because of it's based on origami, we get two features for free: 
 #' foreach based parallelization, and support for arbitrary cross-validation schemes. 
-#' Note, while this is a working SuperLearner implementation, it is intended more as an example 
-#' than production code. As such, it is subject to change in the future.
 #' @param Y vector of outcomes.
 #' @param X vector of covariates.
 #' @param newX currently ignored.
@@ -75,8 +87,9 @@ cv_SL <- function(fold, Y, X, SL.library, family, obsWeights,
 #' @example /inst/examples/SL_example.R
 #' 
 #' @export
-origami_SuperLearner <- function(Y, X, newX = NULL, SL.library, family = gaussian(), obsWeights = rep(1, length(Y)), 
-    id = NULL, folds = NULL, method = method.NNLS(), cvfun=cv_SL, ...) {
+origami_SuperLearner <- function(Y, X, newX = NULL, SL.library, family = gaussian(), 
+    obsWeights = rep(1, length(Y)), id = NULL, folds = NULL, method = method.NNLS(), 
+    cvfun = cv_SL, ...) {
     
     if (is.null(folds)) {
         folds <- make_folds(Y, cluster_ids = id)
@@ -91,16 +104,18 @@ origami_SuperLearner <- function(Y, X, newX = NULL, SL.library, family = gaussia
     }
     
     # fit algorithms to folds, get predictions
-    results <- cross_validate(cvfun, folds, Y, X, SL.library, family, obsWeights, id, ...)
+    results <- cross_validate(cvfun, folds, Y, X, SL.library, family, obsWeights, 
+        id, ...)
     
     # unshuffle results
-    Z <- results$Z[order(results$valid_index), ,drop=F]
+    Z <- aorder(results$Z, order(results$valid_index))
     valY <- results$valY[order(results$valid_index)]
     valWeights <- results$valWeights[order(results$valid_index)]
-
+    
     # calculate coefficients
-    SLcontrol=SuperLearner.control()
-    getCoef <- method$computeCoef(Z = Z, Y = valY, obsWeights=valWeights, libraryNames = SL.library, verbose = F, control=SLcontrol)
+    SLcontrol <- SuperLearner.control()
+    getCoef <- method$computeCoef(Z = Z, Y = valY, obsWeights = valWeights, libraryNames = SL.library, 
+        verbose = F, control = SLcontrol)
     coef <- getCoef$coef
     cvRisk <- getCoef$cvRisk
     
@@ -109,7 +124,8 @@ origami_SuperLearner <- function(Y, X, newX = NULL, SL.library, family = gaussia
     full <- cvfun(resub, Y, X, SL.library, family, obsWeights, id, ...)
     
     # fit object for predictions
-    fitObj <- structure(list(library_fits = full$fits, coef = coef, family = family, method = method), class = "origami_SuperLearner_fit",control=SLcontrol)
+    fitObj <- structure(list(library_fits = full$fits, coef = coef, family = family, 
+        method = method), class = "origami_SuperLearner_fit", control = SLcontrol)
     
     # analogous objects but with learners fit only in a particular fold
     foldFits <- lapply(seq_along(folds), function(fold) {
@@ -118,8 +134,9 @@ origami_SuperLearner <- function(Y, X, newX = NULL, SL.library, family = gaussia
     })
     
     # results
-    out <- list(coef = coef, cvRisk = cvRisk, Z = Z, valY=valY,valWeights=valWeights,SL.library = SL.library, folds = folds, fullFit = fitObj, foldFits = foldFits)
-    class(out) <- c("origami_SuperLearner","SuperLearner")
+    out <- list(coef = coef, cvRisk = cvRisk, Z = Z, valY = valY, valWeights = valWeights, 
+        SL.library = SL.library, folds = folds, fullFit = fitObj, foldFits = foldFits)
+    class(out) <- c("origami_SuperLearner", "SuperLearner")
     return(out)
 }
 
@@ -134,25 +151,33 @@ origami_SuperLearner <- function(Y, X, newX = NULL, SL.library, family = gaussia
 #' 
 #' @export
 predict.origami_SuperLearner <- function(object, newdata, ...) {
-    if (missing(newdata)) (stop("newdata must be specified"))
+    if (missing(newdata)) 
+        (stop("newdata must be specified"))
     
     predict(object$fullFit, newdata)
 }
 
 #' @export
 predict.origami_SuperLearner_fit <- function(object, newdata, ...) {
-    if (missing(newdata)) (stop("newdata must be specified"))
+    if (missing(newdata)) 
+        (stop("newdata must be specified"))
     
-    library_pred <- sapply(seq_along(object$library_fits), function(index) {
-        #we don't need to predict for library functions with 0 weight
-      if(object$coef[index]!=0){
-        fitobj=object$library_fits[[index]]
-        predict(fitobj$fit, newdata = newdata, family = object$family)
-      } else {
-        rep(0,nrow(newdata))
-      }
+    library_pred <- lapply(seq_along(object$library_fits), function(index) {
+        # we don't need to predict for library functions with 0 weight
+        fitobj <- object$library_fits[[index]]
+        if (object$coef[index] != 0) {
+            
+            pred <- predict(fitobj$fit, newdata = newdata, family = object$family)
+        } else {
+            pred <- matrix(0, nrow = nrow(newdata), ncol = ncol(fitobj$pred))  #fix for non multinomial (ncol=NULL)
+        }
+        
+        drop(pred)
     })
-    pred <- object$method$computePred(library_pred, object$coef,control=object$control)
+    
+    Z <- do.call(abind, c(library_pred, rev.along = 0))
+    
+    pred <- object$method$computePred(Z, object$coef, control = object$control)
     
     return(list(pred = pred, library_pred = library_pred))
 } 

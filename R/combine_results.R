@@ -3,8 +3,9 @@
 #' @param result a single result.
 #' @return A function to combine a list of such results.
 guess_combiner <- function(result) {
-    switch(class(result), data.frame = combiner_rbind, matrix = combiner_rbind, numeric = combiner_c, character = combiner_c, 
-        integer = combiner_c, logical = combiner_c, factor = combiner_factor, identity)
+    switch(class(result), data.frame = combiner_rbind, matrix = combiner_rbind, numeric = combiner_c, 
+        character = combiner_c, integer = combiner_c, logical = combiner_c, factor = combiner_factor, 
+        array = combiner_array, identity)
 }
 
 
@@ -58,8 +59,15 @@ combiner_rbind <- function(x) {
 combiner_c <- function(x) {
     do.call(c, x)
 }
+
 #' @rdname combiners
 #' @export
 combiner_factor <- function(x) {
     unlist(x)
+}
+
+#' @rdname combiners
+#' @export
+combiner_array <- function(x) {
+    do.call(abind, c(x, along = 1))
 } 

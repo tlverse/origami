@@ -50,8 +50,7 @@ mean(resub_results$SE)
 # cross-validated estimate
 folds <- make_folds(mtcars)
 results <- cross_validate(cvlm, folds)
-mean(results$SE)
- 
+mean(results$SE) 
 }
 \author{
 Jeremy Coyle \email{jeremyrcoyle@gmail.com}

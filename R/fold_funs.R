@@ -13,7 +13,8 @@
 #' @seealso \code{link{Fold}}
 #' 
 #' @export
-make_folds <- function(n = NULL, fold_fun = NULL, cluster_ids = NULL, strata_ids = NULL, ...) {
+make_folds <- function(n = NULL, fold_fun = NULL, cluster_ids = NULL, strata_ids = NULL, 
+    ...) {
     if (missing(n)) {
         # compute n from strata or cluster ids if possible
         if (!is.null(strata_ids)) {
@@ -39,7 +40,8 @@ make_folds <- function(n = NULL, fold_fun = NULL, cluster_ids = NULL, strata_ids
         if (!is.null(cluster_ids)) {
             stopifnot(length(cluster_ids) == n)
             
-            # it's not clear what to do if clusters are not nested in strata, so we require this for now
+            # it's not clear what to do if clusters are not nested in strata, so we require
+            # this for now
             nesting <- all(rowSums(table(cluster_ids, strata_ids) > 0) == 1)
             if (!nesting) {
                 stop("cluster ids are not nested in strata ids. This is currently unsupported")
@@ -56,12 +58,14 @@ make_folds <- function(n = NULL, fold_fun = NULL, cluster_ids = NULL, strata_ids
         folds <- cluster_folds(fold_fun, cluster_ids, ...)
         
     } else {
-        # we either don't have clusters or strata, or we're in the functions that are handling those
+        # we either don't have clusters or strata, or we're in the functions that are
+        # handling those
         
         if (!is.function(fold_fun)) {
             # determine method
             fun_names <- c("vfold", "loo", "montecarlo", "bootstrap", "resubstitution")
-            fold_funs <- c(folds_vfold, folds_loo, folds_montecarlo, folds_bootstrap, folds_resubstitution)
+            fold_funs <- c(folds_vfold, folds_loo, folds_montecarlo, folds_bootstrap, 
+                folds_resubstitution)
             fold_fun <- match.arg(fold_fun, fun_names)
             fold_fun <- fold_funs[[match(fold_fun, fun_names)]]
         }
@@ -73,7 +77,8 @@ make_folds <- function(n = NULL, fold_fun = NULL, cluster_ids = NULL, strata_ids
     return(folds)
 }
 
-# for v-fold type cross-validation, take a fold vector and make fold object for fold v
+# for v-fold type cross-validation, take a fold vector and make fold object for
+# fold v
 fold_from_foldvec <- function(v, folds) {
     training_set <- which(folds != v)
     validation_set <- which(folds == v)
@@ -185,22 +190,23 @@ folds_bootstrap <- function(n, V = 1000) {
     return(folds)
 }
 
-# generate folds for clusters, and then convert into folds for observations
-# this is kind of for a large number of ids. should improve.
+# generate folds for clusters, and then convert into folds for observations this
+# is kind of for a large number of ids. should improve.
 cluster_folds <- function(fold_fun, cluster_ids, ...) {
     # convert ids to numeric 1:n
     idfac <- factor(cluster_ids)
     nclusters <- length(levels(idfac))
     clusternums <- as.numeric(idfac)
-    id_indexes=by(seq_along(cluster_ids),list(id=clusternums),list)
+    id_indexes <- by(seq_along(cluster_ids), list(id = clusternums), list)
     
     # generate folds for ids
-    idfolds <- make_folds(n = nclusters, fold_fun = fold_fun, cluster_ids = NULL, ...)
+    idfolds <- make_folds(n = nclusters, fold_fun = fold_fun, cluster_ids = NULL, 
+        ...)
     
     # convert this into folds for observations
     folds <- lapply(idfolds, function(idfold) {
-        make_fold(v = fold_index(fold = idfold), training_set = unlist(training(id_indexes,idfold)), 
-            validation_set = unlist(validation(id_indexes,idfold)))
+        make_fold(v = fold_index(fold = idfold), training_set = unlist(training(id_indexes, 
+            idfold)), validation_set = unlist(validation(id_indexes, idfold)))
     })
     
     return(folds)
@@ -216,8 +222,8 @@ strata_folds <- function(fold_fun, cluster_ids, strata_ids, ...) {
     # generate strata specific folds
     strata_folds <- lapply(seq_len(nstrata), function(strata) {
         n_in_strata <- sum(stratanums == strata)
-        idfolds <- make_folds(n = n_in_strata, fold_fun = fold_fun, cluster_ids = cluster_ids[stratanums == strata], 
-            strata_ids = NULL, ...)
+        idfolds <- make_folds(n = n_in_strata, fold_fun = fold_fun, cluster_ids = cluster_ids[stratanums == 
+            strata], strata_ids = NULL, ...)
     })
     
     # collapse strata folds
@@ -255,14 +261,14 @@ strata_folds <- function(fold_fun, cluster_ids, strata_ids, ...) {
 #' 
 #' @export
 folds_rolling_origin <- function(n, first_window, validation_size) {
-  last_window <- n-validation_size
-  origins <- first_window:last_window
-  folds <- lapply(seq_along(origins), function(i){
-    origin <- origins[i]
-    make_fold(v=i, training_set=1:origin, validation_set=origin+(1:validation_size))
-  })
-  
-  return(folds)
+    last_window <- n - validation_size
+    origins <- first_window:last_window
+    folds <- lapply(seq_along(origins), function(i) {
+        origin <- origins[i]
+        make_fold(v = i, training_set = 1:origin, validation_set = origin + (1:validation_size))
+    })
+    
+    return(folds)
 }
 
 #' @family fold_funs
@@ -275,12 +281,13 @@ folds_rolling_origin <- function(n, first_window, validation_size) {
 #' 
 #' @export
 folds_rolling_window <- function(n, window_size, validation_size) {
-  last_window <- n-validation_size
-  origins <- window_size:last_window
-  folds <- lapply(seq_along(origins), function(i){
-    origin <- origins[i]
-    make_fold(v=i, training_set=(1:window_size)+(i-1L), validation_set=origin+(1:validation_size))
-  })
-  
-  return(folds)
-}
+    last_window <- n - validation_size
+    origins <- window_size:last_window
+    folds <- lapply(seq_along(origins), function(i) {
+        origin <- origins[i]
+        make_fold(v = i, training_set = (1:window_size) + (i - 1L), validation_set = origin + 
+            (1:validation_size))
+    })
+    
+    return(folds)
+} 

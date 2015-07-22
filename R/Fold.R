@@ -19,7 +19,8 @@ make_fold <- function(v, training_set, validation_set) {
 
 # function factory for different fold-based indexing functions
 get_from_fold <- function(slotname) {
-    # function to index an object based on the training set, validation set, or index of a fold
+    # function to index an object based on the training set, validation set, or index
+    # of a fold
     function(x = NULL, fold = NULL) {
         # if fold isn't specified, attempt to pull from the calling environment
         if (is.null(fold)) {
@@ -41,7 +42,7 @@ get_from_fold <- function(slotname) {
             return(x[index])
         } else {
             # if dim, index on first dimension
-            return(x[index, ,drop=F])
+            return(x[index, , drop = F])
         }
     }
 }
@@ -64,5 +65,4 @@ training <- get_from_fold("training_set")
 validation <- get_from_fold("validation_set")
 #' @rdname fold_helpers
 #' @export
-fold_index <- get_from_fold("v")
- 
+fold_index <- get_from_fold("v") 
