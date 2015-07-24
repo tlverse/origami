@@ -59,7 +59,7 @@ mnSL.multinom <- function(Y, X, newX, family, obsWeights, id, ...) {
     }
     
     df <- data.frame(X, Y = Y)
-    fit.mn <- multinom(Y ~ ., df, weights = obsWeights)
+    fit.mn <- multinom(Y ~ ., df, weights = obsWeights, trace = FALSE)
     pred <- predict(fit.mn, newX, type = "prob")
     fit <- list(object = fit.mn)
     out <- list(pred = pred, fit = fit)
