@@ -10,17 +10,14 @@ trim_loglin <- function(x, trim = 1e-05) {
     return(log(x))
 }
 
+#' @export
 mn_pred <- function(alpha, x) {
     Y_pred <- plogis(t(aaply(x, 2, `%*%`, alpha)))
+    
     # normalize so class predictions sum to 1
-    Y_pred <- aaply(Y_pred, 1, function(x) x/sum(x))
+    Y_pred <- normalize_rows(Y_pred)
     
     return(Y_pred)
-}
-
-#' @export
-factor_to_indicators <- function(x) {
-    model.matrix(~factor(x) - 1)
 }
 
 #' @export
@@ -34,7 +31,9 @@ method.mnNNloglik <- function() {
         .NNloglik <- function(x, truth, weight, start_alpha = rep(0, dim(x)[3])) {
             fmin <- function(alpha, x, truth, weight) {
                 Y_pred <- mn_pred(alpha, x)
-                -2 * nrow(Y_pred) * mn_loglik(Y_pred, truth, weight)
+                result <- -2 * nrow(Y_pred) * mn_loglik(Y_pred, truth, weight)
+                if (!is.finite(result)) browser()
+                return(result)
             }
             gmin <- function(alpha, x, truth, weight) {
                 eta <- t(aaply(x, 2, `%*%`, alpha))
@@ -49,7 +48,7 @@ method.mnNNloglik <- function() {
                 -2 * (a_grad - tot_grad)
             }
             fit <- optim(start_alpha, fmin, gmin, x = x, truth = truth, weight = weight, 
-                method = "L-BFGS-B", lower = 0)  #, ...)
+                method = "L-BFGS-B", lower = 0, upper = 1)  #, ...)
             fit
             invisible(fit)
         }

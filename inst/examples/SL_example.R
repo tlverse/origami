@@ -25,6 +25,7 @@ set.seed(1)  #cv in glmnet is randomized so we have to set a seed to consistent 
 osl_result <- origami_SuperLearner(Y = Y, X = X, SL.library = SL.library, method = method.NNLS(), 
     family = binomial(), folds = folds)
 
+
 # compare results
 equal_values <- function(e1, e2) {
     all.equal(e1, e2, check.attributes = FALSE, use.names = FALSE)

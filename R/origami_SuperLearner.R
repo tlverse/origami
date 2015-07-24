@@ -144,17 +144,24 @@ origami_SuperLearner <- function(Y, X, newX = NULL, SL.library, family = gaussia
 #' @description prediction function for origami_SuperLearner. Note, while this is a working SuperLearner implementation, it is intended more as an example 
 #' than production code. As such, it is subject to change in the future.
 #' @param object origami_SuperLearner fit.
-#' @param newdata matrix or data.frame of new covariate values
+#' @param newdata matrix or data.frame of new covariate values. If newdata='cv-original' (default), it will return Z (the split-specific library predictions), and the Super Learner applied to Z (the split-specific Super Learner Predictions)
 #' @param ... other arguments to the learners.
 #' @return A list with two elements: \code{library_pred} are the predictions from the library functions, and \code{pred} is the prediction from the SuperLearner.
 #' @seealso \code{\link{origami_SuperLearner}}
 #' 
 #' @export
-predict.origami_SuperLearner <- function(object, newdata, ...) {
+predict.origami_SuperLearner <- function(object, newdata = "cv-original", ...) {
     if (missing(newdata)) 
         (stop("newdata must be specified"))
+    if (identical(newdata, "cv-original")) {
+        Z <- object$Z
+        pred_obj <- list(pred = object$fullFit$method$computePred(Z, object$coef, 
+            control = object$fullFit, control), library_pred = Z)
+    } else {
+        pred_obj <- predict(object$fullFit, newdata)
+    }
     
-    predict(object$fullFit, newdata)
+    return(pred_obj)
 }
 
 #' @export
@@ -174,5 +181,5 @@ predict.origami_SuperLearner_fit <- function(object, newdata, ...) {
     
     pred <- object$method$computePred(Z, object$coef, control = object$control)
     
-    return(list(pred = pred, library_pred = library_pred))
+    return(list(pred = pred, library_pred = Z))
 } 

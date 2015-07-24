@@ -4,12 +4,12 @@
 \alias{predict.origami_SuperLearner}
 \title{predict.origami_SuperLearner}
 \usage{
-\method{predict}{origami_SuperLearner}(object, newdata, ...)
+\method{predict}{origami_SuperLearner}(object, newdata = "cv-original", ...)
 }
 \arguments{
 \item{object}{origami_SuperLearner fit.}
 
-\item{newdata}{matrix or data.frame of new covariate values}
+\item{newdata}{matrix or data.frame of new covariate values. If newdata='cv-original' (default), it will return Z (the split-specific library predictions), and the Super Learner applied to Z (the split-specific Super Learner Predictions)}
 
 \item{...}{other arguments to the learners.}
 }
