@@ -32,8 +32,6 @@ method.mnNNloglik <- function() {
             fmin <- function(alpha, x, truth, weight) {
                 Y_pred <- mn_pred(alpha, x)
                 result <- -2 * nrow(Y_pred) * mn_loglik(Y_pred, truth, weight)
-                if (!is.finite(result)) browser()
-                return(result)
             }
             gmin <- function(alpha, x, truth, weight) {
                 eta <- t(aaply(x, 2, `%*%`, alpha))
