@@ -89,7 +89,7 @@ aorder <- function(mat, index, along = 1) {
 #' @export
 origami_SuperLearner <- function(Y, X, newX = NULL, SL.library, family = gaussian(), 
     obsWeights = rep(1, length(Y)), id = NULL, folds = NULL, method = method.NNLS(), 
-    cvfun = cv_SL, ...) {
+    cvfun = cv_SL, control=list(), ...) {
     
     if (is.null(folds)) {
         folds <- make_folds(Y, cluster_ids = id)
@@ -113,7 +113,7 @@ origami_SuperLearner <- function(Y, X, newX = NULL, SL.library, family = gaussia
     valWeights <- results$valWeights[order(results$valid_index)]
     
     # calculate coefficients
-    SLcontrol <- SuperLearner.control()
+    SLcontrol <- SuperLearner.control(control)
     getCoef <- method$computeCoef(Z = Z, Y = valY, obsWeights = valWeights, libraryNames = SL.library, 
         verbose = F, control = SLcontrol)
     coef <- getCoef$coef
@@ -156,7 +156,7 @@ predict.origami_SuperLearner <- function(object, newdata = "cv-original", ...) {
     if (identical(newdata, "cv-original")) {
         Z <- object$Z
         pred_obj <- list(pred = object$fullFit$method$computePred(Z, object$coef, 
-            control = object$fullFit, control), library_pred = Z)
+            control = object$fullFit$control), library_pred = Z)
     } else {
         pred_obj <- predict(object$fullFit, newdata)
     }
