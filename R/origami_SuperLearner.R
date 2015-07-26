@@ -89,7 +89,7 @@ aorder <- function(mat, index, along = 1) {
 #' @export
 origami_SuperLearner <- function(Y, X, newX = NULL, SL.library, family = gaussian(), 
     obsWeights = rep(1, length(Y)), id = NULL, folds = NULL, method = method.NNLS(), 
-    cvfun = cv_SL, control=list(), ...) {
+    cvfun = cv_SL, control = list(), ...) {
     
     if (is.null(folds)) {
         folds <- make_folds(Y, cluster_ids = id)

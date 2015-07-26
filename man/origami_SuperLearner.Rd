@@ -9,7 +9,7 @@ cv_SL(fold, Y, X, SL.library, family, obsWeights, id, ...)
 
 origami_SuperLearner(Y, X, newX = NULL, SL.library, family = gaussian(),
   obsWeights = rep(1, length(Y)), id = NULL, folds = NULL,
-  method = method.NNLS(), cvfun = cv_SL, ...)
+  method = method.NNLS(), cvfun = cv_SL, control = list(), ...)
 }
 \arguments{
 \item{fold}{a Fold to be passed to cv_SL.}
