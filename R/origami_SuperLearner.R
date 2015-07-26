@@ -125,7 +125,7 @@ origami_SuperLearner <- function(Y, X, newX = NULL, SL.library, family = gaussia
     
     # fit object for predictions
     fitObj <- structure(list(library_fits = full$fits, coef = coef, family = family, 
-        method = method), class = "origami_SuperLearner_fit", control = SLcontrol)
+        method = method, control = SLcontrol), class = "origami_SuperLearner_fit")
     
     # analogous objects but with learners fit only in a particular fold
     foldFits <- lapply(seq_along(folds), function(fold) {
