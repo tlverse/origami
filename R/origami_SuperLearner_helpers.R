@@ -1,21 +1,29 @@
-#' @title drop_zero_learners
-#' @description Drops library learners that were assigned 0 weight, speeding up future predictions.
-#' @param osl_fit fit generated using orgami_SuperLearner.
-#' @param osl_fit orgami_SuperLearner without the zero weight learners.
-#' @export
-drop_zero_learners <- function(osl_fit) {
+
+fit_drop_zero_learners <- function(osl_fit) {
     coef <- osl_fit$coef
     is_nz <- which(coef != 0)
+    if (length(is_nz) == 1) {
+        # make sure we have at least two learners (so we don't break the combination
+        # methods)
+        is_nz <- c(is_nz, length(coef))
+    }
     coefnz <- coef[is_nz]
     osl_fit$coef <- coefnz
-    last_dim <- length(safe_dim(osl_fit$Z))
-    osl_fit$Z <- index_dim(osl_fit$Z, is_nz, last_dim)
-    osl_fit$fullFit$coef <- coefnz
-    osl_fit$fullFit$library_fits <- osl_fit$fullFit$library_fits[is_nz]
+    osl_fit$library_fits <- osl_fit$library_fits[is_nz, drop = FALSE]
     
-    for (i in seq_along(osl_fit$foldsFits)) {
-        osl_fit$foldFits[[i]]$coef <- coefnz
-        osl_fit$foldFits[[i]]$library <- osl_fit$foldFits[i]$library[is_nz]
-    }
     return(osl_fit)
+}
+
+#' @title drop_zero_learners
+#' @description Drops library learners that were assigned 0 weight, speeding up future predictions.
+#' @param osl_obj object generated using orgami_SuperLearner.
+#' @return osl_obj orgami_SuperLearner without the zero weight learners.
+#' @export
+drop_zero_learners <- function(osl_obj) {
+    osl_obj$fullFit <- fit_drop_zero_learners(osl_obj$fullFit)
+    
+    for (i in seq_along(osl_obj$foldFits)) {
+        osl_obj$foldFits[[i]] <- fit_drop_zero_learners(osl_obj$foldFits[[i]])
+    }
+    return(osl_obj)
 } 

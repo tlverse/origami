@@ -52,18 +52,6 @@ cv_SL <- function(fold, Y, X, SL.library, family, obsWeights, id, ...) {
     return(results)
 }
 
-#' sort n-dimensional array (for multinomial SL support)
-aorder <- function(mat, index, along = 1) {
-    
-    dims <- dim(mat)
-    args <- ifelse(along == seq_along(dims), "index", "")
-    indexer <- paste(c(args, "drop=F"), collapse = ",")
-    call <- sprintf("mat[%s]", indexer)
-    result <- eval(parse(text = call))
-    
-    return(result)
-}
-
 #' @title origami_SuperLearner
 #' @description SuperLearner implemented using orgami cross-validation. Leverages a lot of code from Eric Polley's 
 #' SuperLearner package. Because of it's based on origami, we get two features for free: 
@@ -109,7 +97,8 @@ origami_SuperLearner <- function(Y, X, newX = NULL, SL.library, family = gaussia
     
     # unshuffle results
     Z <- aorder(results$Z, order(results$valid_index))
-    valY <- results$valY[order(results$valid_index)]
+    valY <- aorder(results$valY, order(results$valid_index))
+    # valY <- results$valY[order(results$valid_index)]
     valWeights <- results$valWeights[order(results$valid_index)]
     
     # calculate coefficients
@@ -125,7 +114,8 @@ origami_SuperLearner <- function(Y, X, newX = NULL, SL.library, family = gaussia
     
     # fit object for predictions
     fitObj <- structure(list(library_fits = full$fits, coef = coef, family = family, 
-        method = method, control = SLcontrol), class = "origami_SuperLearner_fit")
+        method = method, control = SLcontrol), class = "origami_SuperLearner_fit", 
+        folds = folds)
     
     # analogous objects but with learners fit only in a particular fold
     foldFits <- lapply(seq_along(folds), function(fold) {
@@ -155,7 +145,7 @@ predict.origami_SuperLearner <- function(object, newdata = "cv-original", ...) {
         (stop("newdata must be specified"))
     if (identical(newdata, "cv-original")) {
         Z <- object$Z
-        pred_obj <- list(pred = object$fullFit$method$computePred(Z, object$coef, 
+        pred_obj <- list(pred = object$fullFit$method$computePred(Z, object$fullFit$coef, 
             control = object$fullFit$control), library_pred = Z)
     } else {
         pred_obj <- predict(object$fullFit, newdata)

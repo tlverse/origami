@@ -4,12 +4,13 @@
 \alias{drop_zero_learners}
 \title{drop_zero_learners}
 \usage{
-drop_zero_learners(osl_fit)
+drop_zero_learners(osl_obj)
 }
 \arguments{
-\item{osl_fit}{fit generated using orgami_SuperLearner.}
-
-\item{osl_fit}{orgami_SuperLearner without the zero weight learners.}
+\item{osl_obj}{object generated using orgami_SuperLearner.}
+}
+\value{
+osl_obj orgami_SuperLearner without the zero weight learners.
 }
 \description{
 Drops library learners that were assigned 0 weight, speeding up future predictions.

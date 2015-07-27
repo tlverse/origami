@@ -23,4 +23,17 @@ index_dim <- function(x, indicies, which_dim = 1, drop = FALSE) {
     command <- sprintf("x[%s]", paste(index_text, collapse = ","))
     
     eval(parse(text = command))
+}
+
+
+# sort n-dimensional array (for multinomial/multivariate SL support)
+aorder <- function(mat, index, along = 1) {
+    
+    dims <- safe_dim(mat)
+    args <- ifelse(along == seq_along(dims), "index", "")
+    indexer <- paste(c(args, "drop=F"), collapse = ",")
+    call <- sprintf("mat[%s]", indexer)
+    result <- eval(parse(text = call))
+    
+    return(result)
 } 
