@@ -53,5 +53,6 @@ split_to_nested <- function(fit, osl_args) {
     folds <- osl_args$folds
     nested_fits <- cross_validate(cv_nested_fit, folds = folds, Y = Y, X = X, osl_args = osl_args)
     fit$foldFits <- nested_fits$fit
+    
     return(fit)
 } 

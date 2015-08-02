@@ -1,8 +1,6 @@
 # benefits over SuperLearner package from gencv: arbitrary CV schemes foreach
-# parallelization from SL implementation: learners that return a vector of
-# predictions for each observation, avoiding nested CV (SL.glmnetall) can return
-# fold specific SL fits for smart sequential super learner -> don't fully match
-# SL object have to think about how to implement nested cvs
+# parallelization from SL implementation, can return fold specific SL fits for
+# smart sequential super learner -> don't fully match
 
 # do this robust to errors
 fitmods <- function(SL.library, Y, X, newX, family, obsWeights, id, ...) {
@@ -13,13 +11,9 @@ fitmods <- function(SL.library, Y, X, newX, family, obsWeights, id, ...) {
                 obsWeights = obsWeights, id = id, ...))
         })
         
-        if (is.null(res)) {
-            res <- SL.mean(Y = Y, X = X, newX = newX, family = family, obsWeights = obsWeights, 
-                id = id, ...)
-        }
-        
         res
     })
+    
     names(fits) <- SL.library
     return(fits)
 }
@@ -42,12 +36,22 @@ cv_SL <- function(fold, Y, X, SL.library, family, obsWeights, id, ...) {
     fits <- fitmods(SL.library, Y = train_Y, X = train_X, newX = valid_X, family = family, 
         obsWeights = train_obsWeights, id = train_id, ...)
     
+    fit_failed <- sapply(fits, is.null)
+    if (all(fit_failed)) {
+        stop(sprintf("All learners failed for fold %d", fold_index()))
+    } else if (any(fit_failed)) {
+        dummy_pred <- fits[[which(!fit_failed)[1]]]$pred * 0
+        for (failed_index in which(fit_failed)) {
+            fits[[failed_index]] <- list(pred = dummy_pred, fit = NA)
+        }
+    }
+    
     # extract and collapse predictions preds <- lapply(fits, function(fit) fit$pred)
     preds <- lapply(fits, function(fit) drop(fit$pred))
     Z <- do.call(abind, c(preds, rev.along = 0))
     
     results <- list(Z = Z, valid_index = valid_index, valY = validation(Y), valWeights = validation(obsWeights), 
-        fits = fits)
+        fits = fits, fit_failed = fit_failed)
     
     return(results)
 }
@@ -95,11 +99,25 @@ origami_SuperLearner <- function(Y, X, newX = NULL, SL.library, family = gaussia
     results <- cross_validate(cvfun, folds, Y, X, SL.library, family, obsWeights, 
         id, ...)
     
+    
     # unshuffle results
     Z <- aorder(results$Z, order(results$valid_index))
     valY <- aorder(results$valY, order(results$valid_index))
     # valY <- results$valY[order(results$valid_index)]
     valWeights <- results$valWeights[order(results$valid_index)]
+    
+    # identify which algorithms failed and drop them
+    failed_ever <- unique(names(which(results$fit_failed)))
+    if(length(failed_ever)>0){
+        warning(sprintf("The following learners failed on at least one fold and will be dropped: %s", 
+                        paste(failed_ever, collapse = ", ")))
+    }
+    good_ind <- match(setdiff(SL.library, failed_ever), SL.library)
+    
+    # drop bad algorithms from Z
+    last_dim <- length(safe_dim(Z))
+    Z <- index_dim(Z, good_ind, last_dim)
+    SL.library <- SL.library[good_ind]
     
     # calculate coefficients
     SLcontrol <- SuperLearner.control(control)
@@ -119,7 +137,7 @@ origami_SuperLearner <- function(Y, X, newX = NULL, SL.library, family = gaussia
     
     # analogous objects but with learners fit only in a particular fold
     foldFits <- lapply(seq_along(folds), function(fold) {
-        fitObj$library_fits <- results$fits[[fold]]
+        fitObj$library_fits <- results$fits[[fold]][good_ind]
         fitObj
     })
     
