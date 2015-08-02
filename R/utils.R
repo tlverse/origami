@@ -36,4 +36,32 @@ aorder <- function(mat, index, along = 1) {
     result <- eval(parse(text = call))
     
     return(result)
+}
+
+#' @export
+split_fold <- function(fold, splits = 2) {
+    v <- fold_index()
+    train_idx <- training()
+    valid_idx <- validation()
+    val_folds <- make_folds(valid_idx, V = splits)
+    val_fold <- val_folds[[1]]
+    make_split(val_fold)
+    make_split <- function(val_fold) {
+        list(split_fold = make_fold(v, train_idx, validation(valid_idx, fold = val_fold)))
+    }
+    split_folds <- cross_validate(make_split, val_folds)$split_fold
+    names(split_folds) <- sprintf("split_%d", seq_len(splits))
+    
+    return(split_folds)
+}
+
+#' @export
+make_split_folds <- function(folds, splits = 2) {
+    result <- cross_validate(split_fold, folds, splits = splits)
+    
+    return(result)
+}
+
+refit_origami_SuperLearner <- function(split_fold, osl_obj) {
+    
 } 

@@ -65,8 +65,7 @@ sl_to_mv_library <- function(SL.library) {
 
 # mvLibrary=sl_to_mv_library(SL.library$QaV)
 # sapply(mvLibrary,function(x){get('wrapper',envir=environment(eval(parse(text=x))))})
-# predictions=val_preds 
-# test=val_preds$QaW
+# predictions=val_preds test=val_preds$QaW
 
 # head(test) #debug(mvSL.mean) debug(predict.mvSL.wrapper) method=method.NNLS()
 # base_method=method.NNLS() mv.method=method.mvSL(base_method)
