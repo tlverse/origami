@@ -9,7 +9,7 @@ fitmods <- function(SL.library, Y, X, newX, family, obsWeights, id, ...) {
         try({
             res <- do.call(learner, list(Y = Y, X = X, newX = newX, family = family, 
                 obsWeights = obsWeights, id = id, ...))
-        })
+        },silent=TRUE)
         
         res
     })
