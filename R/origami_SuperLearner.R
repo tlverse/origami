@@ -9,7 +9,7 @@ fitmods <- function(SL.library, Y, X, newX, family, obsWeights, id, ...) {
         try({
             res <- do.call(learner, list(Y = Y, X = X, newX = newX, family = family, 
                 obsWeights = obsWeights, id = id, ...))
-        },silent=TRUE)
+        }, silent = FALSE)
         
         res
     })
@@ -108,9 +108,9 @@ origami_SuperLearner <- function(Y, X, newX = NULL, SL.library, family = gaussia
     
     # identify which algorithms failed and drop them
     failed_ever <- unique(names(which(results$fit_failed)))
-    if(length(failed_ever)>0){
+    if (length(failed_ever) > 0) {
         warning(sprintf("The following learners failed on at least one fold and will be dropped: %s", 
-                        paste(failed_ever, collapse = ", ")))
+            paste(failed_ever, collapse = ", ")))
     }
     good_ind <- match(setdiff(SL.library, failed_ever), SL.library)
     

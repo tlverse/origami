@@ -35,14 +35,32 @@ method.mvSL <- function(base_method) {
     out <- list(require = NULL, computeCoef = function(Z, Y, libraryNames, verbose, 
         obsWeights, ...) {
         nY <- ncol(Y)
+        
         col_coef <- lapply(seq_len(nY), function(i) {
             base_method$computeCoef(Z[, i, ], Y[, i], libraryNames, verbose, obsWeights, 
                 ...)
         })
         
-        col_coef[[1]]
         cvRisk <- rowMeans(sapply(col_coef, `[[`, "cvRisk"))
+        
+        # get init coef estimate <- average of per column estimates
         coef <- rowMeans(sapply(col_coef, `[[`, "coef"))
+        
+        # get optimum coef
+        risk_fun <- function(coef) {
+            normcoef <- normalize(coef)
+            
+            risks <- sapply(seq_len(nY), function(i) {
+                pred <- base_method$computePred(Z[, i, ], normcoef)
+                base_method$computeCoef(pred, Y[, i], "combination", verbose, obsWeights, 
+                  ...)$cvRisk
+            })
+            mean(risks)
+        }
+        
+        opt <- optim(risk_fun, par = coef, method = "L-BFGS-B", lower = 0, control = list(trace = FALSE))
+        coef <- normalize(opt$par)
+        
         out <- list(cvRisk = cvRisk, coef = coef)
         return(out)
     }, computePred = function(predY, coef, ...) {

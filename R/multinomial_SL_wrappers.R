@@ -106,4 +106,31 @@ predict.mnSL.glmnet <- function(object, newdata, ...) {
     pred <- predict(object$object$glmnet.fit, newx = newdata, s = ifelse(object$useMin, 
         object$object$lambda.min, object$object$lambda.1se), type = "response")
     return(pred)
-} 
+}
+
+
+############ mnSL wrapper for polymars
+
+#' @export
+mnSL.polymars <- function(Y, X, newX, family, obsWeights, ...) {
+    
+    if (family$family != "multinomial") {
+        stop("mnSL functions are for multinomial family only")
+    }
+    
+    require("polspline")
+    
+    fit.mars <- polyclass(Y, X, cv = 5, weight = obsWeights)
+    pred <- ppolyclass(cov = newX, fit = fit.mars)
+    fit <- list(fit = fit.mars)
+    
+    out <- list(pred = pred, fit = fit)
+    class(out$fit) <- c("mnSL.polymars")
+    return(out)
+}
+
+predict.mnSL.polymars <- function(object, newdata, family, ...) {
+    pred <- ppolyclass(cov = newdata, fit = object$fit)
+    return(pred)
+}
+ 
