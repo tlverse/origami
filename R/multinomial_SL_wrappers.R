@@ -132,5 +132,4 @@ mnSL.polymars <- function(Y, X, newX, family, obsWeights, ...) {
 predict.mnSL.polymars <- function(object, newdata, family, ...) {
     pred <- ppolyclass(cov = newdata, fit = object$fit)
     return(pred)
-}
- 
+} 
