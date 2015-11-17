@@ -133,3 +133,51 @@ predict.mnSL.polymars <- function(object, newdata, family, ...) {
     pred <- ppolyclass(cov = newdata, fit = object$fit)
     return(pred)
 } 
+
+
+
+############ mnSL wrapper for boosting (gbm)
+#' @export
+mnSL.gbm <- function(Y, X, newX, 
+                     family, obsWeights,
+                     n.trees = 100,
+                     interaction.depth = 1,
+                     n.minobsinnode = 10,
+                     shrinkage = 0.001,
+                     bag.fraction = 0.5, ...) {
+      require("gbm")
+      if (family$family != "multinomial") {
+            stop("mnSL functions are for multinomial family only")
+      }
+      # Create a dataframe for gbm method
+      data <- as.data.frame(X)
+      
+      fit.gbm <- gbm::gbm( as.factor(Y) ~ .,
+                          data = data,
+                          n.trees = n.trees,
+                          interaction.depth = interaction.depth,
+                          n.minobsinnode = n.minobsinnode,
+                          shrinkage = shrinkage,
+                          bag.fraction = bag.fraction,
+                          distribution = family, cv.folds = 5,
+                          keep.data = TRUE, weights = obsWeights, verbose = FALSE)
+      
+      best.iter <- gbm::gbm.perf(fit.gbm, method = "cv", plot.it = FALSE)
+      
+      pred <- predict(fit.gbm, newdata = as.data.frame(newX), best.iter, type = "response")
+      fit <- list(object = fit.gbm)
+      
+      out <- list(pred = pred, fit = fit)
+      class(out$fit) <- c("mnSL.gbm")
+      return(out)
+}
+
+
+#' @export
+predict.mnSL.gbm <- function(object, newdata, family, ...) {
+      require("gbm")
+      
+      pred <- predict(object$object, newdata = as.data.frame(newdata), type = "response")
+      
+      pred
+}
