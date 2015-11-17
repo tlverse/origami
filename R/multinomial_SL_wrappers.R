@@ -138,14 +138,14 @@ predict.mnSL.polymars <- function(object, newdata, family, ...) {
 
 ############ mnSL wrapper for boosting (gbm)
 #' @export
-mnSL.gbm <- function(Y, X, newX, 
-                     family, obsWeights,
+mnSL.gbm <- function(Y, X, newX, family, obsWeights,
                      n.trees = 100,
                      interaction.depth = 1,
                      n.minobsinnode = 10,
                      shrinkage = 0.001,
                      bag.fraction = 0.5, ...) {
       require("gbm")
+      
       if (family$family != "multinomial") {
             stop("mnSL functions are for multinomial family only")
       }
@@ -159,12 +159,14 @@ mnSL.gbm <- function(Y, X, newX,
                           n.minobsinnode = n.minobsinnode,
                           shrinkage = shrinkage,
                           bag.fraction = bag.fraction,
-                          distribution = family, cv.folds = 5,
+                          distribution = family$family, 
+                          cv.folds = 5,
                           keep.data = TRUE, weights = obsWeights, verbose = FALSE)
       
       best.iter <- gbm::gbm.perf(fit.gbm, method = "cv", plot.it = FALSE)
-      
+      # Return the prob matrix for testing set
       pred <- predict(fit.gbm, newdata = as.data.frame(newX), best.iter, type = "response")
+      # Make a list 
       fit <- list(object = fit.gbm)
       
       out <- list(pred = pred, fit = fit)
@@ -179,5 +181,5 @@ predict.mnSL.gbm <- function(object, newdata, family, ...) {
       
       pred <- predict(object$object, newdata = as.data.frame(newdata), type = "response")
       
-      pred
+      return(pred)
 }
