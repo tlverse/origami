@@ -1,6 +1,8 @@
 # Super Learner for Multinomial A (also multinomial probabilities?)
 mn_loglik <- function(pred, truth, weight) {
-    return(weighted.mean(rowSums(truth * log(pred)), weight))
+  class_liks=truth * log(pred)
+  class_liks[truth==0]=0 # to fix 0*log(0)=0 (otherwise would return NaN)
+  return(weighted.mean(rowSums(class_liks), weight))
 }
 
 trim_loglin <- function(x, trim = 1e-05) {
