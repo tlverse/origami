@@ -26,7 +26,6 @@ method.mnNNloglik <- function() {
         obsWeights, control, ...) {
         Y_ind <- factor_to_indicators(Y)
         cvRisk <- -2 * aaply(Z, 3, mn_loglik, Y_ind, obsWeights)
-        
         names(cvRisk) <- libraryNames
         .NNloglik <- function(x, truth, weight, start_alpha = rep(0, dim(x)[3])) {
             fmin <- function(alpha, x, truth, weight) {

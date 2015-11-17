@@ -117,6 +117,7 @@ origami_SuperLearner <- function(Y, X, newX = NULL, SL.library, family = gaussia
     # drop bad algorithms from Z
     last_dim <- length(safe_dim(Z))
     Z <- index_dim(Z, good_ind, last_dim)
+    rownames(Z)=NULL
     SL.library <- SL.library[good_ind]
     
     # calculate coefficients
