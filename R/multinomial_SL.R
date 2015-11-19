@@ -1,30 +1,30 @@
 # Super Learner for Multinomial A (also multinomial probabilities?)
 mn_loglik <- function(pred, truth, weight) {
-  class_liks=truth * log(pred)
-  class_liks[truth==0]=0 # to fix 0*log(0)=0 (otherwise would return NaN)
-  return(weighted.mean(rowSums(class_liks), weight))
+    class_liks <- truth * log(pred)
+    class_liks[truth == 0] <- 0  # to fix 0*log(0)=0 (otherwise would return NaN)
+    return(weighted.mean(rowSums(class_liks), weight))
 }
 
 trim_loglin <- function(x, trim = 1e-05) {
     x[x < trim] <- trim
     x[x > (1 - trim)] <- (1 - trim)
-
+    
     return(log(x))
 }
 
 #' @export
 mn_pred <- function(alpha, x) {
     Y_pred <- plogis(t(aaply(x, 2, `%*%`, alpha)))
-
+    
     # normalize so class predictions sum to 1
     Y_pred <- normalize_rows(Y_pred)
-
+    
     return(Y_pred)
 }
 
 #' @export
 method.mnNNloglik <- function() {
-    out <- list(require = NULL, computeCoef = function(Z, Y, libraryNames, verbose,
+    out <- list(require = NULL, computeCoef = function(Z, Y, libraryNames, verbose, 
         obsWeights, control, ...) {
         Y_ind <- factor_to_indicators(Y)
         cvRisk <- -2 * aaply(Z, 3, mn_loglik, Y_ind, obsWeights)
@@ -46,7 +46,7 @@ method.mnNNloglik <- function() {
                 tot_grad <- aaply(x, 3, function(x_a) (sum(tot_fac * x_a)))
                 -2 * (a_grad - tot_grad)
             }
-            fit <- optim(start_alpha, fmin, gmin, x = x, truth = truth, weight = weight,
+            fit <- optim(start_alpha, fmin, gmin, x = x, truth = truth, weight = weight, 
                 method = "L-BFGS-B", lower = 0, upper = 1)  #, ...)
             fit
             invisible(fit)
@@ -54,7 +54,7 @@ method.mnNNloglik <- function() {
         tempZ <- trimLogit(Z)
         fit.nnloglik <- .NNloglik(x = tempZ, truth = Y_ind, weight = obsWeights)
         if (verbose) {
-            message(paste("Non-Negative log-likelihood convergence: ", fit.nnloglik$convergence ==
+            message(paste("Non-Negative log-likelihood convergence: ", fit.nnloglik$convergence == 
                 0))
         }
         initCoef <- fit.nnloglik$par
@@ -82,8 +82,8 @@ method.mnNNloglik <- function() {
 #' @seealso \code{\link{predict.origami_SuperLearner}}
 #' @export
 
-multinomial_SuperLearner <- function(Y, X, SL.library = c("mnSL.randomForest", "mnSL.glmnet",
+multinomial_SuperLearner <- function(Y, X, SL.library = c("mnSL.randomForest", "mnSL.glmnet", 
     "mnSL.multinom", "mnSL.mean"), ...) {
-    origami_SuperLearner(Y = factor(Y), X = X, SL.library = SL.library, family = list(family = "multinomial"),
+    origami_SuperLearner(Y = factor(Y), X = X, SL.library = SL.library, family = list(family = "multinomial"), 
         method = method.mnNNloglik(), ...)
-}
+} 
