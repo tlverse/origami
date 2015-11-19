@@ -47,7 +47,6 @@ set.seed(1)
 ocv_sl_result <- origami_CV.SuperLearner(Y = Y, X = X, SL.library = SL.library, method = method.NNLS(), 
     family = binomial())
 
-
 summary(cv_sl_result)
 print(ocv_sl_result)
 
