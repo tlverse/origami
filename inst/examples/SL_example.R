@@ -42,7 +42,7 @@ set.seed(1)
 cv_sl_result <- CV.SuperLearner(Y = Y, X = X, SL.library = SL.library, method = "method.NNLS", 
     family = binomial())
 
-#NB: not yet feature complete with CV.SuperLearner
+# NB: not yet feature complete with CV.SuperLearner
 set.seed(1)
 ocv_sl_result <- origami_CV.SuperLearner(Y = Y, X = X, SL.library = SL.library, method = method.NNLS(), 
     family = binomial())

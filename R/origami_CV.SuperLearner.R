@@ -1,4 +1,4 @@
-
+#' @export
 cv_cvsl <- function(fold, Y, X, id, obsWeights, ...) {
     # training objects
     train_Y <- training(Y)
@@ -31,6 +31,7 @@ cv_cvsl <- function(fold, Y, X, id, obsWeights, ...) {
     list(preds = all_preds, true_y = valid_Y, valid_rows = valid_rows, cv_risks = as.data.frame(as.list(cv_risks)))
 }
 
+#' @export
 origami_CV.SuperLearner <- function(Y, X, V = 10, id = NULL, obsWeights = rep(1, 
     length(Y)), ...) {
     
@@ -47,6 +48,7 @@ origami_CV.SuperLearner <- function(Y, X, V = 10, id = NULL, obsWeights = rep(1,
     return(out)
 }
 
+#' @export
 print.origami_CV.SuperLearner <- function(obj) {
     risk_df <- with(obj, data.frame(Ave = apply(cvRisk, 2, mean), se = apply(cvRisk, 
         2, sd)/sqrt(nrow(cvRisk)), Min = apply(cvRisk, 2, min), Max = apply(cvRisk, 
