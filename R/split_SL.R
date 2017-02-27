@@ -5,8 +5,8 @@ split_from_args <- function(osl_args) {
     fit <- do.call(origami_SuperLearner, osl_args)
 }
 
-# fit origami_SuperLearner once, to the full dataset and return either the
-# FullSuperLearner or the SplitSequential SuperLearner for each fold
+# fit origami_SuperLearner once, to the full dataset and return either the FullSuperLearner or the SplitSequential
+# SuperLearner for each fold
 #' @export
 split_to_full <- function(fit, osl_args = NULL) {
     # full sequntial uses the full fit for all the folds
@@ -15,8 +15,7 @@ split_to_full <- function(fit, osl_args = NULL) {
     return(fit)
 }
 
-# generate nested folds for a given training set todo: allow user-specified
-# nested fold generation
+# generate nested folds for a given training set todo: allow user-specified nested fold generation
 make_nest_folds <- function(Y, X, stratifyAY = FALSE, Anode, ...) {
     
     if (stratifyAY) {
@@ -46,8 +45,7 @@ cv_nested_fit <- function(fold, osl_args, ...) {
     return(list(fit = fit$fullFit))
 }
 
-# fit origami_SuperLearner separately on the training subset of each fold
-# (nested)
+# fit origami_SuperLearner separately on the training subset of each fold (nested)
 #' @export
 split_to_nested <- function(fit, osl_args) {
     folds <- osl_args$folds
@@ -55,4 +53,4 @@ split_to_nested <- function(fit, osl_args) {
     fit$foldFits <- nested_fits$fit
     
     return(fit)
-} 
+}

@@ -15,23 +15,20 @@
 #'
 #' @example /inst/examples/cv_example.R
 #'  
-cross_validate <- function(cv_fun, folds, ..., .parallel = F, .foreach_control = list(), 
-    .combine = T, .combine_control = list()) {
+cross_validate <- function(cv_fun, folds, ..., .parallel = F, .foreach_control = list(), .combine = T, .combine_control = list()) {
     
     # determine if we should parallelize
     `%do_op%` <- `%do%`
     if (.parallel && getDoParRegistered()) 
         `%do_op%` <- `%dopar%`
     
-    # so as to not stress out CRAN about this variable being missing, when it's
-    # defined by for each
+    # so as to not stress out CRAN about this variable being missing, when it's defined by for each
     fold <- NULL
     
     # main loop
-    results <- do.call(foreach, c(list(fold = folds), .foreach_control)) %do_op% 
-        {
-            cv_fun(fold, ...)
-        }
+    results <- do.call(foreach, c(list(fold = folds), .foreach_control)) %do_op% {
+        cv_fun(fold, ...)
+    }
     
     # remove error results
     if (.foreach_control[".errorhandling"] == "pass") {
@@ -48,8 +45,7 @@ cross_validate <- function(cv_fun, folds, ..., .parallel = F, .foreach_control =
         stop("names returned from folds are not consistent")
     
     
-    # invert results - go from a list containing one list per fold to a list
-    # containing one list per result returned by cv_fun
+    # invert results - go from a list containing one list per fold to a list containing one list per result returned by cv_fun
     results <- apply(do.call(rbind, results), 2, as.list)
     
     # combine results
@@ -61,4 +57,4 @@ cross_validate <- function(cv_fun, folds, ..., .parallel = F, .foreach_control =
         results$errors <- error_results
     }
     return(results)
-} 
+}

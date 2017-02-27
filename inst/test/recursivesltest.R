@@ -46,8 +46,7 @@ testonsplit <- function(split, time) {
 
 test3 <- function(splits, time) {
     if (time > 0) {
-        pastSplitResults <- genCV(testonsplit, splits, .doPar = T, time = time - 
-            1)
+        pastSplitResults <- genCV(testonsplit, splits, .doPar = T, time = time - 1)
         aux <- pastSplitResults$full
         aux <- paste(aux, "nested")
     } else {
@@ -59,4 +58,4 @@ test3 <- function(splits, time) {
     return(results)
 }
 
-test3(splits, time = 2) 
+test3(splits, time = 2)

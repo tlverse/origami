@@ -1,7 +1,7 @@
 #' @export
 vals_from_factor <- function(x) {
-    lev <- levels(as.factor(x))
-    factor(lev, levels = lev)
+    # lev <- levels(as.factor(x)) factor(lev, levels = lev)
+    sort(unique(x))
 }
 
 #' @export
@@ -26,4 +26,4 @@ pred_all_Q <- function(Q_fit, newdata, A_vals, Anode) {
 #' @export
 normalize_rows <- function(x) {
     sweep(x, 1, rowSums(x), "/")
-} 
+}

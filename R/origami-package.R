@@ -25,4 +25,4 @@
 #' @seealso \code{\link{cross_validate}}, \code{\link{origami_SuperLearner}}
 #' @example /inst/examples/cv_example.R
 #' @import foreach SuperLearner methods
-NULL 
+NULL

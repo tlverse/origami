@@ -1,14 +1,12 @@
 ############ mnSL wrapper for randomForest
 #' @export
-mnSL.randomForest <- function(Y, X, newX, family, mtry = max(floor(ncol(X)/3), 1), 
-    ntree = 1000, nodesize = 1, ...) {
+mnSL.randomForest <- function(Y, X, newX, family, mtry = max(floor(ncol(X)/3), 1), ntree = 1000, nodesize = 1, ...) {
     require("randomForest")
     if (family$family != "multinomial") {
         stop("mnSL functions are for multinomial family only")
     }
     
-    fit.rf <- randomForest(y = as.factor(Y), x = X, ntree = ntree, xtest = newX, 
-        keep.forest = TRUE, mtry = mtry, nodesize = nodesize)
+    fit.rf <- randomForest(y = as.factor(Y), x = X, ntree = ntree, xtest = newX, keep.forest = TRUE, mtry = mtry, nodesize = nodesize)
     pred <- fit.rf$test$votes
     fit <- list(object = fit.rf)
     
@@ -43,8 +41,7 @@ mnSL.mean <- function(Y, X, newX, family, obsWeights, id, ...) {
 
 #' @export
 predict.mnSL.mean <- function(object, newdata, family, X = NULL, Y = NULL, ...) {
-    pred <- matrix(rep.int(object$object, times = nrow(newdata)), nrow = nrow(newdata), 
-        byrow = T)
+    pred <- matrix(rep.int(object$object, times = nrow(newdata)), nrow = nrow(newdata), byrow = T)
     return(pred)
 }
 
@@ -77,8 +74,7 @@ predict.mnSL.multinom <- function(object, newdata, family, X = NULL, Y = NULL, .
 ############ mnSL wrapper for glmnet
 
 #' @export
-mnSL.glmnet <- function(Y, X, newX, family, obsWeights, id, alpha = 1, nfolds = 10, 
-    nlambda = 100, useMin = TRUE, ...) {
+mnSL.glmnet <- function(Y, X, newX, family, obsWeights, id, alpha = 1, nfolds = 10, nlambda = 100, useMin = TRUE, ...) {
     if (family$family != "multinomial") {
         stop("mnSL functions are for multinomial family only")
     }
@@ -88,10 +84,9 @@ mnSL.glmnet <- function(Y, X, newX, family, obsWeights, id, alpha = 1, nfolds = 
         X <- model.matrix(~-1 + ., X)
         newX <- model.matrix(~-1 + ., newX)
     }
-    fitCV <- cv.glmnet(x = X, y = Y, weights = obsWeights, lambda = NULL, type.measure = "deviance", 
-        nfolds = nfolds, family = "multinomial", alpha = alpha, nlambda = nlambda)
-    pred <- predict(fitCV$glmnet.fit, newx = newX, s = ifelse(useMin, fitCV$lambda.min, 
-        fitCV$lambda.1se), type = "response")
+    fitCV <- cv.glmnet(x = X, y = Y, weights = obsWeights, lambda = NULL, type.measure = "deviance", nfolds = nfolds, family = "multinomial", 
+        alpha = alpha, nlambda = nlambda)
+    pred <- predict(fitCV$glmnet.fit, newx = newX, s = ifelse(useMin, fitCV$lambda.min, fitCV$lambda.1se), type = "response")
     fit <- list(object = fitCV, useMin = useMin)
     class(fit) <- "mnSL.glmnet"
     out <- list(pred = pred, fit = fit)
@@ -103,8 +98,8 @@ predict.mnSL.glmnet <- function(object, newdata, ...) {
     if (!is.matrix(newdata)) {
         newdata <- model.matrix(~-1 + ., newdata)
     }
-    pred <- predict(object$object$glmnet.fit, newx = newdata, s = ifelse(object$useMin, 
-        object$object$lambda.min, object$object$lambda.1se), type = "response")
+    pred <- predict(object$object$glmnet.fit, newx = newdata, s = ifelse(object$useMin, object$object$lambda.min, object$object$lambda.1se), 
+        type = "response")
     return(pred)
 }
 
@@ -129,6 +124,7 @@ mnSL.polymars <- function(Y, X, newX, family, obsWeights, ...) {
     return(out)
 }
 
+#' @export
 predict.mnSL.polymars <- function(object, newdata, family, ...) {
     pred <- ppolyclass(cov = newdata, fit = object$fit)
     return(pred)
@@ -138,8 +134,8 @@ predict.mnSL.polymars <- function(object, newdata, family, ...) {
 
 ############ mnSL wrapper for boosting (gbm)
 #' @export
-mnSL.gbm <- function(Y, X, newX, family, obsWeights, n.trees = 100, interaction.depth = 1, 
-    n.minobsinnode = 10, shrinkage = 0.001, bag.fraction = 0.5, ...) {
+mnSL.gbm <- function(Y, X, newX, family, obsWeights, n.trees = 100, interaction.depth = 1, n.minobsinnode = 10, shrinkage = 0.001, 
+    bag.fraction = 0.5, ...) {
     require("gbm")
     
     if (family$family != "multinomial") {
@@ -148,9 +144,8 @@ mnSL.gbm <- function(Y, X, newX, family, obsWeights, n.trees = 100, interaction.
     # Create a dataframe for gbm method
     data <- as.data.frame(X)
     
-    fit.gbm <- gbm::gbm(as.factor(Y) ~ ., data = data, n.trees = n.trees, interaction.depth = interaction.depth, 
-        n.minobsinnode = n.minobsinnode, shrinkage = shrinkage, bag.fraction = bag.fraction, 
-        distribution = family$family, cv.folds = 5, keep.data = TRUE, weights = obsWeights, 
+    fit.gbm <- gbm::gbm(as.factor(Y) ~ ., data = data, n.trees = n.trees, interaction.depth = interaction.depth, n.minobsinnode = n.minobsinnode, 
+        shrinkage = shrinkage, bag.fraction = bag.fraction, distribution = family$family, cv.folds = 5, keep.data = TRUE, weights = obsWeights, 
         verbose = FALSE)
     
     best.iter <- gbm::gbm.perf(fit.gbm, method = "cv", plot.it = FALSE)
@@ -188,8 +183,7 @@ mnSL.earth <- function(Y, X, newX, family, obsWeights, degree = 1, nfold = 0, ..
     # Create a dataframe for earth method
     data <- as.data.frame(X)
     
-    fit.earth <- earth::earth(as.factor(Y) ~ ., data = data, weights = obsWeights, 
-        nfold = nfold)
+    fit.earth <- earth::earth(as.factor(Y) ~ ., data = data, weights = obsWeights, nfold = nfold)
     
     
     # Return the prob matrix for testing set
@@ -210,4 +204,4 @@ predict.mnSL.earth <- function(object, newdata, family, ...) {
     pred <- predict(object$object, newdata = newdata, type = "response")
     
     pred
-} 
+}

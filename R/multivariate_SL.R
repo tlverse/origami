@@ -29,16 +29,13 @@ predict.mvSL.wrapper <- function(object, ...) {
 }
 
 #' @export
-# coefs are a simple average of the per-Y coeffcients todo: actually maximize in
-# the mv space
+# coefs are a simple average of the per-Y coeffcients todo: actually maximize in the mv space
 method.mvSL <- function(base_method) {
-    out <- list(require = NULL, computeCoef = function(Z, Y, libraryNames, verbose, 
-        obsWeights, ...) {
+    out <- list(require = NULL, computeCoef = function(Z, Y, libraryNames, verbose, obsWeights, ...) {
         nY <- ncol(Y)
         
         col_coef <- lapply(seq_len(nY), function(i) {
-            base_method$computeCoef(Z[, i, ], Y[, i], libraryNames, verbose, obsWeights, 
-                ...)
+            base_method$computeCoef(Z[, i, ], Y[, i], libraryNames, verbose, obsWeights, ...)
         })
         
         cvRisk <- rowMeans(sapply(col_coef, `[[`, "cvRisk"))
@@ -52,8 +49,7 @@ method.mvSL <- function(base_method) {
             
             risks <- sapply(seq_len(nY), function(i) {
                 pred <- base_method$computePred(Z[, i, ], normcoef)
-                base_method$computeCoef(pred, Y[, i], "combination", verbose, obsWeights, 
-                  ...)$cvRisk
+                base_method$computeCoef(pred, Y[, i], "combination", verbose, obsWeights, ...)$cvRisk
             })
             mean(risks)
         }
@@ -82,10 +78,9 @@ sl_to_mv_library <- function(SL.library) {
 }
 
 # mvLibrary=sl_to_mv_library(SL.library$QaV)
-# sapply(mvLibrary,function(x){get('wrapper',envir=environment(eval(parse(text=x))))})
-# predictions=val_preds test=val_preds$QaW
+# sapply(mvLibrary,function(x){get('wrapper',envir=environment(eval(parse(text=x))))}) predictions=val_preds
+# test=val_preds$QaW
 
-# head(test) #debug(mvSL.mean) debug(predict.mvSL.wrapper) method=method.NNLS()
-# base_method=method.NNLS() mv.method=method.mvSL(base_method)
-# #debug(mv.method$computeCoef)
-# test=origami_SuperLearner(folds=folds,Y=val_preds$QaW,X=data[,nodes$Wnodes],SL.library=mvLibrary,method=mv.method) 
+# head(test) #debug(mvSL.mean) debug(predict.mvSL.wrapper) method=method.NNLS() base_method=method.NNLS()
+# mv.method=method.mvSL(base_method) #debug(mv.method$computeCoef)
+# test=origami_SuperLearner(folds=folds,Y=val_preds$QaW,X=data[,nodes$Wnodes],SL.library=mvLibrary,method=mv.method)

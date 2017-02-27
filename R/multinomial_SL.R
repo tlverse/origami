@@ -24,8 +24,7 @@ mn_pred <- function(alpha, x) {
 
 #' @export
 method.mnNNloglik <- function() {
-    out <- list(require = NULL, computeCoef = function(Z, Y, libraryNames, verbose, 
-        obsWeights, control, ...) {
+    out <- list(require = NULL, computeCoef = function(Z, Y, libraryNames, verbose, obsWeights, control, ...) {
         Y_ind <- factor_to_indicators(Y)
         cvRisk <- -2 * aaply(Z, 3, mn_loglik, Y_ind, obsWeights)
         names(cvRisk) <- libraryNames
@@ -46,16 +45,14 @@ method.mnNNloglik <- function() {
                 tot_grad <- aaply(x, 3, function(x_a) (sum(tot_fac * x_a)))
                 -2 * (a_grad - tot_grad)
             }
-            fit <- optim(start_alpha, fmin, gmin, x = x, truth = truth, weight = weight, 
-                method = "L-BFGS-B", lower = 0, upper = 1)  #, ...)
+            fit <- optim(start_alpha, fmin, gmin, x = x, truth = truth, weight = weight, method = "L-BFGS-B", lower = 0, upper = 1)  #, ...)
             fit
             invisible(fit)
         }
         tempZ <- trimLogit(Z)
         fit.nnloglik <- .NNloglik(x = tempZ, truth = Y_ind, weight = obsWeights)
         if (verbose) {
-            message(paste("Non-Negative log-likelihood convergence: ", fit.nnloglik$convergence == 
-                0))
+            message(paste("Non-Negative log-likelihood convergence: ", fit.nnloglik$convergence == 0))
         }
         initCoef <- fit.nnloglik$par
         initCoef[initCoef < 0] <- 0
@@ -82,8 +79,8 @@ method.mnNNloglik <- function() {
 #' @seealso \code{\link{predict.origami_SuperLearner}}
 #' @export
 
-multinomial_SuperLearner <- function(Y, X, SL.library = c("mnSL.randomForest", "mnSL.glmnet", 
-    "mnSL.multinom", "mnSL.mean"), ...) {
-    origami_SuperLearner(Y = factor(Y), X = X, SL.library = SL.library, family = list(family = "multinomial"), 
-        method = method.mnNNloglik(), ...)
-} 
+multinomial_SuperLearner <- function(Y, X, SL.library = c("mnSL.randomForest", "mnSL.glmnet", "mnSL.multinom", "mnSL.mean"), 
+    ...) {
+    origami_SuperLearner(Y = factor(Y), X = X, SL.library = SL.library, family = list(family = "multinomial"), method = method.mnNNloglik(), 
+        ...)
+}

@@ -10,4 +10,4 @@ lapply(folds, function(fold) table(clusterids, seq_len(n) %in% training(fold = f
 
 folds <- make_folds(V = 2, strataids = strataids, clusterids = clusterids)
 
-lapply(folds, function(fold) table(strataids, clusterids, seq_len(n) %in% training(fold = fold))) 
+lapply(folds, function(fold) table(strataids, clusterids, seq_len(n) %in% training(fold = fold)))

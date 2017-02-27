@@ -3,8 +3,7 @@ fit_drop_zero_learners <- function(osl_fit) {
     coef <- osl_fit$coef
     is_nz <- which(coef != 0)
     if (length(is_nz) == 1) {
-        # make sure we have at least two learners (so we don't break the combination
-        # methods)
+        # make sure we have at least two learners (so we don't break the combination methods)
         is_nz <- c(is_nz, length(coef))
     }
     coefnz <- coef[is_nz]
@@ -26,4 +25,4 @@ drop_zero_learners <- function(osl_obj) {
         osl_obj$foldFits[[i]] <- fit_drop_zero_learners(osl_obj$foldFits[[i]])
     }
     return(osl_obj)
-} 
+}

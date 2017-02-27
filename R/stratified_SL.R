@@ -17,8 +17,8 @@ wrapper_to_strat_wrapper <- function(wrapper, strat_var = "A") {
         col_fits <- lapply(strat_levels, function(strat_level) {
             strat_index <- which(strata == strat_level)
             new_strat_index <- which(newX_strata == strat_level)
-            fit <- wrapper(index_dim(Y, strat_index), X[strat_index, ], newX[new_strat_index, 
-                ], family, index_dim(obsWeights, strat_index), ...)
+            fit <- wrapper(index_dim(Y, strat_index), X[strat_index, ], newX[new_strat_index, ], family, index_dim(obsWeights, 
+                strat_index), ...)
             fit$new_strat_index <- new_strat_index
             fit
         })
@@ -49,8 +49,7 @@ predict.stratSL.wrapper <- function(object, newdata, ...) {
     strat_nums_to_pred <- which(strat_levels %in% newdata_strata)
     col_preds <- lapply(strat_nums_to_pred, function(strat_num) {
         new_strat_index <- which(newdata_strata == strat_levels[strat_num])
-        pred <- predict(object$col_fits[[strat_num]]$fit, newdata[new_strat_index, 
-            ], ...)
+        pred <- predict(object$col_fits[[strat_num]]$fit, newdata[new_strat_index, ], ...)
         list(pred = pred, new_strat_index = new_strat_index)
     })
     
@@ -64,9 +63,8 @@ predict.stratSL.wrapper <- function(object, newdata, ...) {
 sl_to_strat_library <- function(SL.library, strat_var) {
     stratSL.library <- sprintf("strat%s", SL.library)
     for (i in seq_along(SL.library)) {
-        assign(stratSL.library[i], wrapper_to_strat_wrapper(SL.library[i], strat_var), 
-            envir = globalenv())
+        assign(stratSL.library[i], wrapper_to_strat_wrapper(SL.library[i], strat_var), envir = globalenv())
     }
     
     return(stratSL.library)
-} 
+}
