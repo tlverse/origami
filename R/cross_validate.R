@@ -9,13 +9,15 @@
 #' @param .foreach_control list; arguments to \code{\link[foreach]{foreach}}.
 #' @param .combine logical; should \code{\link{combine_results}} be called.
 #' @param .combine_control list; arguments to \code{\link{combine_results}}.
+#' @param .old_results list; the returned result from a previous call to cross_validate. Will be combined with the current results. Useful for adding additional cv folds to a results object.
 #'
 #' @return A list of results, combined across folds.
 #' @export
 #'
 #' @example /inst/examples/cv_example.R
 #'  
-cross_validate <- function(cv_fun, folds, ..., .parallel = F, .foreach_control = list(), .combine = T, .combine_control = list()) {
+cross_validate <- function(cv_fun, folds, ..., .parallel = F, .foreach_control = list(), .combine = T, .combine_control = list(), 
+    .old_results = NULL) {
     
     # determine if we should parallelize
     `%do_op%` <- `%do%`
@@ -55,6 +57,13 @@ cross_validate <- function(cv_fun, folds, ..., .parallel = F, .foreach_control =
     
     if (.foreach_control[".errorhandling"] == "pass") {
         results$errors <- error_results
+    }
+    
+    if (!is.null(.old_results)) {
+        # invert results - go from a list containing one list per fold to a list containing one list per result returned by cv_fun
+        new_and_old <- list(results, .old_results)
+        new_and_old <- apply(do.call(rbind, new_and_old), 2, as.list)
+        results <- combine_results(results = new_and_old)
     }
     return(results)
 }

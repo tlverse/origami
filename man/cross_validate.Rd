@@ -5,7 +5,7 @@
 \title{Main cross-validation function}
 \usage{
 cross_validate(cv_fun, folds, ..., .parallel = F, .foreach_control = list(),
-  .combine = T, .combine_control = list())
+  .combine = T, .combine_control = list(), .old_results = NULL)
 }
 \arguments{
 \item{cv_fun}{a function that takes a 'fold' as it's first argument.
@@ -22,6 +22,8 @@ and returns a list of results from that fold.}
 \item{.combine}{logical; should \code{\link{combine_results}} be called.}
 
 \item{.combine_control}{list; arguments to \code{\link{combine_results}}.}
+
+\item{.old_results}{list; the returned result from a previous call to cross_validate. Will be combined with the current results. Useful for adding additional cv folds to a results object.}
 }
 \value{
 A list of results, combined across folds.
