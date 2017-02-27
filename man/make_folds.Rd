@@ -32,5 +32,6 @@ Other fold_funs: \code{\link{folds_bootstrap}},
   \code{\link{folds_resubstitution}},
   \code{\link{folds_rolling_origin}},
   \code{\link{folds_rolling_window}},
-  \code{\link{folds_vfold}}
+  \code{\link{folds_vfold}},
+  \code{\link{make_repeated_folds}}
 }

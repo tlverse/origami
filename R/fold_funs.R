@@ -291,5 +291,21 @@ folds2foldvec <- function(folds) {
     })
     
     return(vfolds)
-} 
+}
 
+
+#' @family fold_funs
+#' @title Repeated cross-validation
+#' @description Repeated window cross-validation. Generates fold objects for repated cross-validation by 
+#' making repeated calls to \link{make_folds} and concatenating the results.
+#' 
+#' @param repeats integer; number of repeats
+#' @param ... arguments passed to \link{make_folds}
+#' 
+#' @export
+make_repeated_folds <- function(repeats, ...) {
+    all_folds <- foreach(i = 1:repeats) %do% make_folds(...)
+    folds <- unlist(all_folds)
+    
+    return(folds)
+}
