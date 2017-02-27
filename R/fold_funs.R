@@ -283,3 +283,13 @@ folds_rolling_window <- function(n, window_size, validation_size) {
     
     return(folds)
 }
+
+#' @export
+folds2foldvec <- function(folds) {
+    vfolds <- lapply(folds, function(fold) {
+        validation()
+    })
+    
+    return(vfolds)
+} 
+

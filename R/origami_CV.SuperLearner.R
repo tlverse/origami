@@ -40,7 +40,7 @@ origami_CV.SuperLearner <- function(Y, X, V = 10, id = NULL, obsWeights = rep(1,
     cv_results <- cross_validate(cv_cvsl, folds, Y, X, id, obsWeights, ...)
     
     # results
-    out <- list(SL.predict = cv_results$preds, cvRisk = cv_results$cv_risks)
+    out <- list(SL.predict = cv_results$preds, cvRisk = cv_results$cv_risks, folds = folds)
     class(out) <- c("origami_CV.SuperLearner")
     return(out)
 }
