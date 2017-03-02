@@ -305,7 +305,7 @@ folds2foldvec <- function(folds) {
 #' @export
 make_repeated_folds <- function(repeats, ...) {
     all_folds <- foreach(i = 1:repeats) %do% make_folds(...)
-    folds <- unlist(all_folds)
+    folds <- unlist(all_folds,recursive=F)
     
     return(folds)
 }
