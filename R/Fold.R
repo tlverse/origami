@@ -1,24 +1,20 @@
-#' @rdname Fold
-#' @name Fold
-setClass("Fold", slots = list(v = "integer", training_set = "integer", validation_set = "integer"))
-
-#' @title Fold S4 class
-#' @description class representing a fold in a cross-validation scheme
-
+#' @title fold
+#' @description Function to make a fold. Current representation is a simple list.
 #' @param v integer index of fold in larger scheme.
 #' @param training_set integer vector of indexes corresponding to the training set.
 #' @param validation_set integer vector of indexes corresponding to the validation set.
-#' @return A Fold.
+#' @return A list containing these elements.
 #'
 #' @seealso \code{\link{fold_helpers}}
 #' @export
-#' @rdname Fold
 make_fold <- function(v, training_set, validation_set) {
-    new("Fold", v = v, training_set = training_set, validation_set = validation_set)
+    fold=list(v = v, training_set = training_set, validation_set = validation_set)
+    class(fold)="fold"
+    fold
 }
 
 # function factory for different fold-based indexing functions
-get_from_fold <- function(slotname) {
+get_from_fold <- function(component) {
     # function to index an object based on the training set, validation set, or index of a fold
     function(x = NULL, fold = NULL) {
         # if fold isn't specified, attempt to pull from the calling environment
@@ -29,10 +25,11 @@ get_from_fold <- function(slotname) {
             fold <- get("fold", envir = parent.frame())
         }
         
-        if (class(fold) != "Fold") {
+        if (class(fold) != "fold") {
             stop("invalid fold")
         }
-        index <- slot(fold, slotname)
+        index=fold[[component]]
+        
         if (is.null(x)) {
             # if no x, return indexes
             return(index)
