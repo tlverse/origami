@@ -160,7 +160,7 @@ predict.origami_SuperLearner <- function(object, newdata = "cv-original", ...) {
         pred_obj <- list(pred = object$fullFit$method$computePred(Z, object$fullFit$coef, control = object$fullFit$control), 
             library_pred = Z)
     } else {
-        pred_obj <- predict(object$fullFit, newdata)
+        pred_obj <- predict(object$fullFit, newdata, ...)
     }
     
     return(pred_obj)
@@ -174,7 +174,7 @@ predict.origami_SuperLearner_fit <- function(object, newdata, ...) {
     library_pred <- lapply(seq_along(object$library_fits), function(index) {
         
         fitobj <- object$library_fits[[index]]
-        pred <- predict(fitobj$fit, newdata = newdata, family = object$family)
+        pred <- predict(fitobj$fit, newdata = newdata, family = object$family, ...)
         
         drop(pred)
     })
