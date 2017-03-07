@@ -46,7 +46,7 @@ cv_SL <- function(fold, Y, X, SL.library, family, obsWeights, id, ...) {
     
     # extract and collapse predictions preds <- lapply(fits, function(fit) fit$pred)
     preds <- lapply(fits, function(fit) drop(fit$pred))
-    Z <- do.call(abind, c(preds, rev.along = 0))
+    Z <- do.call(abind::abind, c(preds, rev.along = 0))
     
     results <- list(Z = Z, valid_index = valid_index, valY = validation(Y), valWeights = validation(obsWeights), fits = fits, 
         fit_failed = fit_failed)

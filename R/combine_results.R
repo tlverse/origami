@@ -69,5 +69,5 @@ combiner_factor <- function(x) {
 #' @rdname combiners
 #' @export
 combiner_array <- function(x) {
-    do.call(abind, c(x, along = 1))
+    do.call(abind::abind, c(x, along = 1))
 }
