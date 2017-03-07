@@ -181,7 +181,7 @@ predict.origami_SuperLearner_fit <- function(object, newdata, ...) {
     
     
     
-    Z <- do.call(abind, c(library_pred, rev.along = 0))
+    Z <- do.call(abind::abind, c(library_pred, rev.along = 0))
     dimnames(Z)[[length(dim(Z))]] <- names(object$library_fits)
     
     pred <- object$method$computePred(Z, object$coef, control = object$control)

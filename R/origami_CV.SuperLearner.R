@@ -19,7 +19,7 @@ cv_cvsl <- function(fold, Y, X, id, obsWeights, ...) {
     # get preds
     preds <- predict(o_SL, newdata = valid_X)
     library_names <- names(o_SL$cvRisk)
-    all_preds <- abind(preds$pred, preds$library_pred, rev.along = 1)
+    all_preds <- abind::abind(preds$pred, preds$library_pred, rev.along = 1)
     dimnames(all_preds)[[2]][1] <- "SuperLearner"
     
     # get risks
