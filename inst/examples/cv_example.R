@@ -8,11 +8,11 @@ mean(resid(r)^2)
 cvlm <- function(fold) {
     train_data <- training(mtcars)
     valid_data <- validation(mtcars)
-    
+
     r <- lm(mpg ~ ., data = train_data)
     preds <- predict(r, newdata = valid_data)
     list(coef = data.frame(t(coef(r))), SE = ((preds - valid_data$mpg)^2))
-    
+
 }
 
 # replicate the resubstitution estimate
