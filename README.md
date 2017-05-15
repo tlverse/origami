@@ -1,6 +1,6 @@
 
 [![Travis-CI Build Status](https://travis-ci.org/jeremyrcoyle/origami.svg?branch=master)](https://travis-ci.org/jeremyrcoyle/origami)
-[![AppVeyor Build  Status](https://ci.appveyor.com/project/jeremyrcoyle/origami?branch=master&svg=true)](https://ci.appveyor.com/project/jeremyrcoyle/origami)
+[![Build status](https://ci.appveyor.com/api/projects/status/i5qwp8cjb4j4x329?svg=true)](https://ci.appveyor.com/project/jeremyrcoyle/origami)
 [![Coverage Status](https://img.shields.io/codecov/c/github/benkeser/survtmle/master.svg)](https://codecov.io/github/benkeser/survtmle?branch=master)
 [![CRAN](http://www.r-pkg.org/badges/version/survtmle)](http://www.r-pkg.org/pkg/survtmle)
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
