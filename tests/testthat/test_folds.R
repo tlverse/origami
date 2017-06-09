@@ -1,0 +1,51 @@
+library(origami)
+library(data.table)
+context("Folds")
+
+# generic test should be applied to all generated fold vectors
+# make sure training and validation sets don't overlap
+find_overlap=function(fold){
+	training_idx=training()
+	validation_idx=validation()
+	overlap=intersect(training_idx,validation_idx)
+	list(overlap=overlap)
+}
+
+test_splits=function(folds){
+	overlaps=cross_validate(find_overlap,folds)
+	all_overlaps=unlist(overlaps)
+	test_that("Training and Validation don't overlap",expect_length(all_overlaps,0))
+}
+# generate v-fold fold vector
+n=1000
+folds=make_folds(n=n,fold_fun=folds_vfold)
+
+
+
+test_splits(folds)
+
+# make sure v fold validation sets are exhaustive, mutually exclusive
+get_validation_sets=function(fold){
+	list(fold_data=data.table(validation=validation(),fold_index=fold_index()))
+}
+
+validation_sets=cross_validate(get_validation_sets,folds)
+validation_dt=rbindlist(validation_sets)
+all_indicies=seq_len(n)
+test_that("V-fold validation sets are exhaustive",expect_equivalent(sort(validation_dt$validation),all_indicies))
+
+max_index_count=max(table(validation_dt$validation))
+test_that("V-fold validation sets are mutually exclusive",expect_equal(max_index_count,1))
+
+# make sure ids all get put in the same validation set
+# generate 100 subjects, each with 10 replicates
+ids=sample(seq_len(100),n,replace=T)
+
+id_folds=make_folds(n=n,fold_fun=folds_vfold,cluster_id=ids)
+
+get_validation_sets=function(fold,ids){
+	list(fold_data=data.table(validation=validation(),fold_index=fold_index()))
+}
+
+validation_sets=cross_validate(get_validation_sets,folds)
+validation_dt=rbindlist(validation_sets)
