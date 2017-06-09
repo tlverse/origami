@@ -6,7 +6,7 @@ X <- matrix(rnorm(N * p), N, p)
 X <- as.data.frame(X)
 Y <- rbinom(N, 1, plogis(0.2 * X[, 1] + 0.1 * X[, 2] - 0.2 * X[, 3] + 0.1 * X[, 3] * X[, 4] - 0.2 * abs(X[, 4])))
 
-SL.library <- c("SL.glmnet", "SL.glm", "SL.knn_stored", "SL.gam", "SL.mean")
+SL.library <- c("SL.glmnet", "SL.glm", "SL.mean")
 
 folds <- make_folds(X)
 
