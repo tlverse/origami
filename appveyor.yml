@@ -48,7 +48,7 @@ notifications:
      - jeremyrcoyle@gmail.com
      - nh@nimahejazi.org
    subject: 'r-appveyor build {{status}}'
-   message: "https://ci.appveyor.com/project/benkeser/survtmle"
+   message: "https://ci.appveyor.com/project/jeremyrcoyle/origami"
    on_build_success: false
    on_build_failure: true
    on_build_status_changed: true
