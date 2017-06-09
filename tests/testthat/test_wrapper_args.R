@@ -32,10 +32,13 @@ X <- matrix(rnorm(N * p), N, p)
 X <- as.data.frame(X)
 Y <- rbinom(N, 1, plogis(0.2 * X[, 1] + 0.1 * X[, 2] - 0.2 * X[, 3] + 0.1 * X[, 3] * X[, 4] - 0.2 * abs(X[, 4])))
 
+assign("SL.arg_wrapper",SL.arg_wrapper,envir=globalenv())
+assign("predict.SL.arg_wrapper",predict.SL.arg_wrapper,envir=globalenv())
+
 SL.library <- "SL.arg_wrapper"
 
 osl_result <- origami_SuperLearner(Y = Y, X = X, SL.library = SL.library, method = method.NNLS(), family = binomial())
-
+meanY <- mean(Y)
 mean_preds <- predict(osl_result,newdata=X)$pred
 expected_preds <- matrix(meanY, nrow = nrow(X),ncol=1)
 
