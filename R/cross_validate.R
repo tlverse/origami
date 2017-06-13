@@ -21,14 +21,6 @@
 cross_validate <- function(cv_fun, folds, ..., .parallel = F, .foreach_control = list(), .combine = T, .combine_control = list(), 
     .old_results = NULL) {
     
-    # determine if we should parallelize
-    `%do_op%` <- `%do%`
-    if (.parallel && getDoParRegistered()) 
-        `%do_op%` <- `%dopar%`
-    
-    # so as to not stress out CRAN about this variable being missing, when it's defined by for each
-    fold <- NULL
-    
     # main loop
     future_results <- listenv("")
     for(foldi in seq_along(folds)){
