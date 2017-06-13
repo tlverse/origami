@@ -2,7 +2,8 @@ library(origami)
 library(data.table)
 context("Folds")
 
-############################ generic test should be applied to all generated fold vectors make sure training and validation sets don't overlap
+############################ 
+# generic test should be applied to all generated fold vectors make sure training and validation sets don't overlap
 find_overlap <- function(fold) {
     training_idx <- training()
     validation_idx <- validation()
@@ -16,7 +17,9 @@ test_splits <- function(folds) {
     test_that("Training and Validation don't overlap", expect_length(all_overlaps, 0))
 }
 
-############################ generate v-fold fold vector
+############################ 
+
+# generate v-fold fold vector
 n <- 1000
 folds <- make_folds(n = n, fold_fun = folds_vfold)
 
@@ -35,7 +38,11 @@ test_that("V-fold validation sets are exhaustive", expect_equivalent(sort(valida
 max_index_count <- max(table(validation_dt$validation))
 test_that("V-fold validation sets are mutually exclusive", expect_equal(max_index_count, 1))
 
-############################ make sure ids all get put in the same validation set generate 100 subjects, each with n/100 replicates
+############################ 
+
+# make sure ids all get put in the same validation set
+
+# generate 100 subjects, each with n/100 replicates
 ids <- sample(seq_len(100), n, replace = T)
 
 id_folds <- make_folds(fold_fun = folds_vfold, cluster_id = ids)
@@ -72,10 +79,14 @@ one_counts <- validation_dt[, list(one_count = sum(strata_ids)), by = list(fold)
 count_range <- diff(range(one_counts$one_count))
 test_that("Strata are roughly balanced", expect_lte(count_range, nfolds))
 
-############################ check ids nested in strata is enforced
+############################ 
+
+# check ids nested in strata is enforced
 test_that("Ids must be nested in strata", expect_error(make_folds(cluster_ids = ids, strata_ids = strata_ids)))
 
-############################ Verify quoted fold scheme names work
+############################ 
+
+# Verify quoted fold scheme names work
 set.seed(1)
 folds <- make_folds(n, fold_fun = "vfold")
 test_splits(folds)
@@ -84,7 +95,9 @@ set.seed(1)
 folds2 <- make_folds(n, fold_fun = folds_vfold)
 test_that("Quoted fold function names work", expect_equal(folds, folds2))
 
-############################ v fold->LOO fallback
+############################ 
+
+# v fold->LOO fallback
 smalln <- 5
 suppressWarnings({
     folds <- make_folds(n = smalln, fold_fun = folds_vfold, V = 10)
@@ -93,10 +106,14 @@ test_splits(folds)
 
 test_that("V fold falls back to LOO for small n, large V", expect_length(folds, smalln))
 
-############################ Error if no way to guess n
+############################ 
+
+# Error if no way to guess n
 test_that("Error if we can't guess n", expect_error(make_folds()))
 
-############################ Simple bootstrap fold test
+############################ 
+
+# Simple bootstrap fold test
 folds <- make_folds(n = n, fold_fun = folds_bootstrap)
 test_splits(folds)
 
