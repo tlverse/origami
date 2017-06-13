@@ -2,21 +2,28 @@
 % Please edit documentation in R/fold_funs.R
 \name{make_folds}
 \alias{make_folds}
-\title{Make list of folds for cross-validation}
+\title{Make List of Folds for cross-validation}
 \usage{
 make_folds(n = NULL, fold_fun = NULL, cluster_ids = NULL,
   strata_ids = NULL, ...)
 }
 \arguments{
-\item{n}{either an integer indicating the number of observations to cross-validate over, or an object from which to guess the number of observations. Can also be computed from strata_ids or cluster_ids.}
+\item{n}{- either an integer indicating the number of observations to
+cross-validate over, or an object from which to guess the number of
+observations; can also be computed from strata_ids or cluster_ids.}
 
-\item{fold_fun}{either a character vector or a function indicating the cross-validation scheme to use.}
+\item{fold_fun}{- either a character vector or a function indicating the
+cross-validation scheme to use.}
 
-\item{cluster_ids}{a vector of cluster ids. Clusters are treated as a unit - they are all placed in either the training or validation set.}
+\item{cluster_ids}{- a vector of cluster ids. Clusters are treated as a unit
+- that is, all observations within a cluster are placed in either the
+training or validation set.}
 
-\item{strata_ids}{a vector of strata ids. Strata are balanced - insofar as possible the distribution in the sample should be the same as the distribution in the training and validation sets.}
+\item{strata_ids}{- a vector of strata ids. Strata are balanced: insofar as
+possible the distribution in the sample should be the same as the
+distribution in the training and validation sets.}
 
-\item{...}{other arguments to \code{fold_fun}.}
+\item{...}{other arguments to be passed to \code{fold_fun}.}
 }
 \value{
 A list of Folds.
@@ -27,8 +34,9 @@ Generates a list of folds for a variety of cross-validation schemes.
 \seealso{
 \code{link{Fold}}
 
-Other fold_funs: \code{\link{folds_bootstrap}},
-  \code{\link{folds_loo}}, \code{\link{folds_montecarlo}},
+Other fold_funs: \code{\link{fold_from_foldvec}},
+  \code{\link{folds_bootstrap}}, \code{\link{folds_loo}},
+  \code{\link{folds_montecarlo}},
   \code{\link{folds_resubstitution}},
   \code{\link{folds_rolling_origin}},
   \code{\link{folds_rolling_window}},

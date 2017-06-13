@@ -2,22 +2,24 @@
 % Please edit documentation in R/Fold.R
 \name{make_fold}
 \alias{make_fold}
-\title{fold}
+\title{Fold}
 \usage{
 make_fold(v, training_set, validation_set)
 }
 \arguments{
 \item{v}{integer index of fold in larger scheme.}
 
-\item{training_set}{integer vector of indexes corresponding to the training set.}
+\item{training_set}{- integer vector of indexes corresponding to the
+training set.}
 
-\item{validation_set}{integer vector of indexes corresponding to the validation set.}
+\item{validation_set}{- integer vector of indexes corresponding to the
+validation set.}
 }
 \value{
 A list containing these elements.
 }
 \description{
-Function to make a fold. Current representation is a simple list.
+Functions to make a fold. Current representation is a simple list.
 }
 \seealso{
 \code{\link{fold_helpers}}

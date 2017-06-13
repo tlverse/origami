@@ -2,34 +2,34 @@
 % Please edit documentation in R/cross_validate.R
 \name{cross_validate}
 \alias{cross_validate}
-\title{Main cross-validation function}
+\title{Main Cross-Validation Function}
 \usage{
-cross_validate(cv_fun, folds, ..., .combine = T, .combine_control = list(),
-  .old_results = NULL)
+cross_validate(cv_fun, folds, ..., .combine = TRUE,
+  .combine_control = list(), .old_results = NULL)
 }
 \arguments{
-\item{cv_fun}{a function that takes a 'fold' as it's first argument.
-and returns a list of results from that fold.}
+\item{cv_fun}{a function that takes a 'fold' as it's first argument and
+returns a list of results from that fold.}
 
-\item{folds}{a list of folds to loop over generated using \code{\link{make_folds}}.}
+\item{folds}{a list of folds to loop over generated using
+\code{\link{make_folds}}.}
 
 \item{...}{other arguments passed to \code{cvfun}.}
 
-\item{.combine}{logical; should \code{\link{combine_results}} be called.}
+\item{.combine}{(logical) - should \code{\link{combine_results}} be called.}
 
-\item{.combine_control}{list; arguments to \code{\link{combine_results}}.}
+\item{.combine_control}{(list) - arguments to \code{\link{combine_results}}.}
 
-\item{.old_results}{list; the returned result from a previous call to cross_validate. Will be combined with the current results. Useful for adding additional cv folds to a results object.}
-
-\item{.parallel}{logical; should \code{\%dopar\%} be used instead of \code{\%do\%}, to evalute on folds in parallel. See \code{\link[foreach]{foreach}} for details.}
-
-\item{.foreach_control}{list; arguments to \code{\link[foreach]{foreach}}.}
+\item{.old_results}{(list) - the returned result from a previous call to
+This function. Will be combined with the current results. This is
+useful for adding additional CV folds to a results object.}
 }
 \value{
 A list of results, combined across folds.
 }
 \description{
-Applies \code{cvfun} to the folds using \code{foreach} and combines the results across folds using \code{combine_results}.
+Applies \code{cvfun} to the folds using \code{foreach} and combines the
+results across folds using \code{combine_results}.
 }
 \examples{
 data(mtcars)

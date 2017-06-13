@@ -1,6 +1,6 @@
 Package: origami
 Title: Generalized framework for cross-validation
-Version: 0.7
+Version: 0.8
 Authors@R: c(
   person("Jeremy", "Coyle", email = "jeremyrcoyle@gmail.com",
          role = c("aut", "cre", "cph")),

@@ -2,22 +2,23 @@
 % Please edit documentation in R/fold_funs.R
 \name{folds_resubstitution}
 \alias{folds_resubstitution}
-\title{Resubstution cross-validation}
+\title{Resubstution Cross-Validation}
 \usage{
 folds_resubstitution(n)
 }
 \arguments{
-\item{n}{integer; number of observations.}
+\item{n}{(integer) - number of observations.}
 }
 \value{
 A single fold, using same data for both training and testing.
 }
 \description{
-Resubstution cross-validation
+Implementation of resubstution cross-validation.
 }
 \seealso{
-Other fold_funs: \code{\link{folds_bootstrap}},
-  \code{\link{folds_loo}}, \code{\link{folds_montecarlo}},
+Other fold_funs: \code{\link{fold_from_foldvec}},
+  \code{\link{folds_bootstrap}}, \code{\link{folds_loo}},
+  \code{\link{folds_montecarlo}},
   \code{\link{folds_rolling_origin}},
   \code{\link{folds_rolling_window}},
   \code{\link{folds_vfold}}, \code{\link{make_folds}},

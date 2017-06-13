@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Rolling origin cross-validation — folds_rolling_origin • origami</title>
+<title>Rolling Origin Cross-Validation — folds_rolling_origin • origami</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -74,11 +74,11 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Rolling origin cross-validation</h1>
+    <h1>Rolling Origin Cross-Validation</h1>
     </div>
 
     
-    <p>Rolling origin cross-validation.</p>
+    <p>Implementation of rolling origin cross-validation.</p>
     
 
     <pre><span class='fu'>folds_rolling_origin</span>(<span class='no'>n</span>, <span class='no'>first_window</span>, <span class='no'>validation_size</span>)</pre>
@@ -86,17 +86,20 @@
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>n</dt>
-      <dd>integer; number of observations.</dd>
+      <dd>(integer) - number of observations.</dd>
       <dt>first_window</dt>
-      <dd>integer; number of observations in the first training sample.</dd>
+      <dd>(integer) - number of observations in the first training
+sample.</dd>
       <dt>validation_size</dt>
-      <dd>integer; number of points in the validation samples. Should be equal to the largest forecast horizon</dd>
+      <dd>(integer) - number of points in the validation
+samples; should be equal to the largest forecast horizon.</dd>
     </dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other fold_funs: <code><a href='folds_bootstrap.html'>folds_bootstrap</a></code>,
-  <code><a href='folds_loo.html'>folds_loo</a></code>, <code><a href='folds_montecarlo.html'>folds_montecarlo</a></code>,
+    <p>Other fold_funs: <code><a href='fold_from_foldvec.html'>fold_from_foldvec</a></code>,
+  <code><a href='folds_bootstrap.html'>folds_bootstrap</a></code>, <code><a href='folds_loo.html'>folds_loo</a></code>,
+  <code><a href='folds_montecarlo.html'>folds_montecarlo</a></code>,
   <code><a href='folds_resubstitution.html'>folds_resubstitution</a></code>,
   <code><a href='folds_rolling_window.html'>folds_rolling_window</a></code>,
   <code><a href='folds_vfold.html'>folds_vfold</a></code>, <code><a href='make_folds.html'>make_folds</a></code>,

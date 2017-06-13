@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Make list of folds for cross-validation — make_folds • origami</title>
+<title>Make List of Folds for cross-validation — make_folds • origami</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -74,7 +74,7 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Make list of folds for cross-validation</h1>
+    <h1>Make List of Folds for cross-validation</h1>
     </div>
 
     
@@ -87,15 +87,22 @@
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>n</dt>
-      <dd>either an integer indicating the number of observations to cross-validate over, or an object from which to guess the number of observations. Can also be computed from strata_ids or cluster_ids.</dd>
+      <dd>- either an integer indicating the number of observations to
+cross-validate over, or an object from which to guess the number of
+observations; can also be computed from strata_ids or cluster_ids.</dd>
       <dt>fold_fun</dt>
-      <dd>either a character vector or a function indicating the cross-validation scheme to use.</dd>
+      <dd>- either a character vector or a function indicating the
+cross-validation scheme to use.</dd>
       <dt>cluster_ids</dt>
-      <dd>a vector of cluster ids. Clusters are treated as a unit - they are all placed in either the training or validation set.</dd>
+      <dd>- a vector of cluster ids. Clusters are treated as a unit
+- that is, all observations within a cluster are placed in either the
+training or validation set.</dd>
       <dt>strata_ids</dt>
-      <dd>a vector of strata ids. Strata are balanced - insofar as possible the distribution in the sample should be the same as the distribution in the training and validation sets.</dd>
+      <dd>- a vector of strata ids. Strata are balanced: insofar as
+possible the distribution in the sample should be the same as the
+distribution in the training and validation sets.</dd>
       <dt>...</dt>
-      <dd>other arguments to <code>fold_fun</code>.</dd>
+      <dd>other arguments to be passed to <code>fold_fun</code>.</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -105,8 +112,9 @@
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <p><code>link{Fold}</code></p>
-    <p>Other fold_funs: <code><a href='folds_bootstrap.html'>folds_bootstrap</a></code>,
-  <code><a href='folds_loo.html'>folds_loo</a></code>, <code><a href='folds_montecarlo.html'>folds_montecarlo</a></code>,
+    <p>Other fold_funs: <code><a href='fold_from_foldvec.html'>fold_from_foldvec</a></code>,
+  <code><a href='folds_bootstrap.html'>folds_bootstrap</a></code>, <code><a href='folds_loo.html'>folds_loo</a></code>,
+  <code><a href='folds_montecarlo.html'>folds_montecarlo</a></code>,
   <code><a href='folds_resubstitution.html'>folds_resubstitution</a></code>,
   <code><a href='folds_rolling_origin.html'>folds_rolling_origin</a></code>,
   <code><a href='folds_rolling_window.html'>folds_rolling_window</a></code>,
