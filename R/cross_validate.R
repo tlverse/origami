@@ -1,3 +1,5 @@
+
+
 #' @title Main cross-validation function
 #' @description Applies \code{cvfun} to the folds using \code{foreach} and combines the results across folds using \code{combine_results}.
 #' 
@@ -16,30 +18,20 @@
 #'
 #' @example /inst/examples/cv_example.R
 #' @importFrom foreach foreach %do% %dopar% getDoParRegistered
-#' @importFrom future future
+#' @importFrom future future values future_lapply
 #' @importFrom listenv listenv
-cross_validate <- function(cv_fun, folds, ..., .parallel = F, .foreach_control = list(), .combine = T, .combine_control = list(), 
+cross_validate <- function(cv_fun, folds, ..., .combine = T, .combine_control = list(), 
     .old_results = NULL) {
-    
+
     # main loop
-    future_results <- listenv("")
-    for(foldi in seq_along(folds)){
-        future_results[[foldi]] <- future({
-            try({
-                cv_fun(folds[[foldi]], ...)
-                }, silent = TRUE)
-        })
-    }
+    results=future_lapply(folds,safe_eval,fun=cv_fun,...)
     
-    results <- as.list(values(future_results))
     # remove error results
-    if (.foreach_control[".errorhandling"] == "pass") {
-        error_idx <- which(sapply(results, inherits, "try-error"))
-        error_results <- list(index = error_idx, error = results[error_idx])
-        good_results <- setdiff(seq_along(folds), error_idx)
-        results <- results[good_results]
-    }
-    
+    error_idx <- which(sapply(results, inherits, "try-error"))
+    error_results <- list(index = error_idx, error = results[error_idx])
+    good_results <- setdiff(seq_along(folds), error_idx)
+    results <- results[good_results]
+
     # verify that the folds returned similar results
     if (length(unique(lapply(results, length))) > 1) 
         stop("lists returned from folds are not the same length")
@@ -55,10 +47,8 @@ cross_validate <- function(cv_fun, folds, ..., .parallel = F, .foreach_control =
         results <- do.call(combine_results, c(list(results = results), .combine_control))
     }
     
-    if (.foreach_control[".errorhandling"] == "pass") {
-        results$errors <- error_results
-    }
-    
+    results$errors <- error_results
+
     if (!is.null(.old_results)) {
         # invert results - go from a list containing one list per fold to a list containing one list per result returned by cv_fun
         new_and_old <- list(results, .old_results)

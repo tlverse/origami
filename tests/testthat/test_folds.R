@@ -31,7 +31,7 @@ get_validation_sets <- function(fold) {
 }
 
 validation_sets <- cross_validate(get_validation_sets, folds)
-validation_dt <- rbindlist(validation_sets)
+validation_dt <- validation_sets$fold_data
 all_indicies <- seq_len(n)
 test_that("V-fold validation sets are exhaustive", expect_equivalent(sort(validation_dt$validation), all_indicies))
 
@@ -53,7 +53,7 @@ get_validation_sets_ids <- function(fold, ids) {
 }
 
 validation_sets <- cross_validate(get_validation_sets_ids, id_folds, ids)
-validation_dt <- rbindlist(validation_sets)
+validation_dt <- validation_sets$fold_data
 
 idtab <- table(validation_dt$id, validation_dt$fold)
 fold_counts <- rowSums(idtab > 0)
@@ -74,7 +74,7 @@ test_splits(strata_folds)
 
 
 validation_sets <- cross_validate(get_validation_sets_ids, strata_folds, strata_ids)
-validation_dt <- rbindlist(validation_sets)
+validation_dt <- validation_sets$fold_data
 one_counts <- validation_dt[, list(one_count = sum(strata_ids)), by = list(fold)]
 count_range <- diff(range(one_counts$one_count))
 test_that("Strata are roughly balanced", expect_lte(count_range, nfolds))
