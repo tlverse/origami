@@ -8,4 +8,10 @@ test_that("combine_results falls back by returning unprocessed input",expect_equ
 
 nrows=10
 ncols=10
-matrix_results=list(a=list(array(0,dim=c(nrows,ncols,1))))
+nmats=5
+nreps=10
+md_array=array(0,dim=c(nrows,ncols,nmats))
+array_list=replicate(nreps,md_array,simplify=F)
+combined_array=combiner_array(array_list)
+expected_dims=c(nrows*nreps,ncols,nmats)
+test_that("combiner_array stacks on rows for multidimensional arrays",expect_equal(dim(combined_array),expected_dims))

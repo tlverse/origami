@@ -41,7 +41,7 @@ test_that("V-fold validation sets are mutually exclusive",expect_equal(max_index
 # generate 100 subjects, each with n/100 replicates
 ids=sample(seq_len(100),n,replace=T)
 
-id_folds=make_folds(n=n,fold_fun=folds_vfold,cluster_id=ids)
+id_folds=make_folds(fold_fun=folds_vfold,cluster_id=ids)
 
 get_validation_sets_ids=function(fold,ids){
 	list(fold_data=data.table(validation=validation(),fold=fold_index(),id=validation(ids)))
