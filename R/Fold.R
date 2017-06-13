@@ -8,8 +8,8 @@
 #' @seealso \code{\link{fold_helpers}}
 #' @export
 make_fold <- function(v, training_set, validation_set) {
-    fold=list(v = v, training_set = training_set, validation_set = validation_set)
-    class(fold)="fold"
+    fold <- list(v = v, training_set = training_set, validation_set = validation_set)
+    class(fold) <- "fold"
     fold
 }
 
@@ -28,7 +28,7 @@ get_from_fold <- function(component) {
         if (class(fold) != "fold") {
             stop("invalid fold")
         }
-        index=fold[[component]]
+        index <- fold[[component]]
         
         if (is.null(x)) {
             # if no x, return indexes

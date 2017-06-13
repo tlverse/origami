@@ -185,8 +185,8 @@ folds_bootstrap <- function(n, V = 1000) {
     return(folds)
 }
 
-# generate folds for clusters, and then convert into folds for observations this is kind of for a large number of ids.
-# should improve.
+# generate folds for clusters, and then convert into folds for observations this is kind of for a large number of ids.  should
+# improve.
 cluster_folds <- function(fold_fun, cluster_ids, ...) {
     # convert ids to numeric 1:n
     idfac <- factor(cluster_ids)
@@ -284,14 +284,9 @@ folds_rolling_window <- function(n, window_size, validation_size) {
     return(folds)
 }
 
-# unclear where this is being used
-# folds2foldvec <- function(folds) {
-#     vfolds <- lapply(folds, function(fold) {
-#         validation()
-#     })
-    
-#     return(vfolds)
-# }
+# unclear where this is being used folds2foldvec <- function(folds) { vfolds <- lapply(folds, function(fold) { validation() })
+
+# return(vfolds) }
 
 
 #' @family fold_funs
@@ -305,7 +300,7 @@ folds_rolling_window <- function(n, window_size, validation_size) {
 #' @export
 make_repeated_folds <- function(repeats, ...) {
     all_folds <- foreach(i = 1:repeats) %do% make_folds(...)
-    folds <- unlist(all_folds,recursive=F)
+    folds <- unlist(all_folds, recursive = F)
     
     return(folds)
 }

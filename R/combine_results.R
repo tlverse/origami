@@ -5,8 +5,7 @@
 #' @importFrom data.table rbindlist
 guess_combiner <- function(result) {
     switch(class(result)[1], data.table = rbindlist, data.frame = combiner_rbind, matrix = combiner_rbind, numeric = combiner_c, 
-        character = combiner_c, integer = combiner_c, logical = combiner_c, factor = unlist, array = combiner_array, 
-        identity)
+        character = combiner_c, integer = combiner_c, logical = combiner_c, factor = unlist, array = combiner_array, identity)
 }
 
 
