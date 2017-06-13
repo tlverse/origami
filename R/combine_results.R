@@ -9,23 +9,24 @@
 #' @return A function to combine a list of such results.
 #'
 guess_combiner <- function(result) {
-    switch(class(result)[1], data.table = data.table::rbindlist,
-                             data.frame = combiner_rbind,
-                             matrix = combiner_rbind,
-                             numeric = combiner_c,
-                             character = combiner_c,
-                             integer = combiner_c,
-                             logical = combiner_c,
-                             factor = combiner_factor,
-                             array = combiner_array,
-                             identity)
+    switch(class(result)[1],
+                 data.table = data.table::rbindlist,
+                 data.frame = combiner_rbind,
+                 matrix = combiner_rbind,
+                 numeric = combiner_c,
+                 character = combiner_c,
+                 integer = combiner_c,
+                 logical = combiner_c,
+                 factor = unlist,
+                 array = combiner_array,
+                 identity)
 }
 
 ################################################################################
 
 #' Combine Results from Different Folds
 #'
-#' Applies \link{combiners}: functions that collapse across a list of similarly
+#' Applies \link{Combiners}: functions that collapse across a list of similarly
 #' structured results, to a list of such lists.
 #'
 #' @param results (list) - a list of lists, corresponding to each result, with
@@ -41,7 +42,7 @@ guess_combiner <- function(result) {
 #'
 #' @return A list of combined results.
 #'
-#' @seealso \link{combiners}
+#' @seealso \link{Combiners}
 #'
 #' @export
 #'
@@ -81,13 +82,11 @@ combine_results <- function(results,
 #'
 #' @return A combined results object.
 #'
-#' @rdname combiners
+#' @rdname Combiners
 #'
-#' @name combiners
+#' @name Combiners
 #'
 NULL
-
-################################################################################
 
 #' @rdname Combiners
 #'
@@ -97,8 +96,6 @@ combiner_rbind <- function(x) {
     do.call(rbind, x)
 }
 
-################################################################################
-
 #' @rdname Combiners
 #'
 #' @export
@@ -107,8 +104,6 @@ combiner_c <- function(x) {
     do.call(c, x)
 }
 
-################################################################################
-
 #' @rdname Combiners
 #'
 #' @export
@@ -116,8 +111,6 @@ combiner_c <- function(x) {
 combiner_factor <- function(x) {
     unlist(x)
 }
-
-################################################################################
 
 #' @rdname Combiners
 #'

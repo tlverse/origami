@@ -3,6 +3,7 @@
 ^\.travis\.yml$
 ^appveyor\.yml$
 ^codecov\.yml$
+^CONTRIBUTING\.md$
 ^README\.md$
 ^TODO\.md$
 ^\.git$

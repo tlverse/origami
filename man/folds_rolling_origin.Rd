@@ -2,23 +2,26 @@
 % Please edit documentation in R/fold_funs.R
 \name{folds_rolling_origin}
 \alias{folds_rolling_origin}
-\title{Rolling origin cross-validation}
+\title{Rolling Origin Cross-Validation}
 \usage{
 folds_rolling_origin(n, first_window, validation_size)
 }
 \arguments{
-\item{n}{integer; number of observations.}
+\item{n}{(integer) - number of observations.}
 
-\item{first_window}{integer; number of observations in the first training sample.}
+\item{first_window}{(integer) - number of observations in the first training
+sample.}
 
-\item{validation_size}{integer; number of points in the validation samples. Should be equal to the largest forecast horizon}
+\item{validation_size}{(integer) - number of points in the validation
+samples; should be equal to the largest forecast horizon.}
 }
 \description{
-Rolling origin cross-validation.
+Implementation of rolling origin cross-validation.
 }
 \seealso{
-Other fold_funs: \code{\link{folds_bootstrap}},
-  \code{\link{folds_loo}}, \code{\link{folds_montecarlo}},
+Other fold_funs: \code{\link{fold_from_foldvec}},
+  \code{\link{folds_bootstrap}}, \code{\link{folds_loo}},
+  \code{\link{folds_montecarlo}},
   \code{\link{folds_resubstitution}},
   \code{\link{folds_rolling_window}},
   \code{\link{folds_vfold}}, \code{\link{make_folds}},

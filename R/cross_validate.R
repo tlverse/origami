@@ -8,10 +8,6 @@
 #' @param folds a list of folds to loop over generated using
 #'        \code{\link{make_folds}}.
 #' @param ... other arguments passed to \code{cvfun}.
-#' @param .parallel (logical) - should \code{\%dopar\%} be used instead of
-#'        \code{\%do\%}, to evalute on folds in parallel. For details, see
-#'        '\code{\link[foreach]{foreach}}.
-#' @param .foreach_control (list) - arguments to \code{\link[foreach]{foreach}}.
 #' @param .combine (logical) - should \code{\link{combine_results}} be called.
 #' @param .combine_control (list) - arguments to \code{\link{combine_results}}.
 #' @param .old_results (list) - the returned result from a previous call to
@@ -19,6 +15,8 @@
 #'        useful for adding additional CV folds to a results object.
 #'
 #' @importFrom foreach foreach %do% %dopar% getDoParRegistered
+#' @importFrom future future values future_lapply
+#' @importFrom listenv listenv
 #'
 #' @return A list of results, combined across folds.
 #'
@@ -29,35 +27,18 @@
 cross_validate <- function(cv_fun,
                            folds,
                            ...,
-                           .parallel = FALSE,
-                           .foreach_control = list(),
                            .combine = TRUE,
                            .combine_control = list(),
                            .old_results = NULL) {
 
-    # determine if we should parallelize
-    `%do_op%` <- `%do%`
-    if (.parallel && getDoParRegistered()) {
-        `%do_op%` <- `%dopar%`
-    }
-
-    # so as to not stress out CRAN about this variable being missing, when it's
-    # defined by foreach
-    fold <- NULL
-
     # main loop
-    results <- do.call(foreach, c(list(fold = folds), .foreach_control))
-    %do_op% {
-        cv_fun(fold, ...)
-    }
+    results <- future_lapply(folds, safe_eval, fun = cv_fun, ...)
 
     # remove error results
-    if (.foreach_control[".errorhandling"] == "pass") {
-        error_idx <- which(sapply(results, function(x) "error" %in% class(x)))
-        error_results <- list(index = error_idx, error = results[error_idx])
-        good_results <- setdiff(seq_along(folds), error_idx)
-        results <- results[good_results]
-    }
+    error_idx <- which(sapply(results, inherits, "try-error"))
+    error_results <- list(index = error_idx, error = results[error_idx])
+    good_results <- setdiff(seq_along(folds), error_idx)
+    results <- results[good_results]
 
     # verify that the folds returned similar results
     if (length(unique(lapply(results, length))) > 1)
@@ -66,8 +47,9 @@ cross_validate <- function(cv_fun,
         stop("names returned from folds are not consistent")
 
 
-    # invert results - go from a list containing one list per fold to a list
-    # containing one list per result returned by cv_fun
+    # invert results - go from a list containing one list per
+    # fold to a list containing one list per result returned by
+    # cv_fun
     results <- apply(do.call(rbind, results), 2, as.list)
 
     # combine results
@@ -77,13 +59,12 @@ cross_validate <- function(cv_fun,
                            .combine_control))
     }
 
-    if (.foreach_control[".errorhandling"] == "pass") {
-        results$errors <- error_results
-    }
+    results$errors <- error_results
 
     if (!is.null(.old_results)) {
-        # invert results - go from a list containing one list per fold to a
-        # list containing one list per result returned by cv_fun
+        # invert results - go from a list containing one list per
+        # fold to a list containing one list per result returned by
+        # cv_fun
         new_and_old <- list(results, .old_results)
         new_and_old <- apply(do.call(rbind, new_and_old), 2, as.list)
         results <- combine_results(results = new_and_old)

@@ -2,21 +2,22 @@
 % Please edit documentation in R/fold_funs.R
 \name{folds_loo}
 \alias{folds_loo}
-\title{Leave-one-out cross-validation}
+\title{Leave-One-Out Cross-Validation}
 \usage{
 folds_loo(n)
 }
 \arguments{
-\item{n}{integer; number of observations.}
+\item{n}{(integer) - number of observations.}
 }
 \value{
 A list of Folds
 }
 \description{
-Leave-one-out cross-validation.
+Implementation of leave-one-out cross-validation.
 }
 \seealso{
-Other fold_funs: \code{\link{folds_bootstrap}},
+Other fold_funs: \code{\link{fold_from_foldvec}},
+  \code{\link{folds_bootstrap}},
   \code{\link{folds_montecarlo}},
   \code{\link{folds_resubstitution}},
   \code{\link{folds_rolling_origin}},

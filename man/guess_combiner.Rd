@@ -2,7 +2,7 @@
 % Please edit documentation in R/combine_results.R
 \name{guess_combiner}
 \alias{guess_combiner}
-\title{guess_combiner}
+\title{Flexible Guessing and Mapping for Combining Data Types}
 \usage{
 guess_combiner(result)
 }

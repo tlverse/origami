@@ -7,18 +7,18 @@
 folds_montecarlo(n, V = 1000, pvalidation = 0.2)
 }
 \arguments{
-\item{n}{integer; number of observations.}
+\item{n}{(integer) - number of observations.}
 
-\item{V}{integer; number of folds to generate.}
+\item{V}{(integer) - number of folds to generate.}
 
 \item{pvalidation}{proportion of observation to be in validation fold.}
 }
 \description{
-Monte Carlo cross-validation.
+Implementation of Monte Carlo cross-validation.
 }
 \seealso{
-Other fold_funs: \code{\link{folds_bootstrap}},
-  \code{\link{folds_loo}},
+Other fold_funs: \code{\link{fold_from_foldvec}},
+  \code{\link{folds_bootstrap}}, \code{\link{folds_loo}},
   \code{\link{folds_resubstitution}},
   \code{\link{folds_rolling_origin}},
   \code{\link{folds_rolling_window}},

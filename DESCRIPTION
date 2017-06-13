@@ -16,8 +16,11 @@ Imports:
     abind,
     methods,
     foreach,
-    data.table
+    data.table,
+    future,
+    listenv
 Suggests:
+    future.batchtools,
     testthat,
     class,
     rmarkdown,

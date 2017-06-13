@@ -14,15 +14,18 @@ validation(x = NULL, fold = NULL)
 fold_index(x = NULL, fold = NULL)
 }
 \arguments{
-\item{x}{an object to be indexed by a training set, validation set, or fold index. If missing, the index itself will be returned.}
+\item{x}{an object to be indexed by a training set, validation set, or fold
+index. If missing, the index itself will be returned.}
 
-\item{fold}{Fold; the fold used to do the indexing. If missing, \code{fold} will be pulled from the calling environment, if available.}
+\item{fold}{Fold; the fold used to do the indexing. If missing, \code{fold}
+will be pulled from the calling environment, if available.}
 }
 \value{
-The elements of \code{x} corresponding to the indexes, or the indexes themselves if \code{x} is missing.
+The elements of \code{x} corresponding to the indexes, or the
+        indexes themselves if \code{x} is missing.
 }
 \description{
-Acessors/Indexers for the different parts of a fold.
+Acessors and indexers for the different parts of a fold.
 }
 \seealso{
 \code{\link{make_fold}}

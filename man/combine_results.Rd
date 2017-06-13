@@ -2,27 +2,32 @@
 % Please edit documentation in R/combine_results.R
 \name{combine_results}
 \alias{combine_results}
-\title{Combine results from different folds}
+\title{Combine Results from Different Folds}
 \usage{
 combine_results(results, combiners = NULL, smart_combiners = TRUE)
 }
 \arguments{
-\item{results}{list; a list of lists, corresponding to each result, with the inner lists corresponding to results from each fold.}
+\item{results}{(list) - a list of lists, corresponding to each result, with
+the inner lists corresponding to results from each fold.}
 
-\item{combiners}{list; a list with the same names results, containing combiner function names or functions for each result.}
+\item{combiners}{(list) - a list with the same names results, containing
+combiner function names or functions for each result.}
 
-\item{smart_combiners}{logical; if combiners are missing, should they be guessed from the data type of the results.}
+\item{smart_combiners}{(logical) - if combiners are missing, should they be
+guessed from the data type of the results.}
 }
 \value{
 A list of combined results.
 }
 \description{
-Applies \link{combiners}: functions that collapse across a list
-             of similarly structured results, to a list of such lists.
+Applies \link{Combiners}: functions that collapse across a list of similarly
+structured results, to a list of such lists.
 }
 \details{
-In theory you should never call this function directly, because it is called automatically by cross_validate. The defaults (combiners guessed based on data type), should work in most cases.
+In theory you should never call this function directly, because it
+         is called automatically by cross_validate. The defaults, combiners
+         guessed based on data type, should work in most cases.
 }
 \seealso{
-\link{combiners}
+\link{Combiners}
 }

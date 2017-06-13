@@ -13,13 +13,16 @@
 
 ## Description
 
-`origami` is an R package that facilitates...
+`origami` is an R package that provides a general framework for the application
+of cross-validation schemes to particular functions. By allowing arbitrary
+lists of results, `origami` accommodates a range of cross-validation applications.
 
 ---
 
 ## Installation
 
-Download the latest version from here using
+The package will be available on [CRAN](https://cran.r-project.org/) in the
+near future, for now, download the latest version using
 [`devtools`](https://www.rstudio.com/products/rpackages/devtools/):
 
 ```
