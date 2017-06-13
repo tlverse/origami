@@ -75,3 +75,16 @@ one_counts=validation_dt[,list(one_count=sum(strata_ids)),by=list(fold)]
 count_range=diff(range(one_counts$one_count))
 test_that("Strata are roughly balanced",expect_lte(count_range,nfolds))
 
+
+############################
+# Verify quoted fold scheme names work
+set.seed(1)
+folds=make_folds(n,fold_fun="vfold")
+test_splits(folds)
+
+set.seed(1)
+folds2=make_folds(n,fold_fun=folds_vfold)
+test_that("Quoted fold function names work",expect_equal(folds,folds2))
+
+############################
+# Verify quoted fold_fun names work
