@@ -4,8 +4,8 @@
 \alias{cross_validate}
 \title{Main cross-validation function}
 \usage{
-cross_validate(cv_fun, folds, ..., .parallel = F, .foreach_control = list(),
-  .combine = T, .combine_control = list(), .old_results = NULL)
+cross_validate(cv_fun, folds, ..., .combine = T, .combine_control = list(),
+  .old_results = NULL)
 }
 \arguments{
 \item{cv_fun}{a function that takes a 'fold' as it's first argument.
@@ -15,15 +15,15 @@ and returns a list of results from that fold.}
 
 \item{...}{other arguments passed to \code{cvfun}.}
 
-\item{.parallel}{logical; should \code{\%dopar\%} be used instead of \code{\%do\%}, to evalute on folds in parallel. See \code{\link[foreach]{foreach}} for details.}
-
-\item{.foreach_control}{list; arguments to \code{\link[foreach]{foreach}}.}
-
 \item{.combine}{logical; should \code{\link{combine_results}} be called.}
 
 \item{.combine_control}{list; arguments to \code{\link{combine_results}}.}
 
 \item{.old_results}{list; the returned result from a previous call to cross_validate. Will be combined with the current results. Useful for adding additional cv folds to a results object.}
+
+\item{.parallel}{logical; should \code{\%dopar\%} be used instead of \code{\%do\%}, to evalute on folds in parallel. See \code{\link[foreach]{foreach}} for details.}
+
+\item{.foreach_control}{list; arguments to \code{\link[foreach]{foreach}}.}
 }
 \value{
 A list of results, combined across folds.

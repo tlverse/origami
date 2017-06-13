@@ -19,4 +19,5 @@ folds <- make_folds(1000)
 
 results <- cross_validate(cv_errors, folds)
 
-test_that("Errors are put in special error vector", expect_length(results$errors$error, 1))
+test_that("Errors are put in special error vector", expect_length(results$errors$error, 
+    1))

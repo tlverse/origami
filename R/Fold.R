@@ -13,11 +13,14 @@ make_fold <- function(v, training_set, validation_set) {
     fold
 }
 
-# function factory for different fold-based indexing functions
+# function factory for different fold-based indexing
+# functions
 get_from_fold <- function(component) {
-    # function to index an object based on the training set, validation set, or index of a fold
+    # function to index an object based on the training set,
+    # validation set, or index of a fold
     function(x = NULL, fold = NULL) {
-        # if fold isn't specified, attempt to pull from the calling environment
+        # if fold isn't specified, attempt to pull from the calling
+        # environment
         if (is.null(fold)) {
             if (!exists("fold", envir = parent.frame())) {
                 stop("no fold specified, and fold not defined in calling function")
