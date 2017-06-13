@@ -20,11 +20,11 @@ cvlm <- function(fold) {
 
 }
 
-future::plan(sequential)
+plan(sequential)
 time_seq <- system.time({
     results_seq <- cross_validate(cvlm, folds)
 })
-future::plan(multicore)
+plan(multicore)
 time_mc <- system.time({
     results_mc <- cross_validate(cvlm, folds)
 })

@@ -15,7 +15,7 @@
 #'        useful for adding additional CV folds to a results object.
 #'
 #' @importFrom foreach foreach %do% %dopar% getDoParRegistered
-#' @importFrom future future values future_lapply
+#' @importFrom future future values future_lapply plan sequential multicore
 #' @importFrom listenv listenv
 #'
 #' @return A list of results, combined across folds.
