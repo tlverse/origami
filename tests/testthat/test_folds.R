@@ -87,4 +87,13 @@ folds2=make_folds(n,fold_fun=folds_vfold)
 test_that("Quoted fold function names work",expect_equal(folds,folds2))
 
 ############################
-# Verify quoted fold_fun names work
+# v fold->LOO fallback
+smalln=5
+folds=make_folds(n=smalln,fold_fun=folds_vfold,V=10)
+test_splits(folds)
+
+test_that("V fold falls back to LOO for small n, large V",expect_length(folds,smalln))
+
+############################
+# Error if no way to guess n
+test_that("Error if we can't guess n",expect_error(make_folds()))
