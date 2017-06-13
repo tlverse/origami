@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Monte Carlo cross-validation — folds_montecarlo • origami</title>
+<title>Build a Fold Object for V-Fold CV — fold_from_foldvec • origami</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -74,29 +74,28 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Monte Carlo cross-validation</h1>
+    <h1>Build a Fold Object for V-Fold CV</h1>
     </div>
 
     
-    <p>Implementation of Monte Carlo cross-validation.</p>
+    <p>For V-fold type cross-validation, take a fold vector and make fold object
+for fold V.</p>
     
 
-    <pre><span class='fu'>folds_montecarlo</span>(<span class='no'>n</span>, <span class='kw'>V</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>pvalidation</span> <span class='kw'>=</span> <span class='fl'>0.2</span>)</pre>
+    <pre><span class='fu'>fold_from_foldvec</span>(<span class='no'>v</span>, <span class='no'>folds</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
-      <dt>n</dt>
-      <dd>(integer) - number of observations.</dd>
-      <dt>V</dt>
-      <dd>(integer) - number of folds to generate.</dd>
-      <dt>pvalidation</dt>
-      <dd>proportion of observation to be in validation fold.</dd>
+      <dt>v</dt>
+      <dd>- indentifier of the fold in which observations fall for CV.</dd>
+      <dt>folds</dt>
+      <dd>- vector of the fold status for each observation for CV.</dd>
     </dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other fold_funs: <code><a href='fold_from_foldvec.html'>fold_from_foldvec</a></code>,
-  <code><a href='folds_bootstrap.html'>folds_bootstrap</a></code>, <code><a href='folds_loo.html'>folds_loo</a></code>,
+    <p>Other fold_funs: <code><a href='folds_bootstrap.html'>folds_bootstrap</a></code>,
+  <code><a href='folds_loo.html'>folds_loo</a></code>, <code><a href='folds_montecarlo.html'>folds_montecarlo</a></code>,
   <code><a href='folds_resubstitution.html'>folds_resubstitution</a></code>,
   <code><a href='folds_rolling_origin.html'>folds_rolling_origin</a></code>,
   <code><a href='folds_rolling_window.html'>folds_rolling_window</a></code>,

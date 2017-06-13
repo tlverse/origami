@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Combine results from different folds — combine_results • origami</title>
+<title>Combine Results from Different Folds — combine_results • origami</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -74,23 +74,27 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Combine results from different folds</h1>
+    <h1>Combine Results from Different Folds</h1>
     </div>
 
     
-    <p>Applies <a href='combiners.html'>combiners</a> - functions that collapse across a list of similarly structured results, to a list of such lists.</p>
+    <p>Applies <a href='Combiners.html'>Combiners</a>: functions that collapse across a list of similarly
+structured results, to a list of such lists.</p>
     
 
-    <pre><span class='fu'>combine_results</span>(<span class='no'>results</span>, <span class='kw'>combiners</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>smart_combiners</span> <span class='kw'>=</span> <span class='no'>T</span>)</pre>
+    <pre><span class='fu'>combine_results</span>(<span class='no'>results</span>, <span class='kw'>combiners</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>smart_combiners</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>results</dt>
-      <dd>list; a list of lists, corresponding to each result, with the inner lists corresponding to results from each fold.</dd>
+      <dd>(list) - a list of lists, corresponding to each result, with
+the inner lists corresponding to results from each fold.</dd>
       <dt>combiners</dt>
-      <dd>list; a list with the same names results, containing combiner function names or functions for each result.</dd>
+      <dd>(list) - a list with the same names results, containing
+combiner function names or functions for each result.</dd>
       <dt>smart_combiners</dt>
-      <dd>logical; if combiners are missing, should they be guessed from the data type of the results.</dd>
+      <dd>(logical) - if combiners are missing, should they be
+guessed from the data type of the results.</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -99,11 +103,13 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>In theory you should never call this function directly, because it is called automatically by cross_validate. The defaults (combiners guessed based on data type), should work in most cases.</p>
+    <p>In theory you should never call this function directly, because it
+         is called automatically by cross_validate. The defaults, combiners
+         guessed based on data type, should work in most cases.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><a href='combiners.html'>combiners</a></p>
+    <p><a href='Combiners.html'>Combiners</a></p>
     
 
   </div>

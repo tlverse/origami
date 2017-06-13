@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Repeated cross-validation — make_repeated_folds • origami</title>
+<title>Repeated Cross-Validation — make_repeated_folds • origami</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -74,12 +74,13 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Repeated cross-validation</h1>
+    <h1>Repeated Cross-Validation</h1>
     </div>
 
     
-    <p>Repeated window cross-validation. Generates fold objects for repated cross-validation by 
-making repeated calls to <a href='make_folds.html'>make_folds</a> and concatenating the results.</p>
+    <p>Implementation of repeated window cross-validation: generates fold objects
+for repeated cross-validation by making repeated calls to <a href='make_folds.html'>make_folds</a>
+and concatenating the results.</p>
     
 
     <pre><span class='fu'>make_repeated_folds</span>(<span class='no'>repeats</span>, <span class='no'>...</span>)</pre>
@@ -94,8 +95,9 @@ making repeated calls to <a href='make_folds.html'>make_folds</a> and concatenat
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other fold_funs: <code><a href='folds_bootstrap.html'>folds_bootstrap</a></code>,
-  <code><a href='folds_loo.html'>folds_loo</a></code>, <code><a href='folds_montecarlo.html'>folds_montecarlo</a></code>,
+    <p>Other fold_funs: <code><a href='fold_from_foldvec.html'>fold_from_foldvec</a></code>,
+  <code><a href='folds_bootstrap.html'>folds_bootstrap</a></code>, <code><a href='folds_loo.html'>folds_loo</a></code>,
+  <code><a href='folds_montecarlo.html'>folds_montecarlo</a></code>,
   <code><a href='folds_resubstitution.html'>folds_resubstitution</a></code>,
   <code><a href='folds_rolling_origin.html'>folds_rolling_origin</a></code>,
   <code><a href='folds_rolling_window.html'>folds_rolling_window</a></code>,

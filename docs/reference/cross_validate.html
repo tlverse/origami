@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Main cross-validation function — cross_validate • origami</title>
+<title>Main Cross-Validation Function — cross_validate • origami</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -74,35 +74,35 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Main cross-validation function</h1>
+    <h1>Main Cross-Validation Function</h1>
     </div>
 
     
-    <p>Applies <code>cvfun</code> to the folds using <code>foreach</code> and combines the results across folds using <code>combine_results</code>.</p>
+    <p>Applies <code>cvfun</code> to the folds using <code>foreach</code> and combines the
+results across folds using <code>combine_results</code>.</p>
     
 
-    <pre><span class='fu'>cross_validate</span>(<span class='no'>cv_fun</span>, <span class='no'>folds</span>, <span class='no'>...</span>, <span class='kw'>.parallel</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>.foreach_control</span> <span class='kw'>=</span> <span class='fu'>list</span>(),
-  <span class='kw'>.combine</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>.combine_control</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>.old_results</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre><span class='fu'>cross_validate</span>(<span class='no'>cv_fun</span>, <span class='no'>folds</span>, <span class='no'>...</span>, <span class='kw'>.combine</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>.combine_control</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>.old_results</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <dl class="dl-horizontal">
       <dt>cv_fun</dt>
-      <dd>a function that takes a &#39;fold&#39; as it&#39;s first argument.
-and returns a list of results from that fold.</dd>
+      <dd>a function that takes a &#39;fold&#39; as it&#39;s first argument and
+returns a list of results from that fold.</dd>
       <dt>folds</dt>
-      <dd>a list of folds to loop over generated using <code><a href='make_folds.html'>make_folds</a></code>.</dd>
+      <dd>a list of folds to loop over generated using
+<code><a href='make_folds.html'>make_folds</a></code>.</dd>
       <dt>...</dt>
       <dd>other arguments passed to <code>cvfun</code>.</dd>
-      <dt>.parallel</dt>
-      <dd>logical; should <code>%dopar%</code> be used instead of <code>%do%</code>, to evalute on folds in parallel. See <code><a href='http://www.rdocumentation.org/packages/foreach/topics/foreach'>foreach</a></code> for details.</dd>
-      <dt>.foreach_control</dt>
-      <dd>list; arguments to <code><a href='http://www.rdocumentation.org/packages/foreach/topics/foreach'>foreach</a></code>.</dd>
       <dt>.combine</dt>
-      <dd>logical; should <code><a href='combine_results.html'>combine_results</a></code> be called.</dd>
+      <dd>(logical) - should <code><a href='combine_results.html'>combine_results</a></code> be called.</dd>
       <dt>.combine_control</dt>
-      <dd>list; arguments to <code><a href='combine_results.html'>combine_results</a></code>.</dd>
+      <dd>(list) - arguments to <code><a href='combine_results.html'>combine_results</a></code>.</dd>
       <dt>.old_results</dt>
-      <dd>list; the returned result from a previous call to cross_validate. Will be combined with the current results. Useful for adding additional cv folds to a results object.</dd>
+      <dd>(list) - the returned result from a previous call to
+This function. Will be combined with the current results. This is
+useful for adding additional CV folds to a results object.</dd>
     </dl>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
