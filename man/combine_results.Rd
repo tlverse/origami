@@ -4,7 +4,7 @@
 \alias{combine_results}
 \title{Combine results from different folds}
 \usage{
-combine_results(results, combiners = NULL, smart_combiners = T)
+combine_results(results, combiners = NULL, smart_combiners = TRUE)
 }
 \arguments{
 \item{results}{list; a list of lists, corresponding to each result, with the inner lists corresponding to results from each fold.}
@@ -17,7 +17,8 @@ combine_results(results, combiners = NULL, smart_combiners = T)
 A list of combined results.
 }
 \description{
-Applies \link{combiners} - functions that collapse across a list of similarly structured results, to a list of such lists.
+Applies \link{combiners}: functions that collapse across a list
+             of similarly structured results, to a list of such lists.
 }
 \details{
 In theory you should never call this function directly, because it is called automatically by cross_validate. The defaults (combiners guessed based on data type), should work in most cases.

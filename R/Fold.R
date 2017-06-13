@@ -24,12 +24,12 @@ get_from_fold <- function(component) {
             }
             fold <- get("fold", envir = parent.frame())
         }
-        
+
         if (class(fold) != "fold") {
             stop("invalid fold")
         }
         index=fold[[component]]
-        
+
         if (is.null(x)) {
             # if no x, return indexes
             return(index)

@@ -43,7 +43,7 @@ issue](https://github.com/jeremyrcoyle/origami/issues).
 
 ## License
 
-&copy; 2017 [Jeremy R. Coyle]()
+&copy; 2017 [Jeremy R. Coyle](https://github.com/jeremyrcoyle)
 
 The contents of this repository are distributed under the GPL-3 license. See
 file `LICENSE` for details.

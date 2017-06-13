@@ -1,37 +1,54 @@
-#' @title Main cross-validation function
-#' @description Applies \code{cvfun} to the folds using \code{foreach} and combines the results across folds using \code{combine_results}.
-#' 
-#' @param cv_fun a function that takes a 'fold' as it's first argument.
-#' and returns a list of results from that fold.
-#' @param folds a list of folds to loop over generated using \code{\link{make_folds}}.
+#' Main Cross-Validation Function
+#'
+#' Applies \code{cvfun} to the folds using \code{foreach} and combines the
+#' results across folds using \code{combine_results}.
+#'
+#' @param cv_fun a function that takes a 'fold' as it's first argument and
+#'        returns a list of results from that fold.
+#' @param folds a list of folds to loop over generated using
+#'        \code{\link{make_folds}}.
 #' @param ... other arguments passed to \code{cvfun}.
-#' @param .parallel logical; should \code{\%dopar\%} be used instead of \code{\%do\%}, to evalute on folds in parallel. See \code{\link[foreach]{foreach}} for details.
-#' @param .foreach_control list; arguments to \code{\link[foreach]{foreach}}.
-#' @param .combine logical; should \code{\link{combine_results}} be called.
-#' @param .combine_control list; arguments to \code{\link{combine_results}}.
-#' @param .old_results list; the returned result from a previous call to cross_validate. Will be combined with the current results. Useful for adding additional cv folds to a results object.
+#' @param .parallel (logical) - should \code{\%dopar\%} be used instead of
+#'        \code{\%do\%}, to evalute on folds in parallel. For details, see
+#'        '\code{\link[foreach]{foreach}}.
+#' @param .foreach_control (list) - arguments to \code{\link[foreach]{foreach}}.
+#' @param .combine (logical) - should \code{\link{combine_results}} be called.
+#' @param .combine_control (list) - arguments to \code{\link{combine_results}}.
+#' @param .old_results (list) - the returned result from a previous call to
+#'        This function. Will be combined with the current results. This is
+#'        useful for adding additional CV folds to a results object.
 #'
 #' @return A list of results, combined across folds.
+#'
 #' @export
 #'
 #' @example /inst/examples/cv_example.R
-#'  
-cross_validate <- function(cv_fun, folds, ..., .parallel = F, .foreach_control = list(), .combine = T, .combine_control = list(), 
-    .old_results = NULL) {
-    
+#'
+cross_validate <- function(cv_fun,
+                           folds,
+                           ...,
+                           .parallel = FALSE,
+                           .foreach_control = list(),
+                           .combine = TRUE,
+                           .combine_control = list(),
+                           .old_results = NULL) {
+
     # determine if we should parallelize
     `%do_op%` <- `%do%`
-    if (.parallel && getDoParRegistered()) 
+    if (.parallel && getDoParRegistered()) {
         `%do_op%` <- `%dopar%`
-    
-    # so as to not stress out CRAN about this variable being missing, when it's defined by for each
+    }
+
+    # so as to not stress out CRAN about this variable being missing, when it's
+    # defined by foreach
     fold <- NULL
-    
+
     # main loop
-    results <- do.call(foreach, c(list(fold = folds), .foreach_control)) %do_op% {
+    results <- do.call(foreach, c(list(fold = folds), .foreach_control))
+    %do_op% {
         cv_fun(fold, ...)
     }
-    
+
     # remove error results
     if (.foreach_control[".errorhandling"] == "pass") {
         error_idx <- which(sapply(results, function(x) "error" %in% class(x)))
@@ -39,28 +56,32 @@ cross_validate <- function(cv_fun, folds, ..., .parallel = F, .foreach_control =
         good_results <- setdiff(seq_along(folds), error_idx)
         results <- results[good_results]
     }
-    
+
     # verify that the folds returned similar results
-    if (length(unique(lapply(results, length))) > 1) 
+    if (length(unique(lapply(results, length))) > 1)
         stop("lists returned from folds are not the same length")
-    if (length(unique(lapply(results, names))) > 1) 
+    if (length(unique(lapply(results, names))) > 1)
         stop("names returned from folds are not consistent")
-    
-    
-    # invert results - go from a list containing one list per fold to a list containing one list per result returned by cv_fun
+
+
+    # invert results - go from a list containing one list per fold to a list
+    # containing one list per result returned by cv_fun
     results <- apply(do.call(rbind, results), 2, as.list)
-    
+
     # combine results
     if (.combine) {
-        results <- do.call(combine_results, c(list(results = results), .combine_control))
+        results <- do.call(combine_results,
+                           c(list(results = results),
+                           .combine_control))
     }
-    
+
     if (.foreach_control[".errorhandling"] == "pass") {
         results$errors <- error_results
     }
-    
+
     if (!is.null(.old_results)) {
-        # invert results - go from a list containing one list per fold to a list containing one list per result returned by cv_fun
+        # invert results - go from a list containing one list per fold to a
+        # list containing one list per result returned by cv_fun
         new_and_old <- list(results, .old_results)
         new_and_old <- apply(do.call(rbind, new_and_old), 2, as.list)
         results <- combine_results(results = new_and_old)
