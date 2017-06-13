@@ -16,17 +16,17 @@ test_splits=function(folds){
 	all_overlaps=unlist(overlaps)
 	test_that("Training and Validation don't overlap",expect_length(all_overlaps,0))
 }
+
+
 # generate v-fold fold vector
 n=1000
 folds=make_folds(n=n,fold_fun=folds_vfold)
-
-
 
 test_splits(folds)
 
 # make sure v fold validation sets are exhaustive, mutually exclusive
 get_validation_sets=function(fold){
-	list(fold_data=data.table(validation=validation(),fold_index=fold_index()))
+	list(fold_data=data.table(validation=validation(),fold=fold_index()))
 }
 
 validation_sets=cross_validate(get_validation_sets,folds)
@@ -38,14 +38,19 @@ max_index_count=max(table(validation_dt$validation))
 test_that("V-fold validation sets are mutually exclusive",expect_equal(max_index_count,1))
 
 # make sure ids all get put in the same validation set
-# generate 100 subjects, each with 10 replicates
+# generate 100 subjects, each with n/100 replicates
 ids=sample(seq_len(100),n,replace=T)
 
 id_folds=make_folds(n=n,fold_fun=folds_vfold,cluster_id=ids)
 
-get_validation_sets=function(fold,ids){
-	list(fold_data=data.table(validation=validation(),fold_index=fold_index()))
+get_validation_sets_ids=function(fold,ids){
+	list(fold_data=data.table(validation=validation(),fold=fold_index(),id=validation(ids)))
 }
 
-validation_sets=cross_validate(get_validation_sets,folds)
+validation_sets=cross_validate(get_validation_sets_ids,id_folds,ids)
 validation_dt=rbindlist(validation_sets)
+
+idtab=table(validation_dt$id,validation_dt$fold)
+fold_counts=rowSums(idtab>0)
+max_fold_count=max(fold_counts)
+test_that("Each ID only appears in one fold",expect_equal(max_fold_count,1))
