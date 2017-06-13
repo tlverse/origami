@@ -16,6 +16,8 @@
 #'
 #' @example /inst/examples/cv_example.R
 #' @importFrom foreach foreach %do% %dopar% getDoParRegistered
+#' @importFrom future future
+#' @importFrom listenv listenv
 cross_validate <- function(cv_fun, folds, ..., .parallel = F, .foreach_control = list(), .combine = T, .combine_control = list(), 
     .old_results = NULL) {
     
@@ -28,13 +30,19 @@ cross_validate <- function(cv_fun, folds, ..., .parallel = F, .foreach_control =
     fold <- NULL
     
     # main loop
-    results <- do.call(foreach, c(list(fold = folds), .foreach_control)) %do_op% {
-        cv_fun(fold, ...)
+    future_results <- listenv("")
+    for(foldi in seq_along(folds)){
+        future_results[[foldi]] <- future({
+            try({
+                cv_fun(folds[[foldi]], ...)
+                }, silent = TRUE)
+        })
     }
     
+    results <- as.list(values(future_results))
     # remove error results
     if (.foreach_control[".errorhandling"] == "pass") {
-        error_idx <- which(sapply(results, function(x) "error" %in% class(x)))
+        error_idx <- which(sapply(results, inherits, "try-error"))
         error_results <- list(index = error_idx, error = results[error_idx])
         good_results <- setdiff(seq_along(folds), error_idx)
         results <- results[good_results]

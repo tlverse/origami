@@ -114,6 +114,6 @@ test_that("Error if we can't guess n", expect_error(make_folds()))
 ############################ 
 
 # Simple bootstrap fold test
-folds <- make_folds(n = n, fold_fun = folds_bootstrap)
+folds <- make_folds(n = n, fold_fun = folds_bootstrap, V=10)
 test_splits(folds)
 
