@@ -2,6 +2,7 @@
 #' @description Maps data types into standard combiners that should be sensible.
 #' @param result a single result.
 #' @return A function to combine a list of such results.
+#' @importFrom data.table rbindlist
 guess_combiner <- function(result) {
     switch(class(result)[1], data.table = rbindlist, data.frame = combiner_rbind, matrix = combiner_rbind, numeric = combiner_c, 
         character = combiner_c, integer = combiner_c, logical = combiner_c, factor = unlist, array = combiner_array, 
@@ -63,6 +64,7 @@ combiner_c <- function(x) {
 
 #' @rdname combiners
 #' @export
+#' @import abind abind
 combiner_array <- function(x) {
     do.call(abind::abind, c(x, along = 1))
 }

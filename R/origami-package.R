@@ -22,7 +22,6 @@
 #' @title origami - Cross-validation Framework
 #' @author Jeremy Coyle \email{jeremyrcoyle@@gmail.com}
 #' @keywords package
-#' @seealso \code{\link{cross_validate}}, \code{\link{origami_SuperLearner}}
+#' @seealso \code{\link{cross_validate}}
 #' @example /inst/examples/cv_example.R
-#' @import foreach SuperLearner methods
 NULL

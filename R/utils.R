@@ -38,7 +38,6 @@ aorder <- function(mat, index, along = 1) {
     return(result)
 }
 
-#' @export
 split_fold <- function(fold, splits = 2) {
     v <- fold_index()
     train_idx <- training()
@@ -55,13 +54,8 @@ split_fold <- function(fold, splits = 2) {
     return(split_folds)
 }
 
-#' @export
 make_split_folds <- function(folds, splits = 2) {
     result <- cross_validate(split_fold, folds, splits = splits)
     
     return(result)
-}
-
-refit_origami_SuperLearner <- function(split_fold, osl_obj) {
-    
 }

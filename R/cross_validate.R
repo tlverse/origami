@@ -15,7 +15,7 @@
 #' @export
 #'
 #' @example /inst/examples/cv_example.R
-#'  
+#' @importFrom foreach foreach %do% %dopar% getDoParRegistered
 cross_validate <- function(cv_fun, folds, ..., .parallel = F, .foreach_control = list(), .combine = T, .combine_control = list(), 
     .old_results = NULL) {
     
