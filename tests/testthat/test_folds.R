@@ -80,7 +80,7 @@ test_that("Strata are roughly balanced",expect_lte(count_range,nfolds))
 ############################
 # check ids nested in strata is enforced
 #
-test_that("Ids must be nested in strata",expect_error(make_folds(cluster_ids = ids, strata_ids = ids)))
+test_that("Ids must be nested in strata",expect_error(make_folds(cluster_ids = ids, strata_ids = strata_ids)))
 
 ############################
 # Verify quoted fold scheme names work
