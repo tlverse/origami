@@ -59,7 +59,9 @@ max_fold_count=max(fold_counts)
 test_that("Each ID only appears in one fold",expect_equal(max_fold_count,1))
 
 ############################
+
 # make sure folds are roughly balanced in strata
+
 # generate two strata, one much more rare than the other
 set.seed(1)
 strata_ids=rbinom(n,1,0.05)
@@ -75,6 +77,10 @@ one_counts=validation_dt[,list(one_count=sum(strata_ids)),by=list(fold)]
 count_range=diff(range(one_counts$one_count))
 test_that("Strata are roughly balanced",expect_lte(count_range,nfolds))
 
+############################
+# check ids nested in strata is enforced
+#
+test_that("Ids must be nested in strata",expect_error(make_folds(cluster_ids = ids, strata_ids = ids)))
 
 ############################
 # Verify quoted fold scheme names work
