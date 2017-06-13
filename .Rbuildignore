@@ -4,6 +4,7 @@
 ^appveyor\.yml$
 ^codecov\.yml$
 ^README\.md$
+^TODO\.md$
 ^\.git$
 ^\.gitignore$
 ^docs$

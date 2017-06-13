@@ -1,6 +1,6 @@
 Package: origami
 Title: Generalized framework for cross-validation
-Version: 0.5
+Version: 0.7
 Authors@R: c(
   person("Jeremy", "Coyle", email = "jeremyrcoyle@gmail.com",
          role = c("aut", "cre", "cph")),
@@ -9,20 +9,17 @@ Maintainer: Jeremy Coyle <jeremyrcoyle@gmail.com>
 Description: Origami provides a general framework for the application of
     cross-validation schemes to particular functions. By allowing arbitrary
     lists of results, origami accommodates a range of cross-validation
-    applications. Some applications are implemented as examples.
+    applications.
 Depends:
     R (>= 3.0.0),
-    abind,
-    plyr
 Imports:
-    SuperLearner,
+    abind,
     methods,
-    foreach
+    foreach,
+    data.table
 Suggests:
     testthat,
     class,
-    glmnet,
-    data.table,
     rmarkdown,
     knitr
 License: GPL-3 + file LICENSE

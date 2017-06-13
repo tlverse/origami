@@ -18,6 +18,8 @@
 #'        This function. Will be combined with the current results. This is
 #'        useful for adding additional CV folds to a results object.
 #'
+#' @importFrom foreach foreach %do% %dopar% getDoParRegistered
+#'
 #' @return A list of results, combined across folds.
 #'
 #' @export

@@ -4,10 +4,12 @@
 #'
 #' @param result - a single result; flexibly accepts several object classes.
 #'
+#' @importFrom data.table rbindlist
+#'
 #' @return A function to combine a list of such results.
 #'
 guess_combiner <- function(result) {
-    switch(class(result)[1], data.table = rbindlist,
+    switch(class(result)[1], data.table = data.table::rbindlist,
                              data.frame = combiner_rbind,
                              matrix = combiner_rbind,
                              numeric = combiner_c,
@@ -118,6 +120,8 @@ combiner_factor <- function(x) {
 ################################################################################
 
 #' @rdname Combiners
+#'
+#' @importFrom abind abind
 #'
 #' @export
 #'

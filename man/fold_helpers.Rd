@@ -25,5 +25,5 @@ The elements of \code{x} corresponding to the indexes, or the indexes themselves
 Acessors/Indexers for the different parts of a fold.
 }
 \seealso{
-\code{\link{Fold}}
+\code{\link{make_fold}}
 }

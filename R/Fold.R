@@ -50,7 +50,7 @@ get_from_fold <- function(component) {
 #' @return The elements of \code{x} corresponding to the indexes, or the indexes themselves if \code{x} is missing.
 #' @rdname fold_helpers
 #' @name fold_helpers
-#' @seealso \code{\link{Fold}}
+#' @seealso \code{\link{make_fold}}
 NULL
 
 #' @rdname fold_helpers

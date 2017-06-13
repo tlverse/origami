@@ -53,7 +53,7 @@ results <- cross_validate(cvlm, folds)
 mean(results$SE)
 }
 \seealso{
-\code{\link{cross_validate}}, \code{\link{origami_SuperLearner}}
+\code{\link{cross_validate}}
 }
 \author{
 Jeremy Coyle \email{jeremyrcoyle@gmail.com}

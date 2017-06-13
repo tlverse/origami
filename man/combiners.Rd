@@ -4,15 +4,12 @@
 \alias{combiners}
 \alias{combiner_rbind}
 \alias{combiner_c}
-\alias{combiner_factor}
 \alias{combiner_array}
 \title{Combiners}
 \usage{
 combiner_rbind(x)
 
 combiner_c(x)
-
-combiner_factor(x)
 
 combiner_array(x)
 }
