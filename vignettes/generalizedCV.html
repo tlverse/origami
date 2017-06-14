@@ -149,7 +149,7 @@ resub_results &lt;-<span class="st"> </span><span class="kw">cvlm</span>(resub)
 folds &lt;-<span class="st"> </span><span class="kw">make_folds</span>(mtcars)
 results &lt;-<span class="st"> </span><span class="kw">cross_validate</span>(cvlm, folds)
 <span class="kw">mean</span>(results<span class="op">$</span>SE)</code></pre></div>
-<pre><code>## [1] 11.5564</code></pre>
+<pre><code>## [1] 12.55745</code></pre>
 <p>Having performed 10-fold cross-validation, we quickly notice that our previous estimate of the model error (by resubstitution) was quite optimistic. The honest estimate of the error is several times larger.</p>
 <hr />
 </div>
@@ -168,20 +168,66 @@ results &lt;-<span class="st"> </span><span class="kw">cross_validate</span>(cvl
 <h3>Apply cross-validate</h3>
 <p><code>cross_validate</code> then maps the <code>cv_fun</code> across the <code>folds</code> using <code>future_lapply</code>. This means that it can be easily parallelized by specifying a <code>plan</code>. See <a href="https://github.com/HenrikBengtsson/future" class="uri">https://github.com/HenrikBengtsson/future</a> for more details.</p>
 <!-- this part is probably hard to read. Not sure how to clarify -->
-<p>This generates a list of results. As described above, each call to <code>cv_fun</code> returns a results list, with different elements for each type of result we care about. The main loop generates a list of these results lists, which is then inverted so there is one element per result type, which is a list of the results for each fold. By default these results type lists are combined using <code>combine_results</code>. For instance, in the above <code>mtcars</code> example, the results contains one <code>coef</code> <code>data.frame</code> from each fold. These are <code>rbind</code>ed together to form one <code>data.frame</code> containing the <code>coefs</code> from all folds in different rows. How results are combined is determined automatically by examining the data types of the results from the first fold. This can be modified by specifying a list of arguments to <code>.combine_control</code>. See the help for <code>combine_results</code> for more details.</p>
+<p>This generates a list of results. As described above, each call to <code>cv_fun</code> returns a results list, with different elements for each type of result we care about. The main loop generates a list of these results lists, which is then inverted so there is one element per result type, which is a list of the results for each fold. By default these results type lists are combined using <code>combine_results</code>. For instance, in the above <code>mtcars</code> example, the results contains one <code>coef</code> <code>data.frame</code> from each fold. These are <code>rbind</code>ed together to form one <code>data.frame</code> containing the <code>coefs</code> from all folds in different rows. How results are combined is determined automatically by examining the data types of the results from the first fold. This can be modified by specifying a list of arguments to <code>.combine_control</code>. See the help for <code>combine_results</code> for more details. In most cases, however, the defaults should suffice.</p>
 <hr />
 </div>
 </div>
 <div id="cross-validation-with" class="section level2">
 <h2>Cross-validation with …</h2>
-<p>Pick an ML algorithm and repeart example with that? Let’s show a simple model selection example (i.e. discrete super learner).</p>
+<p>Pick an ML algorithm and repeat example with that? Let’s show a simple model selection example (i.e. discrete super learner).</p>
 <hr />
 </div>
 <div id="time-series-cross-validation" class="section level2">
 <h2>Time series cross-validation</h2>
-</div>
-<div id="time-series-example-goes-here.-maybe-just-a-model-selection-using-rolling-window.-choose-between-two-arimas-or-something." class="section level2">
-<h2>Time series example goes here. Maybe just a model selection using rolling window. Choose between two ARIMAs or something.</h2>
+<p>Cross-validation can also be used for forecast model selection in a time series setting. Here, the partitioning scheme mirrors the application of the forecasting model: We’ll train the data on past observations (either all available or a recent subset), and then use the model forecast (predict), the next few observations. Consider the <code>AirPassengers</code> dataset, a monthly time series of passenger air traffic in thousands of people.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(AirPassengers)
+<span class="kw">print</span>(AirPassengers)</code></pre></div>
+<pre><code>##      Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+## 1949 112 118 132 129 121 135 148 148 136 119 104 118
+## 1950 115 126 141 135 125 149 170 170 158 133 114 140
+## 1951 145 150 178 163 172 178 199 199 184 162 146 166
+## 1952 171 180 193 181 183 218 230 242 209 191 172 194
+## 1953 196 196 236 235 229 243 264 272 237 211 180 201
+## 1954 204 188 235 227 234 264 302 293 259 229 203 229
+## 1955 242 233 267 269 270 315 364 347 312 274 237 278
+## 1956 284 277 317 313 318 374 413 405 355 306 271 306
+## 1957 315 301 356 348 355 422 465 467 404 347 305 336
+## 1958 340 318 362 348 363 435 491 505 404 359 310 337
+## 1959 360 342 406 396 420 472 548 559 463 407 362 405
+## 1960 417 391 419 461 472 535 622 606 508 461 390 432</code></pre>
+<p>Suppose we want to pick between two forecasting models, <code>stl</code>, and <code>arima</code> (the details of these models are not important for this example). We can do that by evaluating their forecasting performance.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(forecast)
+folds=<span class="kw">make_folds</span>(AirPassengers,<span class="dt">fold_fun=</span>folds_rolling_origin,<span class="dt">first_window=</span><span class="dv">36</span>,<span class="dt">validation_size=</span><span class="dv">24</span>)
+fold=folds[[<span class="dv">1</span>]]
+<span class="co"># function to calculate cross-validated squared error</span>
+cvforecasts &lt;-<span class="st"> </span><span class="cf">function</span>(fold) {
+  train_data &lt;-<span class="st"> </span><span class="kw">training</span>(AirPassengers)
+  valid_data &lt;-<span class="st"> </span><span class="kw">validation</span>(AirPassengers)
+  valid_size &lt;-<span class="st"> </span><span class="kw">length</span>(valid_data)
+  
+  train_ts &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="kw">log10</span>(train_data), <span class="dt">frequency =</span> <span class="dv">12</span>)
+
+  <span class="co">#borrowed from AirPassengers help</span>
+  arima_fit &lt;-<span class="st"> </span><span class="kw">arima</span>(train_ts, <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>),
+                <span class="dt">seasonal =</span> <span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="dt">period =</span> <span class="dv">12</span>))
+  raw_arima_pred &lt;-<span class="st"> </span><span class="kw">predict</span>(arima_fit, <span class="dt">n.ahead =</span> valid_size)
+  arima_pred &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span>raw_arima_pred<span class="op">$</span>pred
+  arima_MSE &lt;-<span class="st"> </span><span class="kw">mean</span>((arima_pred<span class="op">-</span>valid_data)<span class="op">^</span><span class="dv">2</span>)
+  
+  <span class="co">#stl model</span>
+  stl_fit &lt;-<span class="st"> </span><span class="kw">stlm</span>(train_ts, <span class="dt">s.window =</span> <span class="dv">12</span>)
+  raw_stl_pred=<span class="kw">forecast</span>(stl_fit, <span class="dt">h =</span> valid_size)
+  stl_pred &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span>raw_stl_pred<span class="op">$</span>mean
+  stl_MSE &lt;-<span class="st"> </span><span class="kw">mean</span>((stl_pred<span class="op">-</span>valid_data)<span class="op">^</span><span class="dv">2</span>)
+  
+  <span class="kw">list</span>(<span class="dt">mse =</span> <span class="kw">data.frame</span>(<span class="dt">fold =</span> <span class="kw">fold_index</span>(), <span class="dt">arima =</span> arima_MSE, <span class="dt">stl =</span> stl_MSE))
+}
+
+mses=<span class="kw">cross_validate</span>(cvforecasts,folds)<span class="op">$</span>mse
+<span class="kw">colMeans</span>(mses[,<span class="kw">c</span>(<span class="st">&quot;arima&quot;</span>,<span class="st">&quot;stl&quot;</span>)])</code></pre></div>
+<pre><code>##    arima      stl 
+## 667.2478 916.4425</code></pre>
+<hr />
 </div>
 <div id="session-information" class="section level2">
 <h2>Session Information</h2>
@@ -196,17 +242,23 @@ results &lt;-<span class="st"> </span><span class="kw">cross_validate</span>(cvl
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] origami_0.8
+## [1] forecast_8.0 origami_0.8 
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.9.2     codetools_0.2-15  listenv_0.6.0    
-##  [4] future_1.5.0      digest_0.6.12     foreach_1.4.3    
-##  [7] rprojroot_1.2     backports_1.0.5   magrittr_1.5     
-## [10] evaluate_0.10     stringi_1.1.2     data.table_1.10.4
-## [13] rmarkdown_1.3     iterators_1.0.8   tools_3.3.2      
-## [16] stringr_1.1.0     parallel_3.3.2    yaml_2.1.14      
-## [19] abind_1.4-5       globals_0.10.0    htmltools_0.3.5  
-## [22] knitr_1.15.1</code></pre>
+##  [1] Rcpp_0.12.9.2     plyr_1.8.4        tseries_0.10-40  
+##  [4] iterators_1.0.8   tools_3.3.2       digest_0.6.12    
+##  [7] evaluate_0.10     tibble_1.2        gtable_0.2.0     
+## [10] lattice_0.20-34   foreach_1.4.3     yaml_2.1.14      
+## [13] parallel_3.3.2    stringr_1.1.0     knitr_1.15.1     
+## [16] globals_0.10.0    rprojroot_1.2     lmtest_0.9-35    
+## [19] grid_3.3.2        nnet_7.3-12       data.table_1.10.4
+## [22] listenv_0.6.0     rmarkdown_1.3     ggplot2_2.2.1    
+## [25] magrittr_1.5      backports_1.0.5   scales_0.4.1     
+## [28] codetools_0.2-15  htmltools_0.3.5   abind_1.4-5      
+## [31] assertthat_0.1    future_1.5.0      timeDate_3012.100
+## [34] colorspace_1.3-2  fracdiff_1.4-2    quadprog_1.5-5   
+## [37] stringi_1.1.2     lazyeval_0.2.0    munsell_0.4.3    
+## [40] zoo_1.8-0</code></pre>
 </div>
 
 

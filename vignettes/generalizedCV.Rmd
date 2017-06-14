@@ -142,7 +142,7 @@ The `cv_fun` argument to `cross_validate` is a function that will perform some o
 `cross_validate` then maps the `cv_fun` across the `folds` using `future_lapply`. This means that it can be easily parallelized by specifying a `plan`. See https://github.com/HenrikBengtsson/future for more details.
 
 <!-- this part is probably hard to read. Not sure how to clarify -->
-This generates a list of results. As described above, each call to `cv_fun` returns a results list, with different elements for each type of result we care about. The main loop generates a list of these results lists, which is then inverted so there is one element per result type, which is a list of the results for each fold. By default these results type lists are combined using `combine_results`. For instance, in the above `mtcars` example, the results contains one `coef` `data.frame` from each fold. These are `rbind`ed together to form one `data.frame` containing the `coefs` from all folds in different rows. How results are combined is determined automatically by examining the data types of the results from the first fold. This can be modified by specifying a list of arguments to `.combine_control`. See the help for `combine_results` for more details.
+This generates a list of results. As described above, each call to `cv_fun` returns a results list, with different elements for each type of result we care about. The main loop generates a list of these results lists, which is then inverted so there is one element per result type, which is a list of the results for each fold. By default these results type lists are combined using `combine_results`. For instance, in the above `mtcars` example, the results contains one `coef` `data.frame` from each fold. These are `rbind`ed together to form one `data.frame` containing the `coefs` from all folds in different rows. How results are combined is determined automatically by examining the data types of the results from the first fold. This can be modified by specifying a list of arguments to `.combine_control`. See the help for `combine_results` for more details. In most cases, however, the defaults should suffice.
 
 
 ---
@@ -155,7 +155,47 @@ Pick an ML algorithm and repeat example with that? Let's show a simple model sel
 
 ## Time series cross-validation
 
-Cross-validation can also be used for forecast model selection in a time series setting. Here, the partitioning scheme mirrors the application of the forecasting model: We'll train the data on past observations (either all available or a recent subset), and then use the model forecast (predict), the next few observations. Consider the `AirPassengers` dataset, 
+Cross-validation can also be used for forecast model selection in a time series setting. Here, the partitioning scheme mirrors the application of the forecasting model: We'll train the data on past observations (either all available or a recent subset), and then use the model forecast (predict), the next few observations. Consider the `AirPassengers` dataset, a monthly time series of passenger air traffic in thousands of people. 
+
+```{r}
+data(AirPassengers)
+print(AirPassengers)
+```
+
+Suppose we want to pick between two forecasting models, `stl`, and `arima` (the details of these models are not important for this example). We can do that by evaluating their forecasting performance. 
+
+```{r}
+library(forecast)
+folds=make_folds(AirPassengers,fold_fun=folds_rolling_origin,first_window=36,validation_size=24)
+fold=folds[[1]]
+# function to calculate cross-validated squared error
+cvforecasts <- function(fold) {
+  train_data <- training(AirPassengers)
+  valid_data <- validation(AirPassengers)
+  valid_size <- length(valid_data)
+  
+  train_ts <- ts(log10(train_data), frequency = 12)
+
+  #borrowed from AirPassengers help
+  arima_fit <- arima(train_ts, c(0, 1, 1),
+                seasonal = list(order = c(0, 1, 1), period = 12))
+  raw_arima_pred <- predict(arima_fit, n.ahead = valid_size)
+  arima_pred <- 10^raw_arima_pred$pred
+  arima_MSE <- mean((arima_pred-valid_data)^2)
+  
+  #stl model
+  stl_fit <- stlm(train_ts, s.window = 12)
+  raw_stl_pred=forecast(stl_fit, h = valid_size)
+  stl_pred <- 10^raw_stl_pred$mean
+  stl_MSE <- mean((stl_pred-valid_data)^2)
+  
+  list(mse = data.frame(fold = fold_index(), arima = arima_MSE, stl = stl_MSE))
+}
+
+mses=cross_validate(cvforecasts,folds)$mse
+colMeans(mses[,c("arima","stl")])
+```
+
 ---
 
 
