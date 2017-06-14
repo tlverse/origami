@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Jeremy Coyle &amp; Nima Hejazi" />
+
+<meta name="date" content="2017-06-14" />
+
+<title>Generalized Cross-Validation with Origami</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Generalized Cross-Validation with Origami</h1>
+<h4 class="author"><em>Jeremy Coyle &amp; Nima Hejazi</em></h4>
+<h4 class="date"><em>2017-06-14</em></h4>
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Cross-validation is an essential tool for evaluating how any given data analytic procedure extends from a sample to the target population from which the sample is derived. It has seen widespread application in all facets of statistics, perhaps most notably statistical machine learning. Cross-validation works by partitioning a sample into complementary subsets, applying a particular data analytic (statistical) routine on a subset (the “training”&quot; set), and evaluating the routine of choice on the complementary subset (the “testing” set). This procedure is repeated such that all subsets of the sample take part in the evaluation of the routine by being in the testing set. The <code>origami</code> package provides a suite of tools that generalize the application of cross-validation to arbitrary data analytic procedures. The use of <code>origami</code> is best illustrated by example.</p>
+<hr />
+</div>
+<div id="cross-validation-with-linear-regression" class="section level2">
+<h2>Cross-validation with linear regression</h2>
+<p>We’ll start by examining a fairly simple data set:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(mtcars)
+<span class="kw">head</span>(mtcars)</code></pre></div>
+<pre><code>##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</code></pre>
+<p>One might be interested in examining how the efficiency of a car, as measured by miles-per-gallon (mpg), is explained by various technical aspects of the car, with data across a variety of different models of cars. Linear regression is perhaps the simplest statistical procedure that could be used to make such deductions. Let’s try it out:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod &lt;-<span class="st"> </span><span class="kw">lm</span>(mpg <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> mtcars)
+<span class="kw">summary</span>(mod)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ ., data = mtcars)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.4506 -1.6044 -0.1196  1.2193  4.6271 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept) 12.30337   18.71788   0.657   0.5181  
+## cyl         -0.11144    1.04502  -0.107   0.9161  
+## disp         0.01334    0.01786   0.747   0.4635  
+## hp          -0.02148    0.02177  -0.987   0.3350  
+## drat         0.78711    1.63537   0.481   0.6353  
+## wt          -3.71530    1.89441  -1.961   0.0633 .
+## qsec         0.82104    0.73084   1.123   0.2739  
+## vs           0.31776    2.10451   0.151   0.8814  
+## am           2.52023    2.05665   1.225   0.2340  
+## gear         0.65541    1.49326   0.439   0.6652  
+## carb        -0.19942    0.82875  -0.241   0.8122  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 2.65 on 21 degrees of freedom
+## Multiple R-squared:  0.869,  Adjusted R-squared:  0.8066 
+## F-statistic: 13.93 on 10 and 21 DF,  p-value: 3.793e-07</code></pre>
+<p>We can assess how well the model fits the data by comparing the predictions of the linear model to the true outcomes observed in the data set. This is the well known (and standard) squared error. We can extract that from the <code>lm</code> model object like so:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">err &lt;-<span class="st"> </span><span class="kw">mean</span>(<span class="kw">resid</span>(mod)<span class="op">^</span><span class="dv">2</span>)</code></pre></div>
+<p>The squared error is 4.6092009. There is an important problem that arises when we assess the model in this way – that is, we have trained our linear regression model on the full data set and assessed the error on the full data set, using up all of our data. We, of course, are generally not interested in how well the model explains variation in the observed data; rather, we are interested in how the explanation provided by the model generalizes to a target population from which the sample is presumably derived. Having used all of our available data, we cannot honestly evaluate how well the model fits (and thus explains) variation at the population level.</p>
+<p>To resolve this issue, cross-validation allows for a particular procedure (e.g., linear regression) to be implemented over subsets of the data, evaluating how well the procedure fits on a testing (“validation”) set, thereby providing an honest evaluation of the error.</p>
+<p>We can easily add cross-validation to our linear regression procedure by using <code>origami</code>. First, let us define a new function to perform linear regression with cross-validation:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># function to calculate cross-validated squared error</span>
+cvlm &lt;-<span class="st"> </span><span class="cf">function</span>(fold) {
+    train_data &lt;-<span class="st"> </span><span class="kw">training</span>(mtcars)
+    valid_data &lt;-<span class="st"> </span><span class="kw">validation</span>(mtcars)
+    
+    mod &lt;-<span class="st"> </span><span class="kw">lm</span>(mpg <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train_data)
+    preds &lt;-<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> valid_data)
+    <span class="kw">list</span>(<span class="dt">coef =</span> <span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">coef</span>(mod))), <span class="dt">SE =</span> ((preds <span class="op">-</span><span class="st"> </span>valid_data<span class="op">$</span>mpg)<span class="op">^</span><span class="dv">2</span>))
+}</code></pre></div>
+<p>Our <code>cvlm</code> function is rather simple: we merely split the available data into a training and validation sets, using the eponymous functions provided in <code>origami</code>, fit the linear model on the training set, and evaluate the model on the testing set. Having defined such a function, we can simply partition the data using <code>origami</code>’s <code>make_folds</code> function, and apply our <code>cvlm</code> function over the resultant <code>folds</code> object. Below, we replicate the resubstitution estimate of the error – we did this “by hand” above – using <code>make_folds</code> and <code>cvlm</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(origami)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resub &lt;-<span class="st"> </span><span class="kw">make_folds</span>(mtcars, <span class="dt">fold_fun =</span> <span class="st">&quot;resubstitution&quot;</span>)[[<span class="dv">1</span>]]
+resub_results &lt;-<span class="st"> </span><span class="kw">cvlm</span>(resub)
+<span class="kw">mean</span>(resub_results<span class="op">$</span>SE)</code></pre></div>
+<pre><code>## [1] 4.609201</code></pre>
+<p>This (very nearly) matches the estimate of the error that we obtained above.</p>
+<p>We can more honestly evaluate the error by <em>v-fold cross-validation</em>, which partitions the data into <strong>v subsets</strong>, fitting the model on <span class="math inline">\(v - 1\)</span> of the subsets and evaluating on the subset that was held out for testing. This is repeated such that each subset is used for testing. We can easily apply our <code>cvlm</code> function using <code>origami</code>’s <code>cross_validate</code> (n.b., by default this performs 10-fold cross-validation):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># cross-validated estimate</span>
+folds &lt;-<span class="st"> </span><span class="kw">make_folds</span>(mtcars)
+results &lt;-<span class="st"> </span><span class="kw">cross_validate</span>(cvlm, folds)
+<span class="kw">mean</span>(results<span class="op">$</span>SE)</code></pre></div>
+<pre><code>## [1] 18.01923</code></pre>
+<p>Having performed 10-fold cross-validation, we quickly notice that our previous estimate of the model error (by resubstitution) was quite optimistic. The honest estimate of the error is several times larger.</p>
+<hr />
+</div>
+<div id="cross-validation-with" class="section level2">
+<h2>Cross-validation with …</h2>
+<p>Pick an ML algorithm and repeart example with that?</p>
+<hr />
+</div>
+<div id="session-information" class="section level2">
+<h2>Session Information</h2>
+<pre><code>## R version 3.3.2 (2016-10-31)
+## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+## Running under: macOS Sierra 10.12.5
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] origami_0.8
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_0.12.9.2     codetools_0.2-15  listenv_0.6.0    
+##  [4] future_1.5.0      digest_0.6.12     foreach_1.4.3    
+##  [7] rprojroot_1.2     backports_1.0.5   magrittr_1.5     
+## [10] evaluate_0.10     stringi_1.1.2     data.table_1.10.4
+## [13] rmarkdown_1.3     iterators_1.0.8   tools_3.3.2      
+## [16] stringr_1.1.0     parallel_3.3.2    yaml_2.1.14      
+## [19] abind_1.4-5       globals_0.10.0    htmltools_0.3.5  
+## [22] knitr_1.15.1</code></pre>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

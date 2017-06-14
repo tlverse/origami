@@ -7,6 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Generalized Cross-Validation with Origami}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
+# bibliography: nesting.bib
 ---
 
 ## Introduction
@@ -14,15 +15,19 @@ vignette: >
 Cross-validation is an essential tool for evaluating how any given data analytic
 procedure extends from a sample to the target population from which the sample
 is derived. It has seen widespread application in all facets of statistics,
-perhaps most notably statistical machine learning. Cross-validation works by
+perhaps most notably statistical machine learning.  When used for model selection, 
+cross-validation has powerful optimality properties [@Vaart:2006bz,@vanderLaan:2007bz].
+
+<!--and for CV-TMLE based parameter estimation, elimination of difficult-to-assess empirical process conditions from CV-TMLE step [@Zheng:2010ua]. -->
+
+Cross-validation works by
 partitioning a sample into complementary subsets, applying a particular data
 analytic (statistical) routine on a subset (the "training"" set), and evaluating
 the routine of choice on the complementary subset (the "testing" set). This
-procedure is repeated such that all subsets of the sample take part in the
-evaluation of the routine by being in the testing set. The `origami` package
-provides a suite of tools that generalize the application of cross-validation to
-arbitrary data analytic procedures. The use of `origami` is best illustrated by
-example.
+procedure is repeated across multiple partitions of the data. A variety of different 
+partitioning schemes exist, such as V-fold cross-validation and bootstrap cross-validation, many of which are supported by `origami`. The `origami` package provides a suite of tools that generalize 
+the application of cross-validation to arbitrary data analytic procedures. The use of `origami` is best illustrated by example.
+
 
 ---
 
@@ -67,9 +72,8 @@ linear regression) to be implemented over subsets of the data, evaluating how
 well the procedure fits on a testing ("validation") set, thereby providing an
 honest evaluation of the error.
 
-We can easily add cross-validation to our linear regression procedure by using
-`origami`. First, let us define a new function to perform linear regression with
-cross-validation:
+We can easily add cross-validation to our linear regression procedure using
+`origami`. First, let us define a new function to perform linear regression on a specific partition of the data (called a 'fold'):
 ```{r}
 # function to calculate cross-validated squared error
 cvlm <- function(fold) {
@@ -85,8 +89,8 @@ cvlm <- function(fold) {
 Our `cvlm` function is rather simple: we merely split the available data into a
 training and validation sets, using the eponymous functions provided in
 `origami`, fit the linear model on the training set, and evaluate the model on
-the testing set. Having defined such a function, we can simply partition the
-data using `origami`'s `make_folds` function, and apply our `cvlm` function over
+the testing set. Having defined such a function, we can simply generate a set of partitions 
+using `origami`'s `make_folds` function, and apply our `cvlm` function over
 the resultant `folds` object. Below, we replicate the resubstitution estimate of
 the error -- we did this "by hand" above -- using `make_folds` and `cvlm`.
 
@@ -121,11 +125,39 @@ estimate of the error is several times larger.
 
 ---
 
-## Cross-validation with ...
+## General workflow
 
-Pick an ML algorithm and repeart example with that?
+Generally, `cross_validate` usage will mirror the workflow in the above example. First, the user must define folds and a function that operates on each fold. Once these are passed to `cross_validate`, the function will map the function across the folds, and combine the results in a reasonable way. More details on each step of this process will be given below
+
+### Define folds
+
+The `folds` object passed to `cross_validate` is a list of folds. Such lists can be generated using the `make_folds` function. Each `fold` consists of a list with a `training` index vector, a `validation` index vector, and a `fold_index` (its order in the list of folds). This function supports a variety of cross-validation schemes including V-fold and Bootstrap cross-validation as well as time series methods like Rolling Window. Formal definitions of these schemes can be found in [@vanderLaan:2007bz]. It can balance across levels of a variable (`stratify_ids`), and it can also keep all observations from the same independent unit together (`cluster`). See the help for `make_folds` for details.
+
+### Define fold function
+
+The `cv_fun` argument to `cross_validate` is a function that will perform some operation on each fold. The first argument to this function must be `fold`, which will receive an individual fold object to operate on. Additional arguments can be passed to `cv_fun` using the `...` argument to `cross_validate`. Within this function, the convenience functions `training`, `validation` and `fold_index` can return the various components of a fold object. If `training` or `validation` is passed an object, it will index into it in a sensible way. For instance, if it is a vector, it will index the vector directly. If it is a `data.frame` or `matrix`, it will index rows. This allows the user to easily partition data into training and validation sets. This fold function must return a named list of results containing whatever fold-specific outputs are generated.
+
+### Apply cross-validate
+
+`cross_validate` then maps the `cv_fun` across the `folds` using `future_lapply`. This means that it can be easily parallelized by specifying a `plan`. See https://github.com/HenrikBengtsson/future for more details.
+
+<!-- this part is probably hard to read. Not sure how to clarify -->
+This generates a list of results. As described above, each call to `cv_fun` returns a results list, with different elements for each type of result we care about. The main loop generates a list of these results lists, which is then inverted so there is one element per result type, which is a list of the results for each fold. By default these results type lists are combined using `combine_results`. For instance, in the above `mtcars` example, the results contains one `coef` `data.frame` from each fold. These are `rbind`ed together to form one `data.frame` containing the `coefs` from all folds in different rows. How results are combined is determined automatically by examining the data types of the results from the first fold. This can be modified by specifying a list of arguments to `.combine_control`. See the help for `combine_results` for more details.
+
 
 ---
+
+## Cross-validation with ...
+
+Pick an ML algorithm and repeart example with that? Let's show a simple model selection example (i.e. discrete super learner).
+
+---
+
+## Time series cross-validation
+
+Time series example goes here. Maybe just a model selection using rolling window. Choose between two ARIMAs or something.
+---
+
 
 ## Session Information
 
