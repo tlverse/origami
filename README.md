@@ -57,7 +57,7 @@ After using the `origami` R package, please cite it:
           volume = {},
           number = {},
           author = {Coyle, Jeremy R and Hejazi, Nima S},
-          title = {origami: Generalized Cross-Validation for Arbitrary Functions},
+          title = {origami: A Generalized Framework for Cross-Validation},
           journal = {The Journal of Open Source Software}
         }
 

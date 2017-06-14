@@ -2,7 +2,7 @@ library(origami)
 library(data.table)
 context("Future Plan")
 
-set.seed(17946)
+set.seed(1)
 
 data(mtcars)
 # make a lot of folds
