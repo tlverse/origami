@@ -44,6 +44,25 @@ issue](https://github.com/jeremyrcoyle/origami/issues).
 
 ---
 
+## Citation
+
+After using the `origami` R package, please cite it:
+
+        @article{coyle2017origami,
+          doi = {},
+          url = {},
+          year  = {2017},
+          month = {},
+          publisher = {The Open Journal},
+          volume = {},
+          number = {},
+          author = {Coyle, Jeremy R and Hejazi, Nima S},
+          title = {origami: Generalized Cross-Validation for Arbitrary Functions},
+          journal = {The Journal of Open Source Software}
+        }
+
+---
+
 ## License
 
 &copy; 2017 [Jeremy R. Coyle](https://github.com/jeremyrcoyle)

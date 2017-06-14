@@ -31,8 +31,11 @@ cross_validate <- function(cv_fun,
                            .combine_control = list(),
                            .old_results = NULL) {
 
+    #catch and return errors if they occur
+    wrapped_fun <- wrap_in_try(cv_fun)
+    
     # main loop
-    results <- future_lapply(folds, safe_eval, fun = cv_fun, ...)
+    results <- future_lapply(folds, wrapped_fun, ..., future.globals=FALSE)
 
     # remove error results
     error_idx <- which(sapply(results, inherits, "try-error"))
