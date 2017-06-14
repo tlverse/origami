@@ -155,8 +155,7 @@ Pick an ML algorithm and repeat example with that? Let's show a simple model sel
 
 ## Time series cross-validation
 
-Time series example goes here. Maybe just a model selection using rolling window. Choose between two ARIMAs or something.
-
+Cross-validation can also be used for forecast model selection in a time series setting. Here, the partitioning scheme mirrors the application of the forecasting model: We'll train the data on past observations (either all available or a recent subset), and then use the model forecast (predict), the next few observations. Consider the `AirPassengers` dataset, 
 ---
 
 
