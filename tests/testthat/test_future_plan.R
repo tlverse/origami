@@ -2,8 +2,6 @@ library(origami)
 library(data.table)
 context("Future Plan")
 
-#Windows doesn't support multicore
-skip_on_os("windows")
 
 set.seed(1)
 
@@ -33,6 +31,9 @@ time_mc <- system.time({
 })
 
 if(future::availableCores() > 1) {
-test_that("MC is not significantly slower than sequential",
-          expect_lt(time_mc["elapsed"], 1.1*time_seq["elapsed"]))
+    test_that("MC is not significantly slower than sequential",{
+        #Windows doesn't support multicore
+        skip_on_os("windows")
+        expect_lt(time_mc["elapsed"], 1.1*time_seq["elapsed"])
+      })
 }
