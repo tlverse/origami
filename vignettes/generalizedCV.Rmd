@@ -1,0 +1,134 @@
+---
+title: "Generalized Cross-Validation with Origami"
+author: "Jeremy Coyle & Nima Hejazi"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Generalized Cross-Validation with Origami}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+## Introduction
+
+Cross-validation is an essential tool for evaluating how any given data analytic
+procedure extends from a sample to the target population from which the sample
+is derived. It has seen widespread application in all facets of statistics,
+perhaps most notably statistical machine learning. Cross-validation works by
+partitioning a sample into complementary subsets, applying a particular data
+analytic (statistical) routine on a subset (the "training"" set), and evaluating
+the routine of choice on the complementary subset (the "testing" set). This
+procedure is repeated such that all subsets of the sample take part in the
+evaluation of the routine by being in the testing set. The `origami` package
+provides a suite of tools that generalize the application of cross-validation to
+arbitrary data analytic procedures. The use of `origami` is best illustrated by
+example.
+
+---
+
+## Cross-validation with linear regression
+
+We'll start by examining a fairly simple data set:
+```{r}
+data(mtcars)
+head(mtcars)
+```
+
+One might be interested in examining how the efficiency of a car, as measured by
+miles-per-gallon (mpg), is explained by various technical aspects of the car,
+with data across a variety of different models of cars. Linear regression is
+perhaps the simplest statistical procedure that could be used to make such
+deductions. Let's try it out:
+```{r}
+mod <- lm(mpg ~ ., data = mtcars)
+summary(mod)
+```
+
+We can assess how well the model fits the data by comparing the predictions of
+the linear model to the true outcomes observed in the data set. This is the
+well known (and standard) squared error. We can extract that from the `lm` model
+object like so:
+```{r}
+err <- mean(resid(mod)^2)
+```
+
+The squared error is `r err`. There is an important problem that arises when we
+assess the model in this way -- that is, we have trained our linear regression
+model on the full data set and assessed the error on the full data set, using up
+all of our data. We, of course, are generally not interested in how well the
+model explains variation in the observed data; rather, we are interested in
+how the explanation provided by the model generalizes to a target population
+from which the sample is presumably derived. Having used all of our available
+data, we cannot honestly evaluate how well the model fits (and thus explains)
+variation at the population level.
+
+To resolve this issue, cross-validation allows for a particular procedure (e.g.,
+linear regression) to be implemented over subsets of the data, evaluating how
+well the procedure fits on a testing ("validation") set, thereby providing an
+honest evaluation of the error.
+
+We can easily add cross-validation to our linear regression procedure by using
+`origami`. First, let us define a new function to perform linear regression with
+cross-validation:
+```{r}
+# function to calculate cross-validated squared error
+cvlm <- function(fold) {
+    train_data <- training(mtcars)
+    valid_data <- validation(mtcars)
+    
+    mod <- lm(mpg ~ ., data = train_data)
+    preds <- predict(mod, newdata = valid_data)
+    list(coef = data.frame(t(coef(mod))), SE = ((preds - valid_data$mpg)^2))
+}
+```
+
+Our `cvlm` function is rather simple: we merely split the available data into a
+training and validation sets, using the eponymous functions provided in
+`origami`, fit the linear model on the training set, and evaluate the model on
+the testing set. Having defined such a function, we can simply partition the
+data using `origami`'s `make_folds` function, and apply our `cvlm` function over
+the resultant `folds` object. Below, we replicate the resubstitution estimate of
+the error -- we did this "by hand" above -- using `make_folds` and `cvlm`.
+
+```{r}
+library(origami)
+```
+
+```{r}
+resub <- make_folds(mtcars, fold_fun = "resubstitution")[[1]]
+resub_results <- cvlm(resub)
+mean(resub_results$SE)
+```
+
+This (very nearly) matches the estimate of the error that we obtained above. 
+
+We can more honestly evaluate the error by _v-fold cross-validation_, which
+partitions the data into __v subsets__, fitting the model on $v - 1$ of the
+subsets and evaluating on the subset that was held out for testing. This is
+repeated such that each subset is used for testing. We can easily apply our
+`cvlm` function using `origami`'s `cross_validate` (n.b., by default this
+performs 10-fold cross-validation):
+```{r}
+# cross-validated estimate
+folds <- make_folds(mtcars)
+results <- cross_validate(cvlm, folds)
+mean(results$SE)
+```
+
+Having performed 10-fold cross-validation, we quickly notice that our previous
+estimate of the model error (by resubstitution) was quite optimistic. The honest
+estimate of the error is several times larger.
+
+---
+
+## Cross-validation with ...
+
+Pick an ML algorithm and repeart example with that?
+
+---
+
+## Session Information
+
+```{r sessionInfo, echo=FALSE}
+sessionInfo()
+```
