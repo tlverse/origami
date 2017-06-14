@@ -2,7 +2,7 @@ library(origami)
 library(data.table)
 context("Future Plan")
 
-set.seed(1)
+set.seed(17946)
 
 data(mtcars)
 # make a lot of folds
@@ -32,7 +32,7 @@ time_mc <- system.time({
 test_that("MC gives same answer as sequential",
           expect_equal(results_seq, results_mc))
 
-if(availableCores() > 1) {
+if(future::availableCores() > 1) {
 test_that("MC is faster than sequential",
           expect_lt(time_mc["elapsed"], time_seq["elapsed"]))
 }
