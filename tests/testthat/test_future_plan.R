@@ -31,5 +31,8 @@ time_mc <- system.time({
 
 test_that("MC gives same answer as sequential",
           expect_equal(results_seq, results_mc))
+
+if(availableCores() > 1) {
 test_that("MC is faster than sequential",
           expect_lt(time_mc["elapsed"], time_seq["elapsed"]))
+}
