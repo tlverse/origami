@@ -8,4 +8,5 @@
 ^TODO\.md$
 ^\.git$
 ^\.gitignore$
+^paper$
 ^docs$
