@@ -76,7 +76,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>Cross-validation is an essential tool for evaluating how any given data analytic procedure extends from a sample to the target population from which the sample is derived. It has seen widespread application in all facets of statistics, perhaps most notably statistical machine learning. Cross-validation works by partitioning a sample into complementary subsets, applying a particular data analytic (statistical) routine on a subset (the “training”&quot; set), and evaluating the routine of choice on the complementary subset (the “testing” set). This procedure is repeated such that all subsets of the sample take part in the evaluation of the routine by being in the testing set. The <code>origami</code> package provides a suite of tools that generalize the application of cross-validation to arbitrary data analytic procedures. The use of <code>origami</code> is best illustrated by example.</p>
+<p>Cross-validation is an essential tool for evaluating how any given data analytic procedure extends from a sample to the target population from which the sample is derived. It has seen widespread application in all facets of statistics, perhaps most notably statistical machine learning. When used for model selection, cross-validation has powerful optimality properties <span class="citation">[@Vaart:2006bz,@vanderLaan:2007bz]</span>.</p>
+<!--and for CV-TMLE based parameter estimation, elimination of difficult-to-assess empirical process conditions from CV-TMLE step [@Zheng:2010ua]. -->
+<p>Cross-validation works by partitioning a sample into complementary subsets, applying a particular data analytic (statistical) routine on a subset (the “training”&quot; set), and evaluating the routine of choice on the complementary subset (the “testing” set). This procedure is repeated across multiple partitions of the data. A variety of different partitioning schemes exist, such as V-fold cross-validation and bootstrap cross-validation, many of which are supported by <code>origami</code>. The <code>origami</code> package provides a suite of tools that generalize the application of cross-validation to arbitrary data analytic procedures. The use of <code>origami</code> is best illustrated by example.</p>
 <hr />
 </div>
 <div id="cross-validation-with-linear-regression" class="section level2">
@@ -125,7 +127,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">err &lt;-<span class="st"> </span><span class="kw">mean</span>(<span class="kw">resid</span>(mod)<span class="op">^</span><span class="dv">2</span>)</code></pre></div>
 <p>The squared error is 4.6092009. There is an important problem that arises when we assess the model in this way – that is, we have trained our linear regression model on the full data set and assessed the error on the full data set, using up all of our data. We, of course, are generally not interested in how well the model explains variation in the observed data; rather, we are interested in how the explanation provided by the model generalizes to a target population from which the sample is presumably derived. Having used all of our available data, we cannot honestly evaluate how well the model fits (and thus explains) variation at the population level.</p>
 <p>To resolve this issue, cross-validation allows for a particular procedure (e.g., linear regression) to be implemented over subsets of the data, evaluating how well the procedure fits on a testing (“validation”) set, thereby providing an honest evaluation of the error.</p>
-<p>We can easily add cross-validation to our linear regression procedure by using <code>origami</code>. First, let us define a new function to perform linear regression with cross-validation:</p>
+<p>We can easily add cross-validation to our linear regression procedure using <code>origami</code>. First, let us define a new function to perform linear regression on a specific partition of the data (called a ‘fold’):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># function to calculate cross-validated squared error</span>
 cvlm &lt;-<span class="st"> </span><span class="cf">function</span>(fold) {
     train_data &lt;-<span class="st"> </span><span class="kw">training</span>(mtcars)
@@ -135,7 +137,7 @@ cvlm &lt;-<span class="st"> </span><span class="cf">function</span>(fold) {
     preds &lt;-<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> valid_data)
     <span class="kw">list</span>(<span class="dt">coef =</span> <span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">coef</span>(mod))), <span class="dt">SE =</span> ((preds <span class="op">-</span><span class="st"> </span>valid_data<span class="op">$</span>mpg)<span class="op">^</span><span class="dv">2</span>))
 }</code></pre></div>
-<p>Our <code>cvlm</code> function is rather simple: we merely split the available data into a training and validation sets, using the eponymous functions provided in <code>origami</code>, fit the linear model on the training set, and evaluate the model on the testing set. Having defined such a function, we can simply partition the data using <code>origami</code>’s <code>make_folds</code> function, and apply our <code>cvlm</code> function over the resultant <code>folds</code> object. Below, we replicate the resubstitution estimate of the error – we did this “by hand” above – using <code>make_folds</code> and <code>cvlm</code>.</p>
+<p>Our <code>cvlm</code> function is rather simple: we merely split the available data into a training and validation sets, using the eponymous functions provided in <code>origami</code>, fit the linear model on the training set, and evaluate the model on the testing set. Having defined such a function, we can simply generate a set of partitions using <code>origami</code>’s <code>make_folds</code> function, and apply our <code>cvlm</code> function over the resultant <code>folds</code> object. Below, we replicate the resubstitution estimate of the error – we did this “by hand” above – using <code>make_folds</code> and <code>cvlm</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(origami)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resub &lt;-<span class="st"> </span><span class="kw">make_folds</span>(mtcars, <span class="dt">fold_fun =</span> <span class="st">&quot;resubstitution&quot;</span>)[[<span class="dv">1</span>]]
 resub_results &lt;-<span class="st"> </span><span class="kw">cvlm</span>(resub)
@@ -147,14 +149,39 @@ resub_results &lt;-<span class="st"> </span><span class="kw">cvlm</span>(resub)
 folds &lt;-<span class="st"> </span><span class="kw">make_folds</span>(mtcars)
 results &lt;-<span class="st"> </span><span class="kw">cross_validate</span>(cvlm, folds)
 <span class="kw">mean</span>(results<span class="op">$</span>SE)</code></pre></div>
-<pre><code>## [1] 18.01923</code></pre>
+<pre><code>## [1] 11.5564</code></pre>
 <p>Having performed 10-fold cross-validation, we quickly notice that our previous estimate of the model error (by resubstitution) was quite optimistic. The honest estimate of the error is several times larger.</p>
 <hr />
 </div>
+<div id="general-workflow" class="section level2">
+<h2>General workflow</h2>
+<p>Generally, <code>cross_validate</code> usage will mirror the workflow in the above example. First, the user must define folds and a function that operates on each fold. Once these are passed to <code>cross_validate</code>, the function will map the function across the folds, and combine the results in a reasonable way. More details on each step of this process will be given below</p>
+<div id="define-folds" class="section level3">
+<h3>Define folds</h3>
+<p>The <code>folds</code> object passed to <code>cross_validate</code> is a list of folds. Such lists can be generated using the <code>make_folds</code> function. Each <code>fold</code> consists of a list with a <code>training</code> index vector, a <code>validation</code> index vector, and a <code>fold_index</code> (its order in the list of folds). This function supports a variety of cross-validation schemes including V-fold and Bootstrap cross-validation as well as time series methods like Rolling Window. Formal definitions of these schemes can be found in <span class="citation">[@vanderLaan:2007bz]</span>. It can balance across levels of a variable (<code>stratify_ids</code>), and it can also keep all observations from the same independent unit together (<code>cluster</code>). See the help for <code>make_folds</code> for details.</p>
+</div>
+<div id="define-fold-function" class="section level3">
+<h3>Define fold function</h3>
+<p>The <code>cv_fun</code> argument to <code>cross_validate</code> is a function that will perform some operation on each fold. The first argument to this function must be <code>fold</code>, which will receive an individual fold object to operate on. Additional arguments can be passed to <code>cv_fun</code> using the <code>...</code> argument to <code>cross_validate</code>. Within this function, the convenience functions <code>training</code>, <code>validation</code> and <code>fold_index</code> can return the various components of a fold object. If <code>training</code> or <code>validation</code> is passed an object, it will index into it in a sensible way. For instance, if it is a vector, it will index the vector directly. If it is a <code>data.frame</code> or <code>matrix</code>, it will index rows. This allows the user to easily partition data into training and validation sets. This fold function must return a named list of results containing whatever fold-specific outputs are generated.</p>
+</div>
+<div id="apply-cross-validate" class="section level3">
+<h3>Apply cross-validate</h3>
+<p><code>cross_validate</code> then maps the <code>cv_fun</code> across the <code>folds</code> using <code>future_lapply</code>. This means that it can be easily parallelized by specifying a <code>plan</code>. See <a href="https://github.com/HenrikBengtsson/future" class="uri">https://github.com/HenrikBengtsson/future</a> for more details.</p>
+<!-- this part is probably hard to read. Not sure how to clarify -->
+<p>This generates a list of results. As described above, each call to <code>cv_fun</code> returns a results list, with different elements for each type of result we care about. The main loop generates a list of these results lists, which is then inverted so there is one element per result type, which is a list of the results for each fold. By default these results type lists are combined using <code>combine_results</code>. For instance, in the above <code>mtcars</code> example, the results contains one <code>coef</code> <code>data.frame</code> from each fold. These are <code>rbind</code>ed together to form one <code>data.frame</code> containing the <code>coefs</code> from all folds in different rows. How results are combined is determined automatically by examining the data types of the results from the first fold. This can be modified by specifying a list of arguments to <code>.combine_control</code>. See the help for <code>combine_results</code> for more details.</p>
+<hr />
+</div>
+</div>
 <div id="cross-validation-with" class="section level2">
 <h2>Cross-validation with …</h2>
-<p>Pick an ML algorithm and repeart example with that?</p>
+<p>Pick an ML algorithm and repeart example with that? Let’s show a simple model selection example (i.e. discrete super learner).</p>
 <hr />
+</div>
+<div id="time-series-cross-validation" class="section level2">
+<h2>Time series cross-validation</h2>
+</div>
+<div id="time-series-example-goes-here.-maybe-just-a-model-selection-using-rolling-window.-choose-between-two-arimas-or-something." class="section level2">
+<h2>Time series example goes here. Maybe just a model selection using rolling window. Choose between two ARIMAs or something.</h2>
 </div>
 <div id="session-information" class="section level2">
 <h2>Session Information</h2>

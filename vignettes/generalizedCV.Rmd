@@ -149,13 +149,14 @@ This generates a list of results. As described above, each call to `cv_fun` retu
 
 ## Cross-validation with ...
 
-Pick an ML algorithm and repeart example with that? Let's show a simple model selection example (i.e. discrete super learner).
+Pick an ML algorithm and repeat example with that? Let's show a simple model selection example (i.e. discrete super learner).
 
 ---
 
 ## Time series cross-validation
 
 Time series example goes here. Maybe just a model selection using rolling window. Choose between two ARIMAs or something.
+
 ---
 
 
