@@ -1,5 +1,5 @@
 ---
-title: 'origami: Generalized cross-validation for arbitrary functions'
+title: 'origami: A Generalized Framework for Cross-Validation'
 tags:
   - R
 authors:
