@@ -3,7 +3,7 @@ title: "Generalized Cross-Validation with Origami"
 author: "Jeremy Coyle & Nima Hejazi"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
-bibliography: nesting.bib
+bibliography: generalizedCV.bib
 vignette: >
   %\VignetteIndexEntry{Generalized Cross-Validation with Origami}
   %\VignetteEngine{knitr::rmarkdown}
