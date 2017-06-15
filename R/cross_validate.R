@@ -15,7 +15,7 @@
 #'        useful for adding additional CV folds to a results object.
 #'
 #' @importFrom foreach foreach %do% %dopar% getDoParRegistered
-#' @importFrom future future values future_lapply plan sequential multicore
+#' @importFrom future future values future_lapply plan sequential multicore multisession
 #' @importFrom listenv listenv
 #'
 #' @return A list of results, combined across folds.
@@ -35,7 +35,7 @@ cross_validate <- function(cv_fun,
     wrapped_fun <- wrap_in_try(cv_fun)
     
     # main loop
-    results <- future_lapply(folds, wrapped_fun, ..., future.globals=FALSE)
+    results <- future_lapply(folds, wrapped_fun, ...)
 
     # remove error results
     error_idx <- which(sapply(results, inherits, "try-error"))

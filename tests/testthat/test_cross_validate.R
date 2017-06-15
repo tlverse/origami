@@ -36,8 +36,7 @@ cv_always_errors <- function(fold) {
 
 folds <- make_folds(1000)
 
-results <- cross_validate(cv_always_errors, folds)
+suppressWarnings({results <- cross_validate(cv_always_errors, folds)})
 
 test_that("cross_validate handles the case where all folds produce an error", expect_equal(names(results), 
     "errors"))
-

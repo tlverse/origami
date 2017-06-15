@@ -1,5 +1,6 @@
 library(origami)
 library(data.table)
+library(future)
 context("Future Plan")
 
 
@@ -34,6 +35,20 @@ if(future::availableCores() > 1) {
     test_that("MC is not significantly slower than sequential",{
         #Windows doesn't support multicore
         skip_on_os("windows")
-        expect_lt(time_mc["elapsed"], 1.1*time_seq["elapsed"])
+        expect_lt(time_mc["elapsed"], 1.2*time_seq["elapsed"])
       })
 }
+
+######
+
+# verify globals are being transferred to other sessions
+a=4
+folds=make_folds(1000)
+return_a=function(fold){
+    list(a=a,dt=data.table(a=a))
+}
+
+plan(multisession,workers=2)
+results=cross_validate(return_a,folds)
+test_that("globals are available in worker sessions",expect_true(all(results$a==4)))
+test_that("globals are available in worker sessions",expect_is(results$dt,"data.table"))

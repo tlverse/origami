@@ -15,7 +15,6 @@ Depends:
 Imports:
     abind,
     methods,
-    foreach,
     data.table,
     future,
     listenv
