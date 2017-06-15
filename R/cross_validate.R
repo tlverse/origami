@@ -50,9 +50,8 @@ cross_validate <- function(cv_fun,
         stop("names returned from folds are not consistent")
 
 
-    # invert results - go from a list containing one list per
-    # fold to a list containing one list per result returned by
-    # cv_fun
+    # invert results - go from a list containing one list per fold to a list
+    # containing one list per result returned by cv_fun
     results <- apply(do.call(rbind, results), 2, as.list)
 
     # combine results
@@ -65,9 +64,8 @@ cross_validate <- function(cv_fun,
     results$errors <- error_results
 
     if (!is.null(.old_results)) {
-        # invert results - go from a list containing one list per
-        # fold to a list containing one list per result returned by
-        # cv_fun
+        # invert results - go from a list containing one list per fold to a list
+        # containing one list per result returned by cv_fun
         new_and_old <- list(results, .old_results)
         new_and_old <- apply(do.call(rbind, new_and_old), 2, as.list)
         results <- combine_results(results = new_and_old)
