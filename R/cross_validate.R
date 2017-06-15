@@ -33,7 +33,7 @@ cross_validate <- function(cv_fun,
 
     #catch and return errors if they occur
     wrapped_fun <- wrap_in_try(cv_fun)
-    
+
     # main loop
     results <- future_lapply(folds, wrapped_fun, ..., future.globals=FALSE)
 
@@ -43,22 +43,25 @@ cross_validate <- function(cv_fun,
     good_results <- setdiff(seq_along(folds), error_idx)
     results <- results[good_results]
 
-    # verify that the folds returned similar results
-    if (length(unique(lapply(results, length))) > 1)
-        stop("lists returned from folds are not the same length")
-    if (length(unique(lapply(results, names))) > 1)
-        stop("names returned from folds are not consistent")
+    if(length(results) > 0) {
+        # verify that the folds returned similar results
+        if (length(unique(lapply(results, length))) > 1)
+            stop("lists returned from folds are not the same length")
+        if (length(unique(lapply(results, names))) > 1)
+            stop("names returned from folds are not consistent")
 
+        # invert results - go from a list containing one list per fold to a list
+        # containing one list per result returned by cv_fun
+        results <- apply(do.call(rbind, results), 2, as.list)
 
-    # invert results - go from a list containing one list per fold to a list
-    # containing one list per result returned by cv_fun
-    results <- apply(do.call(rbind, results), 2, as.list)
-
-    # combine results
-    if (.combine) {
-        results <- do.call(combine_results,
-                           c(list(results = results),
-                           .combine_control))
+        # combine results
+        if (.combine) {
+            results <- do.call(combine_results,
+                               c(list(results = results),
+                               .combine_control))
+        }
+    } else {
+        warning("All iterations resulted in errors")
     }
 
     results$errors <- error_results
