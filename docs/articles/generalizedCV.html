@@ -57,7 +57,7 @@
       <h1>Generalized Cross-Validation with Origami</h1>
                         <h4 class="author">Jeremy Coyle &amp; Nima Hejazi</h4>
             
-            <h4 class="date">2017-06-14</h4>
+            <h4 class="date">2017-06-15</h4>
           </div>
 
     
@@ -66,7 +66,7 @@
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <html><body><a href="#introduction" class="anchor"> </a></body></html>Introduction</h2>
-<p>Cross-validation is an essential tool for evaluating how any given data analytic procedure extends from a sample to the target population from which the sample is derived. It has seen widespread application in all facets of statistics, perhaps most notably statistical machine learning. When used for model selection, cross-validation has powerful optimality properties <span class="citation">[@Vaart:2006bz, @vanderLaan:2007bz]</span>.</p>
+<p>Cross-validation is an essential tool for evaluating how any given data analytic procedure extends from a sample to the target population from which the sample is derived. It has seen widespread application in all facets of statistics, perhaps most notably statistical machine learning. When used for model selection, cross-validation has powerful optimality properties <span class="citation">(Vaart, Dudoit, and Laan 2006, <span class="citation">Laan, Polley, and Hubbard (2007)</span>)</span>.</p>
 <!--
 and for CV-TMLE based parameter estimation, elimination of difficult-to-assess
 empirical process conditions from CV-TMLE step [@Zheng:2010ua].
@@ -123,7 +123,7 @@ empirical process conditions from CV-TMLE step [@Zheng:2010ua].
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvlm &lt;-<span class="st"> </span><span class="cf">function</span>(fold) {
     train_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fold_helpers.html">training</a></span>(mtcars)
     valid_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fold_helpers.html">validation</a></span>(mtcars)
-    
+
     mod &lt;-<span class="st"> </span><span class="kw">lm</span>(mpg <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train_data)
     preds &lt;-<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> valid_data)
     <span class="kw">list</span>(<span class="dt">coef =</span> <span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">coef</span>(mod))), <span class="dt">SE =</span> ((preds <span class="op">-</span><span class="st"> </span>valid_data<span class="op">$</span>mpg)<span class="op">^</span><span class="dv">2</span>))
@@ -151,7 +151,7 @@ results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cro
 <div id="define-folds" class="section level3">
 <h3 class="hasAnchor">
 <html><body><a href="#define-folds" class="anchor"> </a></body></html>Define folds</h3>
-<p>The <code>folds</code> object passed to <code>cross_validate</code> is a list of folds. Such lists can be generated using the <code>make_folds</code> function. Each <code>fold</code> consists of a list with a <code>training</code> index vector, a <code>validation</code> index vector, and a <code>fold_index</code> (its order in the list of folds). This function supports a variety of cross-validation schemes including <em>v-fold</em> and <em>bootstrap</em> cross-validation as well as time series methods like <em>“Rolling Window”</em>. Formal definitions of these schemes can be found in <span class="citation">[@vanderLaan:2007bz]</span>. It can balance across levels of a variable (<code>stratify_ids</code>), and it can also keep all observations from the same independent unit together (<code>cluster</code>). See the documentation of the <code>make_folds</code> function for details.</p>
+<p>The <code>folds</code> object passed to <code>cross_validate</code> is a list of folds. Such lists can be generated using the <code>make_folds</code> function. Each <code>fold</code> consists of a list with a <code>training</code> index vector, a <code>validation</code> index vector, and a <code>fold_index</code> (its order in the list of folds). This function supports a variety of cross-validation schemes including <em>v-fold</em> and <em>bootstrap</em> cross-validation as well as time series methods like <em>“Rolling Window”</em>. Formal definitions of these schemes can be found in <span class="citation">(Laan, Polley, and Hubbard 2007)</span>. It can balance across levels of a variable (<code>stratify_ids</code>), and it can also keep all observations from the same independent unit together (<code>cluster</code>). See the documentation of the <code>make_folds</code> function for details.</p>
 </div>
 <div id="define-fold-function" class="section level3">
 <h3 class="hasAnchor">
@@ -179,7 +179,7 @@ Nima: tried some re-wording to clarify; not sure how much this helped.
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvrf &lt;-<span class="st"> </span><span class="cf">function</span>(fold) {
     train_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fold_helpers.html">training</a></span>(mtcars)
     valid_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fold_helpers.html">validation</a></span>(mtcars)
-    
+
     mod &lt;-<span class="st"> </span><span class="kw">randomForest</span>(<span class="dt">formula =</span> mpg <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train_data)
     preds &lt;-<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> valid_data)
     <span class="kw">list</span>(<span class="dt">coef =</span> <span class="kw">data.frame</span>(mod<span class="op">$</span>coefs), <span class="dt">SE =</span> mod<span class="op">$</span>mse)
@@ -231,7 +231,7 @@ cvforecasts &lt;-<span class="st"> </span><span class="cf">function</span>(fold)
   train_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fold_helpers.html">training</a></span>(AirPassengers)
   valid_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fold_helpers.html">validation</a></span>(AirPassengers)
   valid_size &lt;-<span class="st"> </span><span class="kw">length</span>(valid_data)
-  
+
   train_ts &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="kw">log10</span>(train_data), <span class="dt">frequency =</span> <span class="dv">12</span>)
 
   <span class="co"># borrowed from AirPassengers help</span>
@@ -241,13 +241,13 @@ cvforecasts &lt;-<span class="st"> </span><span class="cf">function</span>(fold)
   raw_arima_pred &lt;-<span class="st"> </span><span class="kw">predict</span>(arima_fit, <span class="dt">n.ahead =</span> valid_size)
   arima_pred &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span>raw_arima_pred<span class="op">$</span>pred
   arima_MSE &lt;-<span class="st"> </span><span class="kw">mean</span>((arima_pred<span class="op">-</span>valid_data)<span class="op">^</span><span class="dv">2</span>)
-  
+
   <span class="co"># stl model</span>
   stl_fit &lt;-<span class="st"> </span><span class="kw">stlm</span>(train_ts, <span class="dt">s.window =</span> <span class="dv">12</span>)
   raw_stl_pred=<span class="kw">forecast</span>(stl_fit, <span class="dt">h =</span> valid_size)
   stl_pred &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span>raw_stl_pred<span class="op">$</span>mean
   stl_MSE &lt;-<span class="st"> </span><span class="kw">mean</span>((stl_pred<span class="op">-</span>valid_data)<span class="op">^</span><span class="dv">2</span>)
-  
+
   <span class="kw">list</span>(<span class="dt">mse =</span> <span class="kw">data.frame</span>(<span class="dt">fold =</span> <span class="kw"><a href="../reference/fold_helpers.html">fold_index</a></span>(), <span class="dt">arima =</span> arima_MSE, <span class="dt">stl =</span> stl_MSE))
 }
 
@@ -302,6 +302,19 @@ mses =<span class="st"> </span><span class="kw"><a href="../reference/cross_vali
 ## [55] xml2_1.1.1          assertthat_0.2.0    rmarkdown_1.5.9000 
 ## [58] roxygen2_6.0.1      iterators_1.0.8     R6_2.2.1           
 ## [61] globals_0.10.0      nnet_7.3-12         compiler_3.4.0</code></pre>
+<hr>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="hasAnchor">
+<html><body><a href="#references" class="anchor"> </a></body></html>References</h1>
+<div id="refs" class="references">
+<div id="ref-vanderLaan:2007bz">
+<p>Laan, M J van der, E C Polley, and A E Hubbard. 2007. “Super learner.” <em>Statistical Applications in Genetics and Molecular Biology</em> 6: Art. 25–23 pp. (electronic).</p>
+</div>
+<div id="ref-Vaart:2006bz">
+<p>Vaart, A W van der, S Dudoit, and M J van der Laan. 2006. “Oracle inequalities for multi-fold cross validation.” <em>Statistics &amp; Decisions</em> 24 (3): 351–71.</p>
+</div>
+</div>
 </div>
 </div>
   </div>
@@ -316,6 +329,7 @@ mses =<span class="st"> </span><span class="kw"><a href="../reference/cross_vali
       <li><a href="#cross-validation-with-random-forests">Cross-validation with random forests</a></li>
       <li><a href="#cross-validation-with-dependence-time-series">Cross-validation with dependence: time series</a></li>
       <li><a href="#session-information">Session Information</a></li>
+      <li><a href="#references">References</a></li>
       </ul>
 </div>
       </div>

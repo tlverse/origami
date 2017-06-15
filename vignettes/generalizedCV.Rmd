@@ -3,6 +3,7 @@ title: "Generalized Cross-Validation with Origami"
 author: "Jeremy Coyle & Nima Hejazi"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
+bibliography: nesting.bib
 vignette: >
   %\VignetteIndexEntry{Generalized Cross-Validation with Origami}
   %\VignetteEngine{knitr::rmarkdown}
@@ -84,7 +85,7 @@ specific partition of the data (called a "fold"):
 cvlm <- function(fold) {
     train_data <- training(mtcars)
     valid_data <- validation(mtcars)
-    
+
     mod <- lm(mpg ~ ., data = train_data)
     preds <- predict(mod, newdata = valid_data)
     list(coef = data.frame(t(coef(mod))), SE = ((preds - valid_data$mpg)^2))
@@ -110,7 +111,7 @@ resub_results <- cvlm(resub)
 mean(resub_results$SE)
 ```
 
-This (very nearly) matches the estimate of the error that we obtained above. 
+This (very nearly) matches the estimate of the error that we obtained above.
 
 We can more honestly evaluate the error by _v-fold cross-validation_, which
 partitions the data into __v subsets__, fitting the model on $v - 1$ of the
@@ -205,7 +206,7 @@ example, we will use L. Breiman's `randomForest`:
 cvrf <- function(fold) {
     train_data <- training(mtcars)
     valid_data <- validation(mtcars)
-    
+
     mod <- randomForest(formula = mpg ~ ., data = train_data)
     preds <- predict(mod, newdata = valid_data)
     list(coef = data.frame(mod$coefs), SE = mod$mse)
@@ -241,7 +242,7 @@ setting. Here, the partitioning scheme mirrors the application of the
 forecasting model: We'll train the data on past observations (either all
 available or a recent subset), and then use the model forecast (predict), the
 next few observations. Consider the `AirPassengers` dataset, a monthly time
-series of passenger air traffic in thousands of people. 
+series of passenger air traffic in thousands of people.
 
 ```{r}
 data(AirPassengers)
@@ -250,7 +251,7 @@ print(AirPassengers)
 
 Suppose we want to pick between two forecasting models, `stl`, and `arima` (the
 details of these models are not important for this example). We can do that by
-evaluating their forecasting performance. 
+evaluating their forecasting performance.
 
 ```{r}
 library(forecast)
@@ -263,7 +264,7 @@ cvforecasts <- function(fold) {
   train_data <- training(AirPassengers)
   valid_data <- validation(AirPassengers)
   valid_size <- length(valid_data)
-  
+
   train_ts <- ts(log10(train_data), frequency = 12)
 
   # borrowed from AirPassengers help
@@ -273,13 +274,13 @@ cvforecasts <- function(fold) {
   raw_arima_pred <- predict(arima_fit, n.ahead = valid_size)
   arima_pred <- 10^raw_arima_pred$pred
   arima_MSE <- mean((arima_pred-valid_data)^2)
-  
+
   # stl model
   stl_fit <- stlm(train_ts, s.window = 12)
   raw_stl_pred=forecast(stl_fit, h = valid_size)
   stl_pred <- 10^raw_stl_pred$mean
   stl_MSE <- mean((stl_pred-valid_data)^2)
-  
+
   list(mse = data.frame(fold = fold_index(), arima = arima_MSE, stl = stl_MSE))
 }
 
@@ -294,3 +295,7 @@ colMeans(mses[, c("arima", "stl")])
 ```{r sessionInfo, echo=FALSE}
 sessionInfo()
 ```
+
+---
+
+# References
