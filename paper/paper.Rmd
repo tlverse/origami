@@ -28,42 +28,40 @@ perhaps most notably statistical machine learning.  When used for model
 selection, cross-validation has powerful optimality properties
 [@Vaart:2006bz, @vanderLaan:2007bz].
 
-
 Cross-validation works by partitioning a sample into complementary subsets,
 applying a particular data analytic (statistical) routine on a subset (the
 "training" set), and evaluating the routine of choice on the complementary
 subset (the "testing" set). This procedure is repeated across multiple
-partitions of the data. A variety of different  partitioning schemes exist, such
-as V-fold cross-validation and bootstrap cross-validation, many of which are
-supported by the `origami` package, for the R language for statistical
-computing [@R]. The `origami` R package provides a suite of tools that
-generalize  the application of cross-validation to arbitrary data analytic
-procedures.
+partitions of the data, and a variety of different partitioning schemes exist,
+such as $V$-fold cross-validation and bootstrap cross-validation. `origami`, a
+package for the R language for statistical computing [@R], supports many of the
+existing cross-validation schemes, providing a suite of tools that generalize
+the application of cross-validation to arbitrary data analytic procedures.
 
 ---
 
 ## General workflow
 
-Generally, `cross_validate` usage will mirror the workflow in the above example.
-First, the user must define folds and a function that operates on each fold.
-Once these are passed to `cross_validate`, the function will map the function
-across the folds, and combine the results in a reasonable way. More details on
-each step of this process will be given below.
+The main function in the `origami` R package is `cross_validate`. To start off,
+the user must define folds and a function that operates on each fold. Once
+these are passed to `cross_validate`, the function will map the function across
+the folds, combining the results in a reasonable way. Specific details on each
+each step of this process are given below.
 
-### Define folds
+### (1) Define folds
 
 The `folds` object passed to `cross_validate` is a list of folds. Such lists can
-be generated using the `make_folds` function. Each `fold` consists of a list
+be generated using the `make_folds` function. Each fold consists of a list
 with a `training` index vector, a `validation` index vector, and a `fold_index`
 (its order in the list of folds). This function supports a variety of
-cross-validation schemes including _v-fold_ and _bootstrap_ cross-validation as
-well as time series methods like _"Rolling Window"_. Formal definitions of these
-schemes can be found in [@vanderLaan:2007bz]. It can balance across levels of a
-variable (`stratify_ids`), and it can also keep all observations from the same
-independent unit together (`cluster`). See the documentation of the `make_folds`
-function for details.
+cross-validation schemes including $V$-fold and bootstrap cross-validation, as
+well as time series methods like _"rolling window"_. See [@vanderLaan:2007bz]
+for formal definitions of these schemes. `make_folds` can balance across levels
+of a variable (`stratify_ids`), and it can also keep all observations from the
+same independent unit together (`cluster`). We invite interested users to
+consult the documentation of the `make_folds` function for further details.
 
-### Define fold function
+### (2) Define fold function
 
 The `cv_fun` argument to `cross_validate` is a function that will perform some
 operation on each fold. The first argument to this function must be `fold`,
@@ -77,13 +75,12 @@ For instance, if it is a vector, it will index the vector directly. If it is a
 partition data into training and validation sets. This fold function must return
 a named list of results containing whatever fold-specific outputs are generated.
 
-### Apply `cross-validate`
+### (3) Apply `cross-validate`
 
 After defining folds, `cross_validate` can be used to map the `cv_fun` across
 the `folds` using `future_lapply`. This means that it can be easily parallelized
 by specifying a parallelization scheme (i.e., a `plan`). See the [`future`
 package](https://github.com/HenrikBengtsson/future) for more details.
-
 
 The application of `cross_validate` generates a list of results. As described
 above, each call to `cv_fun` itself returns a list of results, with different
@@ -91,15 +88,11 @@ elements for each type of result we care about. The main loop generates a list
 of these individual lists of results (a sort of "meta-list"). This "meta-list"
 is then inverted such that there is one element per result type (this too is a
 list of the results for each fold). By default, `combine_results` is used to
-combine these results type lists.
-
-For instance, in the above `mtcars` example, the results type lists contains one
-`coef` `data.frame` from each fold. These are `rbind`ed together to form one
-`data.frame` containing the `coefs` from all folds in different rows. How
-results are combined is determined automatically by examining the data types
-of the results from the first fold. This can be modified by specifying a list of
-arguments to `.combine_control`. See the help for `combine_results` for more
-details. In most cases, the defaults should suffice.
+combine these results type lists in a sensible manner. How results are combined
+is determined automatically by examining the data types of the results from the
+first fold. This can be modified by specifying a list of arguments to
+`.combine_control`. See the help for `combine_results` for more details. In
+most cases, the defaults should suffice.
 
 Next, we demonstrate the use of `origami` by example.
 
@@ -136,10 +129,9 @@ assess the model in this way -- that is, we have trained our linear regression
 model on the full data set and assessed the error on the full data set, using up
 all of our data. We, of course, are generally not interested in how well the
 model explains variation in the observed data; rather, we are interested in
-how the explanation provided by the model generalizes to a target population
-from which the sample is presumably derived. Having used all of our available
-data, we cannot honestly evaluate how well the model fits (and thus explains)
-variation at the population level.
+how the explanation provided by the model generalizes to a target population.
+Having used all of our available data, we cannot honestly evaluate how well the
+model fits (and thus explains) variation at the population level.
 
 To resolve this issue, cross-validation allows for a particular procedure (e.g.,
 linear regression) to be implemented over subsets of the data, evaluating how
@@ -160,14 +152,14 @@ cvlm <- function(fold) {
 }
 ```
 
-Our `cvlm` function is rather simple: we merely split the available data into a
-training and validation sets, using the eponymous functions provided in
-`origami`, fit the linear model on the training set, and evaluate the model on
-the testing set. Having defined such a function, we can simply generate a set of
-partitions using `origami`'s `make_folds` function, and apply our `cvlm`
-function over the resultant `folds` object. Below, we replicate the
-resubstitution estimate of the error -- we did this "by hand" above -- using
-the functions `make_folds` and `cvlm`.
+Our `cvlm` function is rather simple: we merely split the available data into
+training and validation sets, using the eponymous `origami` functions, fit the
+linear model on the training set, and evaluate the model on the testing set.
+Having defined such a function, we can simply generate a set of partitions
+using `origami`'s `make_folds` function, and apply our `cvlm` function over the
+resultant `folds` object. Below, we replicate the resubstitution estimate of
+the error -- we did this "by hand" above -- using the functions `make_folds`
+and `cvlm`.
 
 ```{r}
 library(origami)
@@ -181,12 +173,12 @@ mean(resub_results$SE)
 
 This (very nearly) matches the estimate of the error that we obtained above.
 
-We can more honestly evaluate the error by _v-fold cross-validation_, which
-partitions the data into __v subsets__, fitting the model on $v - 1$ of the
-subsets and evaluating on the subset that was held out for testing. This is
-repeated such that each subset is used for testing. We can easily apply our
-`cvlm` function using `origami`'s `cross_validate` (n.b., by default this
-performs 10-fold cross-validation):
+We can more honestly evaluate the error by $V$-fold cross-validation, which
+partitions the data into $v$ subsets, fitting the model on $v - 1$ of the
+subsets and evaluating on the held out subset. This is repeated such that each
+subset is used for testing. We can easily apply our `cvlm` function using
+`origami`'s `cross_validate` (n.b., by default this performs 10-fold
+cross-validation):
 ```{r}
 # cross-validated estimate
 folds <- make_folds(mtcars)
@@ -198,7 +190,7 @@ Having performed 10-fold cross-validation, we quickly notice that our previous
 estimate of the model error (by resubstitution) was quite optimistic. The honest
 estimate of the error is several times larger.
 
-For further details about the `origami`, please consult the vignette that
+For further details about `origami`, please consult the vignette that
 accompanies the R package.
 
 ---

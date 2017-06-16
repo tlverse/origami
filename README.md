@@ -31,12 +31,6 @@ devtools::install_github("jeremyrcoyle/origami")
 
 ---
 
-## Usage
-
-See `help('cross_validate')` to get started. More examples to come.
-
----
-
 ## Issues
 
 If you encounter any bugs or have any specific feature requests, please [file an
