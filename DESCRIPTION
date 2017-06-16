@@ -23,7 +23,9 @@ Suggests:
     testthat,
     class,
     rmarkdown,
-    knitr
+    knitr,
+    forecast,
+    randomForest
 License: GPL-3 + file LICENSE
 URL: https://github.com/jeremyrcoyle/origami
 Encoding: UTF-8
