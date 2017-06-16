@@ -34,6 +34,6 @@ if(future::availableCores() > 1) {
     test_that("MC is not significantly slower than sequential",{
         #Windows doesn't support multicore
         skip_on_os("windows")
-        expect_lt(time_mc["elapsed"], 1.1*time_seq["elapsed"])
+        expect_lt(time_mc["elapsed"], time_seq["elapsed"])
       })
 }
