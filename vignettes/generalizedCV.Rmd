@@ -3,7 +3,7 @@ title: "Generalized Cross-Validation with Origami"
 author: "Jeremy Coyle & Nima Hejazi"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
-bibliography: generalizedCV.bib
+#bibliography: generalizedCV.bib
 vignette: >
   %\VignetteIndexEntry{Generalized Cross-Validation with Origami}
   %\VignetteEngine{knitr::rmarkdown}
@@ -16,8 +16,8 @@ Cross-validation is an essential tool for evaluating how any given data analytic
 procedure extends from a sample to the target population from which the sample
 is derived. It has seen widespread application in all facets of statistics,
 perhaps most notably statistical machine learning.  When used for model
-selection, cross-validation has powerful optimality properties
-[@Vaart:2006bz, @vanderLaan:2007bz].
+selection, cross-validation has powerful optimality properties.
+<!-- [@Vaart:2006bz, @vanderLaan:2007bz]. -->
 
 <!--
 and for CV-TMLE based parameter estimation, elimination of difficult-to-assess
@@ -294,7 +294,3 @@ colMeans(mses[, c("arima", "stl")])
 ```{r sessionInfo, echo=FALSE}
 sessionInfo()
 ```
-
----
-
-# References
