@@ -28,7 +28,7 @@ useful for adding additional CV folds to a results object.}
 A list of results, combined across folds.
 }
 \description{
-Applies \code{cvfun} to the folds using \code{foreach} and combines the
+Applies \code{cvfun} to the folds using \code{future_lapply} and combines the
 results across folds using \code{combine_results}.
 }
 \examples{

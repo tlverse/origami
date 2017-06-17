@@ -41,14 +41,14 @@ if(future::availableCores() > 1) {
 
 ######
 
-# verify globals are being transferred to other sessions
-a=4
-folds=make_folds(1000)
-return_a=function(fold){
-    list(a=a,dt=data.table(a=a))
-}
+# # verify globals are being transferred to other sessions
+# a=4
+# folds=make_folds(1000)
+# return_a=function(fold){
+#     list(a=a,dt=data.table(a=a))
+# }
 
-plan(multisession,workers=2)
-results=cross_validate(return_a,folds)
-test_that("globals are available in worker sessions",expect_true(all(results$a==4)))
-test_that("globals are available in worker sessions",expect_is(results$dt,"data.table"))
+# plan(multisession,workers=2)
+# results=cross_validate(return_a,folds)
+# test_that("globals are available in worker sessions",expect_true(all(results$a==4)))
+# test_that("globals are available in worker sessions",expect_is(results$dt,"data.table"))

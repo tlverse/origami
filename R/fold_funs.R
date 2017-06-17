@@ -388,9 +388,9 @@ folds_rolling_window <- function(n, window_size, validation_size) {
 #' @export
 #'
 make_repeated_folds <- function(repeats, ...) {
-    all_folds <- foreach(i = 1:repeats) %do% make_folds(...)
-
-    folds <- unlist(all_folds, recursive = FALSE)
-
-    return(folds)
+  all_folds <- lapply(seq_len(repeats),function(x)make_folds(...))
+  
+  folds <- unlist(all_folds, recursive = FALSE)
+  
+  return(folds)
 }

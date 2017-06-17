@@ -1,6 +1,6 @@
 #' Main Cross-Validation Function
 #'
-#' Applies \code{cvfun} to the folds using \code{foreach} and combines the
+#' Applies \code{cvfun} to the folds using \code{future_lapply} and combines the
 #' results across folds using \code{combine_results}.
 #'
 #' @param cv_fun a function that takes a 'fold' as it's first argument and
@@ -14,7 +14,6 @@
 #'        This function. Will be combined with the current results. This is
 #'        useful for adding additional CV folds to a results object.
 #'
-#' @importFrom foreach foreach %do% %dopar% getDoParRegistered
 #' @importFrom future future values future_lapply plan sequential multicore multisession
 #' @importFrom listenv listenv
 #'
