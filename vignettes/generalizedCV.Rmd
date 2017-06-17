@@ -56,13 +56,13 @@ summary(mod)
 
 We can assess how well the model fits the data by comparing the predictions of
 the linear model to the true outcomes observed in the data set. This is the
-well known (and standard) squared error. We can extract that from the `lm` model
+well known (and standard) mean squared error. We can extract that from the `lm` model
 object like so:
 ```{r}
 err <- mean(resid(mod)^2)
 ```
 
-The squared error is `r err`. There is an important problem that arises when we
+The mean squared error is `r err`. There is an important problem that arises when we
 assess the model in this way -- that is, we have trained our linear regression
 model on the full data set and assessed the error on the full data set, using up
 all of our data. We, of course, are generally not interested in how well the
@@ -146,10 +146,9 @@ be generated using the `make_folds` function. Each `fold` consists of a list
 with a `training` index vector, a `validation` index vector, and a `fold_index`
 (its order in the list of folds). This function supports a variety of
 cross-validation schemes including _v-fold_ and _bootstrap_ cross-validation as
-well as time series methods like _"Rolling Window"_. Formal definitions of these
-schemes can be found in [@vanderLaan:2007bz]. It can balance across levels of a
+well as time series methods like _"Rolling Window"_. It can balance across levels of a
 variable (`stratify_ids`), and it can also keep all observations from the same
-independent unit together (`cluster`). See the documentation of the `make_folds`
+independent unit together (`cluster_ids`). See the documentation of the `make_folds`
 function for details.
 
 ### Define fold function
@@ -166,7 +165,7 @@ For instance, if it is a vector, it will index the vector directly. If it is a
 partition data into training and validation sets. This fold function must return
 a named list of results containing whatever fold-specific outputs are generated.
 
-### Apply `cross-validate`
+### Apply `cross_validate`
 
 After defining folds, `cross_validate` can be used to map the `cv_fun` across
 the `folds` using `future_lapply`. This means that it can be easily parallelized
