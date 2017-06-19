@@ -24,7 +24,7 @@
 #' @export
 #'
 #'
-make_folds <- function(n = NULL,
+make_folds2 <- function(n = NULL,
                        fold_fun = NULL,
                        cluster_ids = NULL,
                        strata_ids = NULL,
@@ -332,7 +332,7 @@ folds_rolling_origin <- function(n, first_window, validation_size, gap=0) {
     origins <- first_window:last_window
     folds <- lapply(seq_along(origins), function(i) {
         origin <- origins[i]
-        make_fold(v = i, training_set = 1:origin, validation_set = origin + gap
+        make_fold(v = i, training_set = 1:origin, validation_set = origin + gap +
             (1:validation_size))
     })
 
@@ -351,16 +351,19 @@ folds_rolling_origin <- function(n, first_window, validation_size, gap=0) {
 #' @param window_size (integer) - number of observations in training samples.
 #' @param validation_size (integer) - number of points in the validation
 #'        samples; should be equal to the largest forecast horizon.
+#' @param gap (integer) - number of points not included in the training or validation 
+#'        samples; Default is 0.
 #'
 #' @export
 #'
-folds_rolling_window <- function(n, window_size, validation_size) {
-    last_window <- n - validation_size
+
+folds_rolling_window <- function(n, window_size, validation_size, gap=0) {
+    last_window <- n - (validation_size + gap)
     origins <- window_size:last_window
     folds <- lapply(seq_along(origins), function(i) {
         origin <- origins[i]
         make_fold(v = i, training_set = (1:window_size) + (i -
-            1L), validation_set = origin + (1:validation_size))
+            1L), validation_set = origin + gap + (1:validation_size))
     })
 
     return(folds)
