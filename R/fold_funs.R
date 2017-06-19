@@ -327,6 +327,8 @@ strata_folds <- function(fold_fun, cluster_ids, strata_ids, ...) {
 #'        
 #' @export
 #'
+#'
+
 
 folds_rolling_origin <- function(n, first_window, validation_size, gap=0, batch=1) {
     last_window <- n - (validation_size+gap)
@@ -355,17 +357,21 @@ folds_rolling_origin <- function(n, first_window, validation_size, gap=0, batch=
 #'        samples; should be equal to the largest forecast horizon.
 #' @param gap (integer) - number of points not included in the training or validation 
 #'        samples; Default is 0.
+#' @param batch (integer) - Increases the number of time-points added to the training
+#'        set each CV iteration. Applicable for larger time-series. Default is 1.
 #'
 #' @export
 #'
 
-folds_rolling_window <- function(n, window_size, validation_size, gap=0) {
+folds_rolling_window <- function(n, window_size, validation_size, gap=0, batch=1) {
     last_window <- n - (validation_size + gap)
-    origins <- window_size:last_window
+    origins<-seq.int(window_size,last_window,by=batch)
+    
     folds <- lapply(seq_along(origins), function(i) {
         origin <- origins[i]
-        make_fold(v = i, training_set = (1:window_size) + (i -
-            1L), validation_set = origin + gap + (1:validation_size))
+        make_fold(v = i, training_set = (1:window_size) + (i*batch-batch),
+                  validation_set = origin + gap + (1:validation_size))
+        
     })
 
     return(folds)
