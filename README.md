@@ -22,12 +22,20 @@ lists of results, `origami` accommodates a range of cross-validation application
 ## Installation
 
 The package will be available on [CRAN](https://cran.r-project.org/) in the
-near future, for now, download the latest version using
+near future; for now, download the latest version using
 [`devtools`](https://www.rstudio.com/products/rpackages/devtools/):
 
 ```
 devtools::install_github("jeremyrcoyle/origami")
 ```
+
+---
+
+## Usage
+
+For details on how best to use `origami`, please consult the vignette that
+accompanies the R package, or browse the vignette
+[here](http://nimahejazi.org/origami/articles/generalizedCV.html).
 
 ---
 
@@ -51,7 +59,7 @@ After using the `origami` R package, please cite it:
           volume = {},
           number = {},
           author = {Coyle, Jeremy R and Hejazi, Nima S},
-          title = {origami: A Generalized Framework for Cross-Validation},
+          title = {origami: A Generalized Framework for Cross-Validation in R},
           journal = {The Journal of Open Source Software}
         }
 

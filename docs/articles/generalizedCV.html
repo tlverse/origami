@@ -57,7 +57,7 @@
       <h1>Generalized Cross-Validation with Origami</h1>
                         <h4 class="author">Jeremy Coyle &amp; Nima Hejazi</h4>
             
-            <h4 class="date">2017-06-15</h4>
+            <h4 class="date">2017-06-18</h4>
           </div>
 
     
@@ -66,7 +66,7 @@
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <html><body><a href="#introduction" class="anchor"> </a></body></html>Introduction</h2>
-<p>Cross-validation is an essential tool for evaluating how any given data analytic procedure extends from a sample to the target population from which the sample is derived. It has seen widespread application in all facets of statistics, perhaps most notably statistical machine learning. When used for model selection, cross-validation has powerful optimality properties <span class="citation">(Vaart, Dudoit, and Laan 2006, <span class="citation">Laan, Polley, and Hubbard (2007)</span>)</span>.</p>
+<p>Cross-validation is an essential tool for evaluating how any given data analytic procedure extends from a sample to the target population from which the sample is derived. It has seen widespread application in all facets of statistics, perhaps most notably statistical machine learning. When used for model selection, cross-validation has powerful optimality properties. <!-- [@Vaart:2006bz, @vanderLaan:2007bz]. --></p>
 <!--
 and for CV-TMLE based parameter estimation, elimination of difficult-to-assess
 empirical process conditions from CV-TMLE step [@Zheng:2010ua].
@@ -115,9 +115,9 @@ empirical process conditions from CV-TMLE step [@Zheng:2010ua].
 ## Residual standard error: 2.65 on 21 degrees of freedom
 ## Multiple R-squared:  0.869,  Adjusted R-squared:  0.8066 
 ## F-statistic: 13.93 on 10 and 21 DF,  p-value: 3.793e-07</code></pre>
-<p>We can assess how well the model fits the data by comparing the predictions of the linear model to the true outcomes observed in the data set. This is the well known (and standard) squared error. We can extract that from the <code>lm</code> model object like so:</p>
+<p>We can assess how well the model fits the data by comparing the predictions of the linear model to the true outcomes observed in the data set. This is the well known (and standard) mean squared error. We can extract that from the <code>lm</code> model object like so:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">err &lt;-<span class="st"> </span><span class="kw">mean</span>(<span class="kw">resid</span>(mod)<span class="op">^</span><span class="dv">2</span>)</code></pre></div>
-<p>The squared error is 4.6092009. There is an important problem that arises when we assess the model in this way – that is, we have trained our linear regression model on the full data set and assessed the error on the full data set, using up all of our data. We, of course, are generally not interested in how well the model explains variation in the observed data; rather, we are interested in how the explanation provided by the model generalizes to a target population from which the sample is presumably derived. Having used all of our available data, we cannot honestly evaluate how well the model fits (and thus explains) variation at the population level.</p>
+<p>The mean squared error is 4.6092009. There is an important problem that arises when we assess the model in this way – that is, we have trained our linear regression model on the full data set and assessed the error on the full data set, using up all of our data. We, of course, are generally not interested in how well the model explains variation in the observed data; rather, we are interested in how the explanation provided by the model generalizes to a target population from which the sample is presumably derived. Having used all of our available data, we cannot honestly evaluate how well the model fits (and thus explains) variation at the population level.</p>
 <p>To resolve this issue, cross-validation allows for a particular procedure (e.g., linear regression) to be implemented over subsets of the data, evaluating how well the procedure fits on a testing (“validation”) set, thereby providing an honest evaluation of the error.</p>
 <p>We can easily add cross-validation to our linear regression procedure using <code>origami</code>. First, let us define a new function to perform linear regression on a specific partition of the data (called a “fold”):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cvlm &lt;-<span class="st"> </span><span class="cf">function</span>(fold) {
@@ -151,16 +151,16 @@ results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cro
 <div id="define-folds" class="section level3">
 <h3 class="hasAnchor">
 <html><body><a href="#define-folds" class="anchor"> </a></body></html>Define folds</h3>
-<p>The <code>folds</code> object passed to <code>cross_validate</code> is a list of folds. Such lists can be generated using the <code>make_folds</code> function. Each <code>fold</code> consists of a list with a <code>training</code> index vector, a <code>validation</code> index vector, and a <code>fold_index</code> (its order in the list of folds). This function supports a variety of cross-validation schemes including <em>v-fold</em> and <em>bootstrap</em> cross-validation as well as time series methods like <em>“Rolling Window”</em>. Formal definitions of these schemes can be found in <span class="citation">(Laan, Polley, and Hubbard 2007)</span>. It can balance across levels of a variable (<code>stratify_ids</code>), and it can also keep all observations from the same independent unit together (<code>cluster</code>). See the documentation of the <code>make_folds</code> function for details.</p>
+<p>The <code>folds</code> object passed to <code>cross_validate</code> is a list of folds. Such lists can be generated using the <code>make_folds</code> function. Each <code>fold</code> consists of a list with a <code>training</code> index vector, a <code>validation</code> index vector, and a <code>fold_index</code> (its order in the list of folds). This function supports a variety of cross-validation schemes including <em>v-fold</em> and <em>bootstrap</em> cross-validation as well as time series methods like <em>“Rolling Window”</em>. It can balance across levels of a variable (<code>stratify_ids</code>), and it can also keep all observations from the same independent unit together (<code>cluster_ids</code>). See the documentation of the <code>make_folds</code> function for details.</p>
 </div>
 <div id="define-fold-function" class="section level3">
 <h3 class="hasAnchor">
 <html><body><a href="#define-fold-function" class="anchor"> </a></body></html>Define fold function</h3>
 <p>The <code>cv_fun</code> argument to <code>cross_validate</code> is a function that will perform some operation on each fold. The first argument to this function must be <code>fold</code>, which will receive an individual fold object to operate on. Additional arguments can be passed to <code>cv_fun</code> using the <code>...</code> argument to <code>cross_validate</code>. Within this function, the convenience functions <code>training</code>, <code>validation</code> and <code>fold_index</code> can return the various components of a fold object. If <code>training</code> or <code>validation</code> is passed an object, it will index into it in a sensible way. For instance, if it is a vector, it will index the vector directly. If it is a <code>data.frame</code> or <code>matrix</code>, it will index rows. This allows the user to easily partition data into training and validation sets. This fold function must return a named list of results containing whatever fold-specific outputs are generated.</p>
 </div>
-<div id="apply-cross-validate" class="section level3">
+<div id="apply-cross_validate" class="section level3">
 <h3 class="hasAnchor">
-<html><body><a href="#apply-cross-validate" class="anchor"> </a></body></html>Apply <code>cross-validate</code>
+<html><body><a href="#apply-cross_validate" class="anchor"> </a></body></html>Apply <code>cross_validate</code>
 </h3>
 <p>After defining folds, <code>cross_validate</code> can be used to map the <code>cv_fun</code> across the <code>folds</code> using <code>future_lapply</code>. This means that it can be easily parallelized by specifying a parallelization scheme (i.e., a <code>plan</code>). See the <a href="https://github.com/HenrikBengtsson/future"><code>future</code> package</a> for more details.</p>
 <!--
@@ -186,18 +186,8 @@ Nima: tried some re-wording to clarify; not sure how much this helped.
 }</code></pre></div>
 <p>Above, in writing our <code>cvrf</code> function to cross-validate <code>randomForest</code>, we used our previous function <code>cvlm</code> as an example. For now, individual <code>cv_fun</code>s must be written by hand; however, in future releases, a wrapper may be available to support auto-generating <code>cv_fun</code>s to be used with <code>origami</code>.</p>
 <p>Below, we use <code>cross_validate</code> to apply our new <code>cvrf</code> function over the <code>folds</code> object generated by <code>make_folds</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(randomForest)</code></pre></div>
-<pre><code>## randomForest 4.6-12</code></pre>
-<pre><code>## Type rfNews() to see new features/changes/bug fixes.</code></pre>
-<pre><code>## 
-## Attaching package: 'randomForest'</code></pre>
-<pre><code>## The following object is masked from 'package:dplyr':
-## 
-##     combine</code></pre>
-<pre><code>## The following object is masked from 'package:ggplot2':
-## 
-##     margin</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">folds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/make_folds.html">make_folds</a></span>(mtcars)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">suppressMessages</span>(<span class="kw">library</span>(randomForest))
+folds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/make_folds.html">make_folds</a></span>(mtcars)
 results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cross_validate.html">cross_validate</a></span>(cvrf, folds)
 <span class="kw">mean</span>(results<span class="op">$</span>SE)</code></pre></div>
 <pre><code>## [1] 6.319931</code></pre>
@@ -286,35 +276,22 @@ mses =<span class="st"> </span><span class="kw"><a href="../reference/cross_vali
 ##  [7] colorspace_1.3-2    testthat_1.0.2.9000 htmltools_0.3.6    
 ## [10] yaml_2.1.14         rlang_0.1.1         pkgdown_0.1.0.9000 
 ## [13] glue_1.0.0          withr_1.0.2         TTR_0.23-1         
-## [16] foreach_1.4.3       ProjectTemplate_0.7 plyr_1.8.4         
-## [19] quantmod_0.4-9      stringr_1.2.0       timeDate_3012.100  
-## [22] munsell_0.4.3       commonmark_1.2      gtable_0.2.0       
-## [25] future_1.5.0        codetools_0.2-15    memoise_1.1.0      
-## [28] evaluate_0.10       tseries_0.10-41     knitr_1.16         
-## [31] highlight_0.4.7.1   lmtest_0.9-35       parallel_3.4.0     
-## [34] xts_0.9-7           methods_3.4.0       Rcpp_0.12.11       
-## [37] backports_1.1.0     scales_0.4.1        desc_1.1.0         
-## [40] pkgload_0.0.0.9000  abind_1.4-5         fracdiff_1.4-2     
-## [43] gridExtra_2.2.1     digest_0.6.12       stringi_1.1.5      
-## [46] grid_3.4.0          rprojroot_1.2       quadprog_1.5-5     
-## [49] tools_3.4.0         magrittr_1.5        lazyeval_0.2.0     
-## [52] tibble_1.3.3        crayon_1.3.2.9000   whisker_0.3-2      
-## [55] xml2_1.1.1          assertthat_0.2.0    rmarkdown_1.5.9000 
-## [58] roxygen2_6.0.1      iterators_1.0.8     R6_2.2.1           
-## [61] globals_0.10.0      nnet_7.3-12         compiler_3.4.0</code></pre>
-<hr>
-</div>
-<div id="references" class="section level1 unnumbered">
-<h1 class="hasAnchor">
-<html><body><a href="#references" class="anchor"> </a></body></html>References</h1>
-<div id="refs" class="references">
-<div id="ref-vanderLaan:2007bz">
-<p>Laan, M J van der, E C Polley, and A E Hubbard. 2007. “Super learner.” <em>Statistical Applications in Genetics and Molecular Biology</em> 6: Art. 25–23 pp. (electronic).</p>
-</div>
-<div id="ref-Vaart:2006bz">
-<p>Vaart, A W van der, S Dudoit, and M J van der Laan. 2006. “Oracle inequalities for multi-fold cross validation.” <em>Statistics &amp; Decisions</em> 24 (3): 351–71.</p>
-</div>
-</div>
+## [16] ProjectTemplate_0.7 plyr_1.8.4          quantmod_0.4-9     
+## [19] stringr_1.2.0       timeDate_3012.100   munsell_0.4.3      
+## [22] commonmark_1.2      gtable_0.2.0        future_1.5.0       
+## [25] codetools_0.2-15    memoise_1.1.0       evaluate_0.10      
+## [28] knitr_1.16          tseries_0.10-41     highlight_0.4.7.1  
+## [31] lmtest_0.9-35       parallel_3.4.0      xts_0.9-7          
+## [34] methods_3.4.0       Rcpp_0.12.11        backports_1.1.0    
+## [37] scales_0.4.1        desc_1.1.0          pkgload_0.0.0.9000 
+## [40] abind_1.4-5         fracdiff_1.4-2      gridExtra_2.2.1    
+## [43] digest_0.6.12       stringi_1.1.5       grid_3.4.0         
+## [46] rprojroot_1.2       quadprog_1.5-5      tools_3.4.0        
+## [49] magrittr_1.5        lazyeval_0.2.0      tibble_1.3.3       
+## [52] crayon_1.3.2.9000   whisker_0.3-2       xml2_1.1.1         
+## [55] assertthat_0.2.0    rmarkdown_1.5.9000  roxygen2_6.0.1     
+## [58] R6_2.2.1            globals_0.10.0      nnet_7.3-12        
+## [61] compiler_3.4.0</code></pre>
 </div>
 </div>
   </div>
@@ -329,7 +306,6 @@ mses =<span class="st"> </span><span class="kw"><a href="../reference/cross_vali
       <li><a href="#cross-validation-with-random-forests">Cross-validation with random forests</a></li>
       <li><a href="#cross-validation-with-dependence-time-series">Cross-validation with dependence: time series</a></li>
       <li><a href="#session-information">Session Information</a></li>
-      <li><a href="#references">References</a></li>
       </ul>
 </div>
       </div>

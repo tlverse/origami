@@ -15,7 +15,7 @@ authors:
 affiliations:
   - name: "Division of Biostatistics, University of California, Berkeley"
     index: 1
-date: "13 June 2017"
+date: "19 June 2017"
 bibliography: paper.bib
 ---
 
@@ -26,7 +26,7 @@ procedure extends from a sample to the target population from which the sample
 is derived. It has seen widespread application in all facets of statistics,
 perhaps most notably statistical machine learning.  When used for model
 selection, cross-validation has powerful optimality properties
-[@Vaart:2006bz, @vanderLaan:2007bz].
+[@Vaart:2006bz; @vanderLaan:2007bz].
 
 Cross-validation works by partitioning a sample into complementary subsets,
 applying a particular data analytic (statistical) routine on a subset (the
@@ -44,9 +44,9 @@ the application of cross-validation to arbitrary data analytic procedures.
 
 The main function in the `origami` R package is `cross_validate`. To start off,
 the user must define folds and a function that operates on each fold. Once
-these are passed to `cross_validate`, the function will map the function across
-the folds, combining the results in a reasonable way. Specific details on each
-each step of this process are given below.
+these are passed to `cross_validate`, this function will map the fold-specific
+function across the folds, combining the results in a reasonable way. Specific
+details on each each step of this process are given below.
 
 ### (1) Define folds
 
@@ -80,7 +80,7 @@ a named list of results containing whatever fold-specific outputs are generated.
 After defining folds, `cross_validate` can be used to map the `cv_fun` across
 the `folds` using `future_lapply`. This means that it can be easily parallelized
 by specifying a parallelization scheme (i.e., a `plan`). See the [`future`
-package](https://github.com/HenrikBengtsson/future) for more details.
+package](https://github.com/HenrikBengtsson/future) for further details.
 
 The application of `cross_validate` generates a list of results. As described
 above, each call to `cv_fun` itself returns a list of results, with different
