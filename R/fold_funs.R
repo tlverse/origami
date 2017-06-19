@@ -24,7 +24,7 @@
 #' @export
 #'
 #'
-make_folds2 <- function(n = NULL,
+make_folds <- function(n = NULL,
                        fold_fun = NULL,
                        cluster_ids = NULL,
                        strata_ids = NULL,
