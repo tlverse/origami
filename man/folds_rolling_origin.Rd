@@ -4,7 +4,7 @@
 \alias{folds_rolling_origin}
 \title{Rolling Origin Cross-Validation}
 \usage{
-folds_rolling_origin(n, first_window, validation_size)
+folds_rolling_origin(n, first_window, validation_size, gap = 0, batch = 1)
 }
 \arguments{
 \item{n}{(integer) - number of observations.}
@@ -14,6 +14,12 @@ sample.}
 
 \item{validation_size}{(integer) - number of points in the validation
 samples; should be equal to the largest forecast horizon.}
+
+\item{gap}{(integer) - number of points not included in the training or validation 
+samples; Default is 0.}
+
+\item{batch}{(integer) - Increases the number of time-points added to the training
+set each CV iteration. Applicable for larger time-series. Default is 1.}
 }
 \description{
 Implementation of rolling origin cross-validation.
