@@ -10,3 +10,6 @@
 ^\.gitignore$
 ^paper$
 ^docs$
+^cran-comments.md$
+^revdep$
+^NEWS\.md$

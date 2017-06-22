@@ -19,7 +19,7 @@ wrap_in_try <- function(fun, ...) {
 #'
 #' @family fold generation functions
 #'
-#' @param v - indentifier of the fold in which observations fall for CV.
+#' @param v - identifier of the fold in which observations fall for CV.
 #' @param folds - vector of the fold status for each observation for CV.
 #'
 fold_from_foldvec <- function(v, folds) {

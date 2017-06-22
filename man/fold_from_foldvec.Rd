@@ -7,7 +7,7 @@
 fold_from_foldvec(v, folds)
 }
 \arguments{
-\item{v}{- indentifier of the fold in which observations fall for CV.}
+\item{v}{- identifier of the fold in which observations fall for CV.}
 
 \item{folds}{- vector of the fold status for each observation for CV.}
 }

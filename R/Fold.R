@@ -58,7 +58,7 @@ get_from_fold <- function(component) {
 
 #' Fold Helpers
 #'
-#' Acessors and indexers for the different parts of a fold.
+#' Accessors and indexers for the different parts of a fold.
 #'
 #' @param x an object to be indexed by a training set, validation set, or fold
 #'        index. If missing, the index itself will be returned.
