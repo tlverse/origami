@@ -43,6 +43,9 @@ samples; Default is 0.}
 
 \item{batch}{(integer) - Increases the number of time-points added to the training
 set each CV iteration. Applicable for larger time-series. Default is 1.}
+
+\item{window_size}{(integer) - number of observations in each training
+sample.}
 }
 \value{
 A list of Folds.

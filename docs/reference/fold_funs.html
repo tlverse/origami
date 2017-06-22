@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Combine Results from Different Folds — combine_results • origami</title>
+<title>Cross-Validation Schemes — fold_funs • origami</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -92,49 +92,81 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Combine Results from Different Folds</h1>
+    <h1>Cross-Validation Schemes</h1>
     </div>
 
     
-    <p>Applies <a href='Combiners.html'>Combiners</a>: functions that collapse across a list of similarly
-structured results, to a list of such lists.</p>
+    <p>These functions represent different cross-validation schemes that can be used with origami.
+They should be used as options for the <code>fold_fun</code> argument to the <code><a href='make_folds.html'>make_folds</a></code> 
+function in this package. <code><a href='make_folds.html'>make_folds</a></code> will call the requested function specify <code>n</code>, 
+based on its arguments, and pass any remaining arguments (e.g. <code>V</code> or <code>pvalidation</code>) on.</p>
     
 
-    <pre class="usage"><span class='fu'>combine_results</span>(<span class='no'>results</span>, <span class='kw'>combiners</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>smart_combiners</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>folds_vfold</span>(<span class='no'>n</span>, <span class='kw'>V</span> <span class='kw'>=</span> <span class='fl'>10</span>)
+
+<span class='fu'>folds_resubstitution</span>(<span class='no'>n</span>)
+
+<span class='fu'>folds_loo</span>(<span class='no'>n</span>)
+
+<span class='fu'>folds_montecarlo</span>(<span class='no'>n</span>, <span class='kw'>V</span> <span class='kw'>=</span> <span class='fl'>1000</span>, <span class='kw'>pvalidation</span> <span class='kw'>=</span> <span class='fl'>0.2</span>)
+
+<span class='fu'>folds_bootstrap</span>(<span class='no'>n</span>, <span class='kw'>V</span> <span class='kw'>=</span> <span class='fl'>1000</span>)
+
+<span class='fu'>folds_rolling_origin</span>(<span class='no'>n</span>, <span class='no'>first_window</span>, <span class='no'>validation_size</span>, <span class='kw'>gap</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>batch</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+
+<span class='fu'>folds_rolling_window</span>(<span class='no'>n</span>, <span class='no'>window_size</span>, <span class='no'>validation_size</span>, <span class='kw'>gap</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>batch</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>results</th>
-      <td><p>(list) - a list of lists, corresponding to each result, with
-the inner lists corresponding to results from each fold.</p></td>
+      <th>n</th>
+      <td><p>(integer) - number of observations.</p></td>
     </tr>
     <tr>
-      <th>combiners</th>
-      <td><p>(list) - a list with the same names results, containing
-combiner function names or functions for each result.</p></td>
+      <th>V</th>
+      <td><p>(integer) - number of folds.</p></td>
     </tr>
     <tr>
-      <th>smart_combiners</th>
-      <td><p>(logical) - if combiners are missing, should they be
-guessed from the data type of the results.</p></td>
+      <th>pvalidation</th>
+      <td><p>(double) - proportion of observation to be in validation fold.</p></td>
+    </tr>
+    <tr>
+      <th>first_window</th>
+      <td><p>(integer) - number of observations in the first training
+sample.</p></td>
+    </tr>
+    <tr>
+      <th>validation_size</th>
+      <td><p>(integer) - number of points in the validation
+samples; should be equal to the largest forecast horizon.</p></td>
+    </tr>
+    <tr>
+      <th>gap</th>
+      <td><p>(integer) - number of points not included in the training or validation 
+samples; Default is 0.</p></td>
+    </tr>
+    <tr>
+      <th>batch</th>
+      <td><p>(integer) - Increases the number of time-points added to the training
+set each CV iteration. Applicable for larger time-series. Default is 1.</p></td>
+    </tr>
+    <tr>
+      <th>window_size</th>
+      <td><p>(integer) - number of observations in each training
+sample.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list of combined results.</p>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>In theory you should never call this function directly, because it
-         is called automatically by cross_validate. The defaults, combiners
-         guessed based on data type, should work in most cases.</p>
+    <p>A list of Folds.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><a href='Combiners.html'>Combiners</a></p>
+    <p>Other fold generation functions: <code><a href='fold_from_foldvec.html'>fold_from_foldvec</a></code>,
+  <code><a href='make_folds.html'>make_folds</a></code>,
+  <code><a href='make_repeated_folds.html'>make_repeated_folds</a></code></p>
     
 
   </div>
@@ -144,8 +176,6 @@ guessed from the data type of the results.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
 
       <li><a href="#see-also">See also</a></li>
           </ul>

@@ -10,6 +10,8 @@
 #' @param pvalidation (double) - proportion of observation to be in validation fold.
 #' @param first_window (integer) - number of observations in the first training
 #'        sample.
+#' @param window_size (integer) - number of observations in each training
+#'        sample.
 #' @param validation_size (integer) - number of points in the validation
 #'        samples; should be equal to the largest forecast horizon.
 #' @param gap (integer) - number of points not included in the training or validation 
