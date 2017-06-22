@@ -1,12 +1,12 @@
 Package: origami
-Title: Generalized framework for cross-validation
-Version: 0.8
+Title: Generalized Framework for Cross-Validation
+Version: 0.8.0
 Authors@R: c(
   person("Jeremy", "Coyle", email = "jeremyrcoyle@gmail.com",
          role = c("aut", "cre", "cph")),
   person("Nima", "Hejazi", email = "nh@nimahejazi.org", role = "ctb"))
 Maintainer: Jeremy Coyle <jeremyrcoyle@gmail.com>
-Description: Origami provides a general framework for the application of
+Description: Provides a general framework for the application of
     cross-validation schemes to particular functions. By allowing arbitrary
     lists of results, origami accommodates a range of cross-validation
     applications.
@@ -26,7 +26,7 @@ Suggests:
     knitr,
     forecast,
     randomForest
-License: GPL-3 + file LICENSE
+License: GPL-3
 URL: https://github.com/jeremyrcoyle/origami
 Encoding: UTF-8
 LazyData: true
