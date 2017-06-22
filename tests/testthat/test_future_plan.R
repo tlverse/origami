@@ -8,7 +8,7 @@ set.seed(1)
 
 data(mtcars)
 # make a lot of folds
-folds <- make_folds(mtcars, fold_fun = "bootstrap", V = 1000)
+folds <- make_folds(mtcars, fold_fun = folds_bootstrap, V = 1000)
 
 
 # function to calculate cross-validated squared error

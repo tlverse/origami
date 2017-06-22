@@ -1,131 +1,30 @@
-#' Make List of Folds for cross-validation
-#'
-#' Generates a list of folds for a variety of cross-validation schemes.
-#'
-#' @family fold_funs
-#'
-#' @param n - either an integer indicating the number of observations to
-#'        cross-validate over, or an object from which to guess the number of
-#'        observations; can also be computed from strata_ids or cluster_ids.
-#' @param fold_fun - either a character vector or a function indicating the
-#'        cross-validation scheme to use.
-#' @param cluster_ids - a vector of cluster ids. Clusters are treated as a unit
-#'        - that is, all observations within a cluster are placed in either the
-#'        training or validation set.
-#' @param strata_ids - a vector of strata ids. Strata are balanced: insofar as
-#'        possible the distribution in the sample should be the same as the
-#'        distribution in the training and validation sets.
-#' @param ... other arguments to be passed to \code{fold_fun}.
-#'
+#' Cross-Validation Schemes
+#' 
+#' These functions represent different cross-validation schemes that can be used with origami.
+#' They should be used as options for the \code{fold_fun} argument to the \code{\link{make_folds}} 
+#' function in this package. \code{\link{make_folds}} will call the requested function specify \code{n}, 
+#' based on its arguments, and pass any remaining arguments (e.g. \code{V} or \code{pvalidation}) on.
+#' @family fold generation functions
+#' @param n (integer) - number of observations.
+#' @param V (integer) - number of folds.
+#' @param pvalidation (double) - proportion of observation to be in validation fold.
+#' @param first_window (integer) - number of observations in the first training
+#'        sample.
+#' @param validation_size (integer) - number of points in the validation
+#'        samples; should be equal to the largest forecast horizon.
+#' @param gap (integer) - number of points not included in the training or validation 
+#'        samples; Default is 0.
+#' @param batch (integer) - Increases the number of time-points added to the training
+#'        set each CV iteration. Applicable for larger time-series. Default is 1.
+#'        
 #' @return A list of Folds.
-#'
-#' @seealso \code{link{Fold}}
-#'
-#' @export
-#'
-#'
-make_folds <- function(n = NULL,
-                       fold_fun = NULL,
-                       cluster_ids = NULL,
-                       strata_ids = NULL,
-                       ...) {
-    if (missing(n)) {
-        # compute n from strata or cluster ids if possible
-        if (!is.null(strata_ids)) {
-          n <- length(strata_ids)
-        } else if (!is.null(cluster_ids)) {
-          n <- length(cluster_ids)
-        } else {
-          stop("n not specified and there are no strata or cluster IDs.")
-        }
-
-    } else if (length(n) > 1) {
-        # if n not an integer, use the number of rows or length of n
-        if (!is.null(nrow(n))) {
-            n <- nrow(n)
-        } else {
-            n <- length(n)
-        }
-    }
-
-    if (!is.null(strata_ids)) {
-        stopifnot(length(strata_ids) == n)
-
-        if (!is.null(cluster_ids)) {
-            stopifnot(length(cluster_ids) == n)
-
-            # it's not clear what to do if clusters are not nested in
-            # strata, so we require this for now
-            nesting <- all(rowSums(table(cluster_ids, strata_ids) >  0) == 1)
-
-            if (!nesting) {
-                stop("cluster IDs are not nested in strata IDs. This is currently unsupported.")
-            }
-
-        }
-
-        # generate separate folds for each strata
-        folds <- strata_folds(fold_fun, cluster_ids, strata_ids, ...)
-
-    } else if (!is.null(cluster_ids)) {
-        # generate folds on clusters instead of observations
-        stopifnot(length(cluster_ids) == n)
-        folds <- cluster_folds(fold_fun, cluster_ids, ...)
-
-    } else {
-        # we either don't have clusters or strata, or we're in the
-        # functions that are handling those
-
-        if (!is.function(fold_fun)) {
-            # determine method
-            fun_names <- c("vfold", "loo", "montecarlo", "bootstrap",
-                           "resubstitution")
-            fold_funs <- c(folds_vfold, folds_loo, folds_montecarlo,
-                           folds_bootstrap, folds_resubstitution)
-            fold_fun <- match.arg(fold_fun, fun_names)
-            fold_fun <- fold_funs[[match(fold_fun, fun_names)]]
-        }
-
-        # generate folds
-        folds <- fold_fun(n, ...)
-    }
-    return(folds)
-}
+#' @name fold_funs
+NULL
 
 ################################################################################
 
-#' Build a Fold Object for V-Fold CV
-#'
-#' For V-fold type cross-validation, take a fold vector and make fold object
-#' for fold V.
-#'
-#' @family fold_funs
-#'
-#' @param v - indentifier of the fold in which observations fall for CV.
-#' @param folds - vector of the fold status for each observation for CV.
-#'
-fold_from_foldvec <- function(v, folds) {
-    training_set <- which(folds != v)
-    validation_set <- which(folds == v)
-
-    make_fold(v, training_set, validation_set)
-}
-
-################################################################################
-
-#' V-Fold Cross-Validation
-#'
-#' Implementation of v-fold cross-validation.
-#'
-#' @family fold_funs
-#'
-#' @param n integer - number of observations.
-#' @param V integer - number of folds.
-#'
-#' @return A list of Folds.
-#'
+#' @rdname fold_funs
 #' @export
-#'
 folds_vfold <- function(n, V = 10) {
     if (n <= V) {
         warning("n <= V so using leave-one-out CV")
@@ -145,36 +44,16 @@ folds_vfold <- function(n, V = 10) {
 
 ################################################################################
 
-#' Resubstution Cross-Validation
-#'
-#' Implementation of resubstution cross-validation.
-#'
-#' @family fold_funs
-#'
-#' @param n (integer) - number of observations.
-#'
-#' @return A single fold, using same data for both training and testing.
-#'
+#' @rdname fold_funs
 #' @export
-#'
 folds_resubstitution <- function(n) {
     list(make_fold(1L, seq_len(n), seq_len(n)))
 }
 
 ################################################################################
 
-#' Leave-One-Out Cross-Validation
-#'
-#' Implementation of leave-one-out cross-validation.
-#'
-#' @family fold_funs
-#'
-#' @param n (integer) - number of observations.
-#'
-#' @return A list of Folds
-#'
+#' @rdname fold_funs
 #' @export
-#'
 folds_loo <- function(n) {
 
     # folds are trivial here
@@ -187,17 +66,7 @@ folds_loo <- function(n) {
 }
 
 ################################################################################
-
-#' Monte Carlo cross-validation
-#'
-#' Implementation of Monte Carlo cross-validation.
-#'
-#' @family fold_funs
-#'
-#' @param n (integer) - number of observations.
-#' @param V (integer) - number of folds to generate.
-#' @param pvalidation proportion of observation to be in validation fold.
-#'
+#' @rdname fold_funs
 #' @export
 #'
 folds_montecarlo <- function(n, V = 1000, pvalidation = 0.2) {
@@ -222,114 +91,19 @@ fold_montecarlo <- function(v, n, ntrain, replace) {
 
 ################################################################################
 
-#' Bootstrap cross-validation
-#'
-#' Implementation of bootstrap cross-validation.
-#'
-#' @family fold_funs
-#'
-#' @param n (integer) - number of observations
-#' @param V (integer) - number of folds to generate.
-#'
+#' @rdname fold_funs
 #' @export
-#'
 folds_bootstrap <- function(n, V = 1000) {
     folds <- lapply(seq_len(V), fold_montecarlo, n, n, replace = T)
 
     return(folds)
 }
 
-################################################################################
-
-# Generate folds for clusters, and then convert into folds for observations
-# this is kind of for a large number of IDs. Should be improved.
-cluster_folds <- function(fold_fun, cluster_ids, ...) {
-    # convert ids to numeric 1:n
-    idfac <- factor(cluster_ids)
-    nclusters <- length(levels(idfac))
-    clusternums <- as.numeric(idfac)
-    id_indexes <- by(seq_along(cluster_ids), list(id = clusternums), list)
-
-    # generate folds for ids
-    idfolds <- make_folds(n = nclusters, fold_fun = fold_fun,
-                          cluster_ids = NULL, ...)
-
-    # convert this into folds for observations
-    folds <- lapply(idfolds, function(idfold) {
-        make_fold(v = fold_index(fold = idfold),
-                  training_set = unlist(training(id_indexes, idfold)),
-                  validation_set = unlist(validation(id_indexes, idfold)))
-    })
-
-    return(folds)
-}
 
 ################################################################################
 
-# generate folds separaetly for each strata, and then collapse
-strata_folds <- function(fold_fun, cluster_ids, strata_ids, ...) {
-    # convert strata to numeric 1:n
-    idfac <- factor(strata_ids)
-    nstrata <- length(levels(idfac))
-    stratanums <- as.numeric(idfac)
-
-    # generate strata specific folds
-    strata_folds <- lapply(seq_len(nstrata), function(strata) {
-        n_in_strata <- sum(stratanums == strata)
-        idfolds <- make_folds(n = n_in_strata, fold_fun = fold_fun,
-                              cluster_ids = cluster_ids[stratanums == strata],
-                              strata_ids = NULL, ...)
-    })
-
-    # collapse strata folds
-    V <- length(strata_folds[[1]])
-
-    folds <- lapply(seq_len(V), function(v) {
-        # convert to indexes on the observations
-        converted_folds <- lapply(seq_len(nstrata), function(strata) {
-            strata_idx <- which(stratanums == strata)
-            strata_fold <- strata_folds[[strata]][[v]]
-            make_fold(v = v, training_set = training(strata_idx, strata_fold),
-                      validation_set = validation(strata_idx, strata_fold))
-
-        })
-
-        # collapse across strata
-        make_fold(v = v, training_set = unlist(lapply(converted_folds,
-            function(fold) {
-                training(fold = fold)
-            })), validation_set = unlist(lapply(converted_folds,
-            function(fold) {
-                validation(fold = fold)
-            })))
-    })
-
-    return(folds)
-}
-
-################################################################################
-
-#' Rolling Origin Cross-Validation
-#'
-#' Implementation of rolling origin cross-validation.
-#'
-#' @family fold_funs
-#'
-#' @param n (integer) - number of observations.
-#' @param first_window (integer) - number of observations in the first training
-#'        sample.
-#' @param validation_size (integer) - number of points in the validation
-#'        samples; should be equal to the largest forecast horizon.
-#' @param gap (integer) - number of points not included in the training or validation 
-#'        samples; Default is 0.
-#' @param batch (integer) - Increases the number of time-points added to the training
-#'        set each CV iteration. Applicable for larger time-series. Default is 1.
-#'        
+#' @rdname fold_funs
 #' @export
-#'
-#'
-
-
 folds_rolling_origin <- function(n, first_window, validation_size, gap=0, batch=1) {
     last_window <- n - (validation_size+gap)
     origins<-seq.int(first_window,last_window,by=batch)
@@ -343,25 +117,8 @@ folds_rolling_origin <- function(n, first_window, validation_size, gap=0, batch=
     return(folds)
 }
 
-################################################################################
-
-#' Rolling Window Cross-Validation
-#'
-#' Implementation of rolling window cross-validation.
-#'
-#' @family fold_funs
-#'
-#' @param n (integer) - number of observations.
-#' @param window_size (integer) - number of observations in training samples.
-#' @param validation_size (integer) - number of points in the validation
-#'        samples; should be equal to the largest forecast horizon.
-#' @param gap (integer) - number of points not included in the training or validation 
-#'        samples; Default is 0.
-#' @param batch (integer) - Increases the number of time-points added to the training
-#'        set each CV iteration. Applicable for larger time-series. Default is 1.
-#'
+#' @rdname fold_funs
 #' @export
-#'
 
 folds_rolling_window <- function(n, window_size, validation_size, gap=0, batch=1) {
     last_window <- n - (validation_size + gap)
@@ -375,38 +132,4 @@ folds_rolling_window <- function(n, window_size, validation_size, gap=0, batch=1
     })
 
     return(folds)
-}
-
-################################################################################
-
-# unclear where this is being used
-# folds2foldvec <- function(folds) {
-#     vfolds <- lapply(folds, function(fold) {
-#         validation()
-#     })
-
-#     return(vfolds)
-# }
-
-################################################################################
-
-#' Repeated Cross-Validation
-#'
-#' Implementation of repeated window cross-validation: generates fold objects
-#' for repeated cross-validation by making repeated calls to \link{make_folds}
-#' and concatenating the results.
-#'
-#' @family fold_funs
-#'
-#' @param repeats integer; number of repeats
-#' @param ... arguments passed to \link{make_folds}
-#'
-#' @export
-#'
-make_repeated_folds <- function(repeats, ...) {
-  all_folds <- lapply(seq_len(repeats),function(x)make_folds(...))
-  
-  folds <- unlist(all_folds, recursive = FALSE)
-  
-  return(folds)
 }

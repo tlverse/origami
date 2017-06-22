@@ -16,7 +16,7 @@ cvlm <- function(fold) {
 }
 
 # replicate the resubstitution estimate
-resub <- make_folds(mtcars, fold_fun = "resubstitution")[[1]]
+resub <- make_folds(mtcars, fold_fun = folds_resubstitution)[[1]]
 resub_results <- cvlm(resub)
 mean(resub_results$SE)
 

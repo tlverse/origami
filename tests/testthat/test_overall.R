@@ -22,7 +22,7 @@ cvlm <- function(fold) {
 }
 
 # replicate the resubstitution estimate
-resub <- make_folds(mtcars, fold_fun = "resubstitution")[[1]]
+resub <- make_folds(mtcars, fold_fun = folds_resubstitution)[[1]]
 resub_results <- cvlm(resub)
 resub_MSE <- mean(resub_results$SE)
 test_that("Resub MSE matches simple resub MSE", expect_equal(resub_MSE, 

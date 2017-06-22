@@ -98,18 +98,6 @@ test_that("Ids must be nested in strata", expect_error(make_folds(cluster_ids = 
 
 ############################ 
 
-# Verify quoted fold scheme names work
-set.seed(1)
-folds <- make_folds(n, fold_fun = "vfold")
-test_splits(folds)
-
-set.seed(1)
-folds2 <- make_folds(n, fold_fun = folds_vfold)
-test_that("Quoted fold function names work", expect_equal(folds, 
-    folds2))
-
-############################ 
-
 # v fold->LOO fallback
 smalln <- 5
 suppressWarnings({
