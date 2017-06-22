@@ -149,7 +149,7 @@ cross-validation schemes including _v-fold_ and _bootstrap_ cross-validation as
 well as time series methods like _"Rolling Window"_. It can balance across levels of a
 variable (`stratify_ids`), and it can also keep all observations from the same
 independent unit together (`cluster_ids`). See the documentation of the `make_folds`
-function for details.
+function for details about supported cross-validation schemes and arguments.
 
 ### Define fold function
 
@@ -158,8 +158,9 @@ operation on each fold. The first argument to this function must be `fold`,
 which will receive an individual fold object to operate on. Additional arguments
 can be passed to `cv_fun` using the `...` argument to `cross_validate`. Within
 this function, the convenience functions `training`, `validation` and
-`fold_index` can return the various components of a fold object. If `training`
-or `validation` is passed an object, it will index into it in a sensible way.
+`fold_index` can return the various components of a fold object. They do this by retrieving 
+the `fold` object from their calling environment. It can also be specified directly. 
+If `training` or `validation` is passed an object, it will index into it in a sensible way.
 For instance, if it is a vector, it will index the vector directly. If it is a
 `data.frame` or `matrix`, it will index rows. This allows the user to easily
 partition data into training and validation sets. This fold function must return
