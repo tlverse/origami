@@ -4,8 +4,8 @@
 ^appveyor\.yml$
 ^codecov\.yml$
 ^CONTRIBUTING\.md$
-^README\.md$
 ^TODO\.md$
+^Makefile$
 ^\.git$
 ^\.gitignore$
 ^paper$
@@ -13,3 +13,7 @@
 ^cran-comments.md$
 ^revdep$
 ^NEWS\.md$
+^README\.md$
+^README\.Rmd$
+^README-.*\.png$
+^README\.html$

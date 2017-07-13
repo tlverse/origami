@@ -49,6 +49,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">News</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -72,7 +75,7 @@
       <h1>Generalized Cross-Validation with Origami</h1>
                         <h4 class="author">Jeremy Coyle &amp; Nima Hejazi</h4>
             
-            <h4 class="date">2017-06-22</h4>
+            <h4 class="date">2017-07-13</h4>
           </div>
 
     
@@ -157,7 +160,7 @@ resub_results &lt;-<span class="st"> </span><span class="kw">cvlm</span>(resub)
 folds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/make_folds.html">make_folds</a></span>(mtcars)
 results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cross_validate.html">cross_validate</a></span>(cvlm, folds)
 <span class="kw">mean</span>(results<span class="op">$</span>SE)</code></pre></div>
-<pre><code>## [1] 13.22306</code></pre>
+<pre><code>## [1] 13.51486</code></pre>
 <p>Having performed 10-fold cross-validation, we quickly notice that our previous estimate of the model error (by resubstitution) was quite optimistic. The honest estimate of the error is several times larger.</p>
 <hr>
 </div>
@@ -207,7 +210,7 @@ Nima: tried some re-wording to clarify; not sure how much this helped.
 folds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/make_folds.html">make_folds</a></span>(mtcars)
 results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cross_validate.html">cross_validate</a></span>(cvrf, folds)
 <span class="kw">mean</span>(results<span class="op">$</span>SE)</code></pre></div>
-<pre><code>## [1] 6.141729</code></pre>
+<pre><code>## [1] 6.270558</code></pre>
 <p>Using 10-fold cross-validation (the default), we obtain an honest estimate of the prediction error of random forests. From this, we gather that the use of <code>origami</code>’s <code>cross_validate</code> procedure can be generalized to arbitrary esimation techniques, given availability of an appropriate <code>cv_fun</code> function.</p>
 <hr>
 </div>
@@ -270,9 +273,13 @@ mses =<span class="st"> </span><span class="kw"><a href="../reference/cross_vali
 <div id="session-information" class="section level2">
 <h2 class="hasAnchor">
 <a href="#session-information" class="anchor"></a>Session Information</h2>
-<pre><code>## R version 3.3.2 (2016-10-31)
-## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+<pre><code>## R version 3.4.1 (2017-06-30)
+## Platform: x86_64-apple-darwin16.6.0 (64-bit)
 ## Running under: macOS Sierra 10.12.5
+## 
+## Matrix products: default
+## BLAS: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+## LAPACK: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLAPACK.dylib
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -281,22 +288,24 @@ mses =<span class="st"> </span><span class="kw"><a href="../reference/cross_vali
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] forecast_8.0        randomForest_4.6-12 origami_0.8        
+## [1] forecast_8.1        randomForest_4.6-12 origami_0.8        
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.11.3    knitr_1.16        magrittr_1.5     
-##  [4] munsell_0.4.3     lattice_0.20-34   colorspace_1.3-2 
-##  [7] rlang_0.1.1       quadprog_1.5-5    plyr_1.8.4       
-## [10] stringr_1.2.0     globals_0.10.0    tools_3.3.2      
-## [13] nnet_7.3-12       grid_3.3.2        parallel_3.3.2   
-## [16] gtable_0.2.0      timeDate_3012.100 data.table_1.10.4
-## [19] htmltools_0.3.6   tseries_0.10-40   lmtest_0.9-35    
-## [22] lazyeval_0.2.0    abind_1.4-5       yaml_2.1.14      
-## [25] rprojroot_1.2     digest_0.6.12     tibble_1.3.3     
-## [28] ggplot2_2.2.1     codetools_0.2-15  evaluate_0.10    
-## [31] rmarkdown_1.6     fracdiff_1.4-2    stringi_1.1.5    
-## [34] scales_0.4.1      backports_1.0.5   future_1.5.0     
-## [37] listenv_0.6.0     zoo_1.8-0</code></pre>
+##  [1] Rcpp_0.12.11       compiler_3.4.1     plyr_1.8.4        
+##  [4] xts_0.10-0         tseries_0.10-42    tools_3.4.1       
+##  [7] digest_0.6.12      evaluate_0.10.1    tibble_1.3.3      
+## [10] gtable_0.2.0       lattice_0.20-35    rlang_0.1.1.9000  
+## [13] curl_2.7           yaml_2.1.14        parallel_3.4.1    
+## [16] stringr_1.2.0.9000 knitr_1.16         globals_0.10.1    
+## [19] rprojroot_1.2      lmtest_0.9-35      grid_3.4.1        
+## [22] nnet_7.3-12        data.table_1.10.4  listenv_0.6.0     
+## [25] rmarkdown_1.6      TTR_0.23-2         ggplot2_2.2.1.9000
+## [28] magrittr_1.5       backports_1.1.0    scales_0.4.1.9002 
+## [31] codetools_0.2-15   htmltools_0.3.6    quantmod_0.4-10   
+## [34] abind_1.4-5        future_1.5.0       timeDate_3012.100 
+## [37] colorspace_1.3-2   fracdiff_1.4-2     quadprog_1.5-5    
+## [40] stringi_1.1.5      lazyeval_0.2.0     munsell_0.4.3     
+## [43] zoo_1.8-0</code></pre>
 </div>
 </div>
   </div>
@@ -320,7 +329,7 @@ mses =<span class="st"> </span><span class="kw"><a href="../reference/cross_vali
 
 
       <footer><div class="copyright">
-  <p>Developed by Jeremy Coyle.</p>
+  <p>Developed by Jeremy Coyle, Nima Hejazi.</p>
 </div>
 
 <div class="pkgdown">
