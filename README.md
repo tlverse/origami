@@ -71,7 +71,7 @@ cvlm <- function(fold) {
 folds <- make_folds(mtcars)
 results <- cross_validate(cvlm, folds)
 mean(results$SE)
-#> [1] 17.07485
+#> [1] 12.88616
 ```
 
 ------------------------------------------------------------------------
