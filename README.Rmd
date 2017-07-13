@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 [![Build status](https://ci.appveyor.com/api/projects/status/i5qwp8cjb4j4x329?svg=true)](https://ci.appveyor.com/project/jeremyrcoyle/origami)
 [![Coverage Status](https://img.shields.io/codecov/c/github/jeremyrcoyle/origami/master.svg)](https://codecov.io/github/jeremyrcoyle/origami?branch=master)
 [![CRAN](http://www.r-pkg.org/badges/version/origami)](http://www.r-pkg.org/pkg/origami)
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/origami)](https://CRAN.R-project.org/package=origami)
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
@@ -93,6 +94,17 @@ mean(results$SE)
 
 If you encounter any bugs or have any specific feature requests, please [file an
 issue](https://github.com/jeremyrcoyle/origami/issues).
+
+---
+
+## Contributions
+
+It is our hope that `origami` will grow to be adopted as a backend for most any
+procedure requiring cross-validation, including its integration into larger
+machine learning frameworks. To that end, contributions are very welcome, though
+we ask that interested contributors consult our [`contribution
+guidelines`](https://github.com/jeremyrcoyle/origami/blob/master/CONTRIBUTING.md)
+prior to submitting a pull request.
 
 ---
 

@@ -1,52 +1,97 @@
-# R/`origami`
 
-[![Travis-CI Build Status](https://travis-ci.org/jeremyrcoyle/origami.svg?branch=master)](https://travis-ci.org/jeremyrcoyle/origami)
-[![Build status](https://ci.appveyor.com/api/projects/status/i5qwp8cjb4j4x329?svg=true)](https://ci.appveyor.com/project/jeremyrcoyle/origami)
-[![Coverage Status](https://img.shields.io/codecov/c/github/jeremyrcoyle/origami/master.svg)](https://codecov.io/github/jeremyrcoyle/origami?branch=master)
-[![CRAN](http://www.r-pkg.org/badges/version/origami)](http://www.r-pkg.org/pkg/origami)
-[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+R/`origami`
+===========
+
+[![Travis-CI Build Status](https://travis-ci.org/jeremyrcoyle/origami.svg?branch=master)](https://travis-ci.org/jeremyrcoyle/origami) [![Build status](https://ci.appveyor.com/api/projects/status/i5qwp8cjb4j4x329?svg=true)](https://ci.appveyor.com/project/jeremyrcoyle/origami) [![Coverage Status](https://img.shields.io/codecov/c/github/jeremyrcoyle/origami/master.svg)](https://codecov.io/github/jeremyrcoyle/origami?branch=master) [![CRAN](http://www.r-pkg.org/badges/version/origami)](http://www.r-pkg.org/pkg/origami) [![CRAN downloads](https://cranlogs.r-pkg.org/badges/origami)](https://CRAN.R-project.org/package=origami) [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active) [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
 > High-powered framework for cross-validation: fold your data like it's paper!
 
----
+**Authors:** [Jeremy Coyle](https://github.com/jeremyrcoyle) and [Nima Hejazi](http://nimahejazi.org)
 
-## Description
+------------------------------------------------------------------------
 
-`origami` is an R package that provides a general framework for the application
-of cross-validation schemes to particular functions. By allowing arbitrary
-lists of results, `origami` accommodates a range of cross-validation applications.
+Description
+-----------
 
----
+`origami` is an R package that provides a general framework for the application of cross-validation schemes to particular functions. By allowing arbitrary lists of results, `origami` accommodates a range of cross-validation applications.
 
-## Installation
+------------------------------------------------------------------------
 
-The package will be available on [CRAN](https://cran.r-project.org/) in the
-near future; for now, download the latest version using
-[`devtools`](https://www.rstudio.com/products/rpackages/devtools/):
+Installation
+------------
 
+For standard use, we recommend installing the package from [CRAN](https://cran.r-project.org/) via
+
+``` r
+install.packages("survtmle")
 ```
+
+You can install a stable release of `origami` from GitHub via [`devtools`](https://www.rstudio.com/products/rpackages/devtools/) with:
+
+``` r
 devtools::install_github("jeremyrcoyle/origami")
 ```
 
----
+------------------------------------------------------------------------
 
-## Usage
+Usage
+-----
 
-For details on how best to use `origami`, please consult the vignette that
-accompanies the R package, or browse the vignette
-[here](http://nimahejazi.org/origami/articles/generalizedCV.html).
+For details on how best to use `origami`, please consult the package vignette from within R, or browse the vignette [here](http://nimahejazi.org/origami/articles/generalizedCV.html).
 
----
+------------------------------------------------------------------------
 
-## Issues
+Example
+-------
 
-If you encounter any bugs or have any specific feature requests, please [file an
-issue](https://github.com/jeremyrcoyle/origami/issues).
+This minimal example shows how to use `origami` to apply cross-validation to the computation of a simple descriptive statistic using a sample data set. In particular, we obtain a cross-validated estimate of the mean:
 
----
+``` r
+data(mtcars)
+head(mtcars)
+#>                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+#> Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+#> Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+#> Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+#> Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+#> Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+#> Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+library(origami)
 
-## Citation
+cvlm <- function(fold) {
+  train_data <- training(mtcars)
+  valid_data <- validation(mtcars)
+
+  mod <- lm(mpg ~ ., data = train_data)
+  preds <- predict(mod, newdata = valid_data)
+  list(coef = data.frame(t(coef(mod))), SE = ((preds - valid_data$mpg)^2))
+}
+
+folds <- make_folds(mtcars)
+results <- cross_validate(cvlm, folds)
+mean(results$SE)
+#> [1] 17.07485
+```
+
+------------------------------------------------------------------------
+
+Issues
+------
+
+If you encounter any bugs or have any specific feature requests, please [file an issue](https://github.com/jeremyrcoyle/origami/issues).
+
+------------------------------------------------------------------------
+
+Contributions
+-------------
+
+It is our hope that `origami` will grow to be adopted as a backend for most any procedure requiring cross-validation, including its integration into larger machine learning frameworks. To that end, contributions are very welcome, though we ask that interested contributors consult our [`contribution guidelines`](https://github.com/jeremyrcoyle/origami/blob/master/CONTRIBUTING.md) prior to submitting a pull request.
+
+------------------------------------------------------------------------
+
+Citation
+--------
 
 After using the `origami` R package, please cite it:
 
@@ -63,11 +108,11 @@ After using the `origami` R package, please cite it:
           journal = {The Journal of Open Source Software}
         }
 
----
+------------------------------------------------------------------------
 
-## License
+License
+-------
 
-&copy; 2017 [Jeremy R. Coyle](https://github.com/jeremyrcoyle)
+© 2017 [Jeremy R. Coyle](https://github.com/jeremyrcoyle)
 
-The contents of this repository are distributed under the GPL-3 license. See
-file `LICENSE` for details.
+The contents of this repository are distributed under the GPL-3 license. See file `LICENSE` for details.
