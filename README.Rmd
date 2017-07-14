@@ -43,7 +43,7 @@ For standard use, we recommend installing the package from
 [CRAN](https://cran.r-project.org/) via
 
 ```{r cran-installation, eval = FALSE}
-install.packages("survtmle")
+install.packages("origami")
 ```
 
 You can install a stable release of `origami` from GitHub via

@@ -97,7 +97,7 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>For standard use, we recommend installing the package from <a href="https://cran.r-project.org/">CRAN</a> via</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"survtmle"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"origami"</span>)</code></pre></div>
 <p>You can install a stable release of <code>origami</code> from GitHub via <a href="https://www.rstudio.com/products/rpackages/devtools/"><code>devtools</code></a> with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"jeremyrcoyle/origami"</span>)</code></pre></div>
 <hr>
@@ -135,7 +135,7 @@ cvlm &lt;-<span class="st"> </span><span class="cf">function</span>(fold) {
 folds &lt;-<span class="st"> </span><span class="kw"><a href="reference/make_folds.html">make_folds</a></span>(mtcars)
 results &lt;-<span class="st"> </span><span class="kw"><a href="reference/cross_validate.html">cross_validate</a></span>(cvlm, folds)
 <span class="kw">mean</span>(results<span class="op">$</span>SE)
-<span class="co">#&gt; [1] 12.39006</span></code></pre></div>
+<span class="co">#&gt; [1] 14.08328</span></code></pre></div>
 <hr>
 </div>
 <div id="issues" class="section level2">

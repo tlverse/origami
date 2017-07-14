@@ -24,7 +24,7 @@ Installation
 For standard use, we recommend installing the package from [CRAN](https://cran.r-project.org/) via
 
 ``` r
-install.packages("survtmle")
+install.packages("origami")
 ```
 
 You can install a stable release of `origami` from GitHub via [`devtools`](https://www.rstudio.com/products/rpackages/devtools/) with:
@@ -71,7 +71,7 @@ cvlm <- function(fold) {
 folds <- make_folds(mtcars)
 results <- cross_validate(cvlm, folds)
 mean(results$SE)
-#> [1] 12.88616
+#> [1] 13.20687
 ```
 
 ------------------------------------------------------------------------

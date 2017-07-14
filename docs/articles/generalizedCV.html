@@ -75,7 +75,7 @@
       <h1>Generalized Cross-Validation with Origami</h1>
                         <h4 class="author">Jeremy Coyle &amp; Nima Hejazi</h4>
             
-            <h4 class="date">2017-07-13</h4>
+            <h4 class="date">2017-07-14</h4>
           </div>
 
     
@@ -160,7 +160,7 @@ resub_results &lt;-<span class="st"> </span><span class="kw">cvlm</span>(resub)
 folds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/make_folds.html">make_folds</a></span>(mtcars)
 results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cross_validate.html">cross_validate</a></span>(cvlm, folds)
 <span class="kw">mean</span>(results<span class="op">$</span>SE)</code></pre></div>
-<pre><code>## [1] 12.7454</code></pre>
+<pre><code>## [1] 10.81254</code></pre>
 <p>Having performed 10-fold cross-validation, we quickly notice that our previous estimate of the model error (by resubstitution) was quite optimistic. The honest estimate of the error is several times larger.</p>
 <hr>
 </div>
@@ -210,7 +210,7 @@ Nima: tried some re-wording to clarify; not sure how much this helped.
 folds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/make_folds.html">make_folds</a></span>(mtcars)
 results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cross_validate.html">cross_validate</a></span>(cvrf, folds)
 <span class="kw">mean</span>(results<span class="op">$</span>SE)</code></pre></div>
-<pre><code>## [1] 6.292059</code></pre>
+<pre><code>## [1] 6.268302</code></pre>
 <p>Using 10-fold cross-validation (the default), we obtain an honest estimate of the prediction error of random forests. From this, we gather that the use of <code>origami</code>’s <code>cross_validate</code> procedure can be generalized to arbitrary esimation techniques, given availability of an appropriate <code>cv_fun</code> function.</p>
 <hr>
 </div>
