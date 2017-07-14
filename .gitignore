@@ -11,3 +11,5 @@ Thumbs.db
 .Rhistory
 .future/*
 README.html
+paper/*.html
+vignettes/*.html
