@@ -22,6 +22,7 @@
 #' @export
 #'
 #' @example /inst/examples/cv_simple_example.R
+#'
 #' @example /inst/examples/cv_parallel_example.R
 #'
 cross_validate <- function(cv_fun,

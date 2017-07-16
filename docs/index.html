@@ -105,14 +105,18 @@
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
-<p>For details on how best to use <code>origami</code>, please consult the package vignette from within R, or browse the vignette <a href="http://nimahejazi.org/origami/articles/generalizedCV.html">here</a>.</p>
+<p>For details on how best to use <code>origami</code>, please consult the package vignette from within <a href="https://www.r-project.org/">R</a> or online <a href="http://nimahejazi.org/origami/articles/generalizedCV.html">here</a>.</p>
 <hr>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
 <p>This minimal example shows how to use <code>origami</code> to apply cross-validation to the computation of a simple descriptive statistic using a sample data set. In particular, we obtain a cross-validated estimate of the mean:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(mtcars)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">4795</span>)
+<span class="kw">library</span>(stringr)
+<span class="kw">library</span>(origami)
+
+<span class="kw">data</span>(mtcars)
 <span class="kw">head</span>(mtcars)
 <span class="co">#&gt;                    mpg cyl disp  hp drat    wt  qsec vs am gear carb</span>
 <span class="co">#&gt; Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4</span>
@@ -121,21 +125,31 @@
 <span class="co">#&gt; Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1</span>
 <span class="co">#&gt; Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2</span>
 <span class="co">#&gt; Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</span>
-<span class="kw">library</span>(origami)
 
-cvlm &lt;-<span class="st"> </span><span class="cf">function</span>(fold) {
-  train_data &lt;-<span class="st"> </span><span class="kw"><a href="reference/fold_helpers.html">training</a></span>(mtcars)
-  valid_data &lt;-<span class="st"> </span><span class="kw"><a href="reference/fold_helpers.html">validation</a></span>(mtcars)
+cv_lm &lt;-<span class="st"> </span><span class="cf">function</span>(fold, data, reg_form) {
+  <span class="co"># get name and index of outcome variable from regression formula</span>
+  out_var &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">unlist</span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/stringr/topics/str_split">str_split</a></span>(reg_form, <span class="st">" "</span>))[<span class="dv">1</span>])
+  out_var_ind &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">which</span>(<span class="kw">colnames</span>(data) <span class="op">==</span><span class="st"> </span>out_var))
 
-  mod &lt;-<span class="st"> </span><span class="kw">lm</span>(mpg <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> train_data)
+  <span class="co"># split up data into training and validation sets</span>
+  train_data &lt;-<span class="st"> </span><span class="kw"><a href="reference/fold_helpers.html">training</a></span>(data)
+  valid_data &lt;-<span class="st"> </span><span class="kw"><a href="reference/fold_helpers.html">validation</a></span>(data)
+
+  <span class="co"># fit linear model on training set and predict on validation set</span>
+  mod &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="kw">as.formula</span>(reg_form), <span class="dt">data =</span> train_data)
   preds &lt;-<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> valid_data)
-  <span class="kw">list</span>(<span class="dt">coef =</span> <span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">coef</span>(mod))), <span class="dt">SE =</span> ((preds <span class="op">-</span><span class="st"> </span>valid_data<span class="op">$</span>mpg)<span class="op">^</span><span class="dv">2</span>))
+
+  <span class="co"># capture results to be returned as output</span>
+  out &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">coef =</span> <span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">coef</span>(mod))),
+              <span class="dt">SE =</span> ((preds <span class="op">-</span><span class="st"> </span>valid_data[, out_var_ind])<span class="op">^</span><span class="dv">2</span>))
+  <span class="kw">return</span>(out)
 }
 
 folds &lt;-<span class="st"> </span><span class="kw"><a href="reference/make_folds.html">make_folds</a></span>(mtcars)
-results &lt;-<span class="st"> </span><span class="kw"><a href="reference/cross_validate.html">cross_validate</a></span>(cvlm, folds)
+results &lt;-<span class="st"> </span><span class="kw"><a href="reference/cross_validate.html">cross_validate</a></span>(<span class="dt">cv_fun =</span> cv_lm, <span class="dt">folds =</span> folds, <span class="dt">data =</span> mtcars,
+                          <span class="dt">reg_form =</span> <span class="st">"mpg ~ ."</span>)
 <span class="kw">mean</span>(results<span class="op">$</span>SE)
-<span class="co">#&gt; [1] 14.08328</span></code></pre></div>
+<span class="co">#&gt; [1] 15.22295</span></code></pre></div>
 <hr>
 </div>
 <div id="issues" class="section level2">

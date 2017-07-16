@@ -38,7 +38,7 @@ devtools::install_github("jeremyrcoyle/origami")
 Usage
 -----
 
-For details on how best to use `origami`, please consult the package vignette from within R, or browse the vignette [here](http://nimahejazi.org/origami/articles/generalizedCV.html).
+For details on how best to use `origami`, please consult the package vignette from within [R](https://www.r-project.org/) or online [here](http://nimahejazi.org/origami/articles/generalizedCV.html).
 
 ------------------------------------------------------------------------
 
@@ -48,6 +48,10 @@ Example
 This minimal example shows how to use `origami` to apply cross-validation to the computation of a simple descriptive statistic using a sample data set. In particular, we obtain a cross-validated estimate of the mean:
 
 ``` r
+set.seed(4795)
+library(stringr)
+library(origami)
+
 data(mtcars)
 head(mtcars)
 #>                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
@@ -57,21 +61,31 @@ head(mtcars)
 #> Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
 #> Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
 #> Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
-library(origami)
 
-cvlm <- function(fold) {
-  train_data <- training(mtcars)
-  valid_data <- validation(mtcars)
+cv_lm <- function(fold, data, reg_form) {
+  # get name and index of outcome variable from regression formula
+  out_var <- as.character(unlist(str_split(reg_form, " "))[1])
+  out_var_ind <- as.numeric(which(colnames(data) == out_var))
 
-  mod <- lm(mpg ~ ., data = train_data)
+  # split up data into training and validation sets
+  train_data <- training(data)
+  valid_data <- validation(data)
+
+  # fit linear model on training set and predict on validation set
+  mod <- lm(as.formula(reg_form), data = train_data)
   preds <- predict(mod, newdata = valid_data)
-  list(coef = data.frame(t(coef(mod))), SE = ((preds - valid_data$mpg)^2))
+
+  # capture results to be returned as output
+  out <- list(coef = data.frame(t(coef(mod))),
+              SE = ((preds - valid_data[, out_var_ind])^2))
+  return(out)
 }
 
 folds <- make_folds(mtcars)
-results <- cross_validate(cvlm, folds)
+results <- cross_validate(cv_fun = cv_lm, folds = folds, data = mtcars,
+                          reg_form = "mpg ~ .")
 mean(results$SE)
-#> [1] 13.20687
+#> [1] 15.22295
 ```
 
 ------------------------------------------------------------------------
