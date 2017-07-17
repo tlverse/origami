@@ -39,7 +39,7 @@ procedures. The use of `origami` is best illustrated by example.
 ## Cross-validation with linear regression
 
 We'll start by examining a fairly simple data set:
-```{r}
+```{r load_data}
 data(mtcars)
 head(mtcars)
 ```
@@ -49,7 +49,7 @@ miles-per-gallon (mpg), is explained by various technical aspects of the car,
 with data across a variety of different models of cars. Linear regression is
 perhaps the simplest statistical procedure that could be used to make such
 deductions. Let's try it out:
-```{r}
+```{r linear_mod}
 lm_mod <- lm(mpg ~ ., data = mtcars)
 summary(lm_mod)
 ```
@@ -138,9 +138,9 @@ performs 10-fold cross-validation):
 ```{r cv_lm_cross_valdate}
 # cross-validated estimate
 folds <- make_folds(mtcars)
-cv_results <- cross_validate(cv_fun = cv_lm, folds = folds, data = mtcars,
-                             reg_form = "mpg ~ .")
-mean(cv_results$SE)
+cvlm_results <- cross_validate(cv_fun = cv_lm, folds = folds, data = mtcars,
+                               reg_form = "mpg ~ .")
+mean(cvlm_results$SE)
 ```
 
 Having performed 10-fold cross-validation, we quickly notice that our previous
