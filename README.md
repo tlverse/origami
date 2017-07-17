@@ -38,7 +38,7 @@ devtools::install_github("jeremyrcoyle/origami")
 Usage
 -----
 
-For details on how best to use `origami`, please consult the package vignette from within [R](https://www.r-project.org/) or online [here](http://nimahejazi.org/origami/articles/generalizedCV.html).
+For details on how best to use `origami`, please consult the package [documentation](https://jeremyrcoyle.github.io/origami/) and [introductory vignette](https://jeremyrcoyle.github.io/origami/articles/generalizedCV.html) online, or do so from within [R](https://www.r-project.org/).
 
 ------------------------------------------------------------------------
 
@@ -51,6 +51,8 @@ This minimal example shows how to use `origami` to apply cross-validation to the
 set.seed(4795)
 library(stringr)
 library(origami)
+#> origami: Generalized Cross-Validation Framework
+#> Version: 0.8.0
 
 data(mtcars)
 head(mtcars)

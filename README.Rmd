@@ -32,8 +32,8 @@ Hejazi](http://nimahejazi.org)
 ## Description
 
 `origami` is an R package that provides a general framework for the application
-of cross-validation schemes to particular functions. By allowing arbitrary
-lists of results, `origami` accommodates a range of cross-validation applications.
+of cross-validation schemes to particular functions. By allowing arbitrary lists
+of results, `origami` accommodates a range of cross-validation applications.
 
 ---
 
@@ -57,9 +57,10 @@ devtools::install_github("jeremyrcoyle/origami")
 
 ## Usage
 
-For details on how best to use `origami`, please consult the package vignette
-from within [R](https://www.r-project.org/) or online
-[here](http://nimahejazi.org/origami/articles/generalizedCV.html).
+For details on how best to use `origami`, please consult the package
+[documentation](https://jeremyrcoyle.github.io/origami/) and [introductory
+vignette](https://jeremyrcoyle.github.io/origami/articles/generalizedCV.html)
+online, or do so from within [R](https://www.r-project.org/).
 
 ---
 

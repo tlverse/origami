@@ -75,7 +75,7 @@
       <h1>Generalized Cross-Validation with Origami</h1>
                         <h4 class="author">Jeremy Coyle &amp; Nima Hejazi</h4>
             
-            <h4 class="date">2017-07-16</h4>
+            <h4 class="date">2017-07-17</h4>
           </div>
 
     
@@ -84,7 +84,7 @@
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>Cross-validation is an essential tool for evaluating how any given data analytic procedure extends from a sample to the target population from which the sample is derived. It has seen widespread application in all facets of statistics, perhaps most notably statistical machine learning. When used for model selection, cross-validation has powerful optimality properties <span class="citation">(Vaart, Dudoit, and Laan 2006,<span class="citation">Laan, Polley, and Hubbard (2007)</span>)</span>.</p>
+<p>Cross-validation is an essential tool for evaluating how any given data analytic procedure extends from a sample to the target population from which the sample is derived. It has seen widespread application in all facets of statistics, perhaps most notably statistical machine learning. When used for model selection, cross-validation has powerful optimality properties <span class="citation">(van der Vaart, Dudoit, and van der Laan 2006,<span class="citation">van der Laan, Polley, and Hubbard (2007)</span>)</span>.</p>
 <!--
 and for CV-TMLE based parameter estimation, elimination of difficult-to-assess
 empirical process conditions from CV-TMLE step [@Zheng:2010ua].
@@ -159,8 +159,10 @@ empirical process conditions from CV-TMLE step [@Zheng:2010ua].
   <span class="kw">return</span>(out)
 }</code></pre></div>
 <p>Our <code>cv_lm</code> function is rather simple: we merely split the available data into a training and validation sets, using the eponymous functions provided in <code>origami</code>, fit the linear model on the training set, and evaluate the model on the testing set. This is a simple example of what <code>origami</code> considers to be <code>cv_fun</code>s – functions for using cross-validation to perform a particular routine over an input data set. Having defined such a function, we can simply generate a set of partitions using <code>origami</code>’s <code>make_folds</code> function, and apply our <code>cv_lm</code> function over the resultant <code>folds</code> object. Below, we replicate the resubstitution estimate of the error – we did this “by hand” above – using the functions <code>make_folds</code> and <code>cv_lm</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(origami)
-<span class="kw">library</span>(stringr) <span class="co"># used in defining the cv_lm function above</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(origami)</code></pre></div>
+<pre><code>## origami: Generalized Cross-Validation Framework</code></pre>
+<pre><code>## Version: 0.8.0</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(stringr) <span class="co"># used in defining the cv_lm function above</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># resubstitution estimate</span>
 resub &lt;-<span class="st"> </span><span class="kw"><a href="../reference/make_folds.html">make_folds</a></span>(mtcars, <span class="dt">fold_fun =</span> folds_resubstitution)[[<span class="dv">1</span>]]
 resub_results &lt;-<span class="st"> </span><span class="kw">cv_lm</span>(<span class="dt">fold =</span> resub, <span class="dt">data =</span> mtcars, <span class="dt">reg_form =</span> <span class="st">"mpg ~ ."</span>)
@@ -170,10 +172,10 @@ resub_results &lt;-<span class="st"> </span><span class="kw">cv_lm</span>(<span 
 <p>We can more honestly evaluate the error by <em>V-fold cross-validation</em>, which partitions the data into <strong>v subsets</strong>, fitting the model on <span class="math inline">\(v - 1\)</span> of the subsets and evaluating on the subset that was held out for testing. This is repeated such that each subset is used for testing. We can easily apply our <code>cv_lm</code> function using <code>origami</code>’s <code>cross_validate</code> (n.b., by default this performs 10-fold cross-validation):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># cross-validated estimate</span>
 folds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/make_folds.html">make_folds</a></span>(mtcars)
-cv_results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cross_validate.html">cross_validate</a></span>(<span class="dt">cv_fun =</span> cv_lm, <span class="dt">folds =</span> folds, <span class="dt">data =</span> mtcars,
-                             <span class="dt">reg_form =</span> <span class="st">"mpg ~ ."</span>)
-<span class="kw">mean</span>(cv_results<span class="op">$</span>SE)</code></pre></div>
-<pre><code>## [1] 12.92426</code></pre>
+cvlm_results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cross_validate.html">cross_validate</a></span>(<span class="dt">cv_fun =</span> cv_lm, <span class="dt">folds =</span> folds, <span class="dt">data =</span> mtcars,
+                               <span class="dt">reg_form =</span> <span class="st">"mpg ~ ."</span>)
+<span class="kw">mean</span>(cvlm_results<span class="op">$</span>SE)</code></pre></div>
+<pre><code>## [1] 15.73588</code></pre>
 <p>Having performed 10-fold cross-validation, we quickly notice that our previous estimate of the model error (by resubstitution) was quite optimistic. The honest estimate of the error is several times larger.</p>
 <hr>
 </div>
@@ -236,7 +238,7 @@ Nima: tried some re-wording to clarify; not sure how much this helped.
 cvrf_results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cross_validate.html">cross_validate</a></span>(<span class="dt">cv_fun =</span> cv_rf, <span class="dt">folds =</span> folds, <span class="dt">data =</span> mtcars,
                                <span class="dt">reg_form =</span> <span class="st">"mpg ~ ."</span>)
 <span class="kw">mean</span>(cvrf_results<span class="op">$</span>SE)</code></pre></div>
-<pre><code>## [1] 5.594291</code></pre>
+<pre><code>## [1] 5.093881</code></pre>
 <p>Using 10-fold cross-validation (the default), we obtain an honest estimate of the prediction error of random forests. From this, we gather that the use of <code>origami</code>’s <code>cross_validate</code> procedure can be generalized to arbitrary esimation techniques, given availability of an appropriate <code>cv_fun</code> function.</p>
 <hr>
 </div>
@@ -341,11 +343,11 @@ mses =<span class="st"> </span><span class="kw"><a href="../reference/cross_vali
 <h2 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h2>
 <div id="refs" class="references">
-<div id="ref-vanderLaan:2007bz">
-<p>Laan, M J van der, E C Polley, and A E Hubbard. 2007. “Super learner.” <em>Statistical Applications in Genetics and Molecular Biology</em> 6: Art. 25–23 pp. (electronic).</p>
+<div id="ref-vdl2007super">
+<p>van der Laan, Mark J, Eric C Polley, and Alan E Hubbard. 2007. “Super Learner.” <em>Statistical Applications in Genetics and Molecular Biology</em> 6 (1).</p>
 </div>
-<div id="ref-Vaart:2006bz">
-<p>Vaart, A W van der, S Dudoit, and M J van der Laan. 2006. “Oracle inequalities for multi-fold cross validation.” <em>Statistics &amp; Decisions</em> 24 (3): 351–71.</p>
+<div id="ref-vaart2006oracle">
+<p>van der Vaart, Aad W, Sandrine Dudoit, and Mark J van der Laan. 2006. “Oracle Inequalities for Multi-Fold Cross Validation.” <em>Statistics &amp; Decisions</em> 24 (3): 351–71.</p>
 </div>
 </div>
 </div>
