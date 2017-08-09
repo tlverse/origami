@@ -5,6 +5,7 @@
 ^codecov\.yml$
 ^CONTRIBUTING\.md$
 ^TODO\.md$
+^LICENSE$
 ^Makefile$
 ^\.git$
 ^\.gitignore$
