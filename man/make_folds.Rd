@@ -34,6 +34,7 @@ Generates a list of folds for a variety of cross-validation schemes.
 }
 \seealso{
 Other fold generation functions: \code{\link{fold_from_foldvec}},
-  \code{\link{fold_funs}},
+  \code{\link{fold_funs}}, \code{\link{folds2foldvec}},
   \code{\link{make_repeated_folds}}
 }
+\concept{fold generation functions}

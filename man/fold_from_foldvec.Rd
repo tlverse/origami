@@ -2,21 +2,22 @@
 % Please edit documentation in R/utils.R
 \name{fold_from_foldvec}
 \alias{fold_from_foldvec}
-\title{Build a Fold Object for V-Fold CV}
+\title{Build a Fold Object from a Fold Vector}
 \usage{
 fold_from_foldvec(v, folds)
 }
 \arguments{
-\item{v}{- identifier of the fold in which observations fall for CV.}
+\item{v}{An identifier of the fold in which observations fall for CV.}
 
-\item{folds}{- vector of the fold status for each observation for CV.}
+\item{folds}{A vector of the fold status for each observation for CV.}
 }
 \description{
-For V-fold type cross-validation, take a fold vector and make fold object
-for fold V.
+For V-fold type cross-validation. This takes a fold vector (validation set
+IDs) and builds a fold object for fold V.
 }
 \seealso{
 Other fold generation functions: \code{\link{fold_funs}},
-  \code{\link{make_folds}},
+  \code{\link{folds2foldvec}}, \code{\link{make_folds}},
   \code{\link{make_repeated_folds}}
 }
+\concept{fold generation functions}

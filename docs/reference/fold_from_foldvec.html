@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Build a Fold Object for V-Fold CV — fold_from_foldvec • origami</title>
+<title>Build a Fold Object from a Fold Vector — fold_from_foldvec • origami</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -95,12 +95,12 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Build a Fold Object for V-Fold CV</h1>
+    <h1>Build a Fold Object from a Fold Vector</h1>
     </div>
 
     
-    <p>For V-fold type cross-validation, take a fold vector and make fold object
-for fold V.</p>
+    <p>For V-fold type cross-validation. This takes a fold vector (validation set
+IDs) and builds a fold object for fold V.</p>
     
 
     <pre class="usage"><span class='fu'>fold_from_foldvec</span>(<span class='no'>v</span>, <span class='no'>folds</span>)</pre>
@@ -110,18 +110,18 @@ for fold V.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>v</th>
-      <td><p>- identifier of the fold in which observations fall for CV.</p></td>
+      <td><p>An identifier of the fold in which observations fall for CV.</p></td>
     </tr>
     <tr>
       <th>folds</th>
-      <td><p>- vector of the fold status for each observation for CV.</p></td>
+      <td><p>A vector of the fold status for each observation for CV.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <p>Other fold generation functions: <code><a href='fold_funs.html'>fold_funs</a></code>,
-  <code><a href='make_folds.html'>make_folds</a></code>,
+  <code><a href='folds2foldvec.html'>folds2foldvec</a></code>, <code><a href='make_folds.html'>make_folds</a></code>,
   <code><a href='make_repeated_folds.html'>make_repeated_folds</a></code></p>
     
 
