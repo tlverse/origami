@@ -58,6 +58,7 @@ based on its arguments, and pass any remaining arguments (e.g. \code{V} or \code
 }
 \seealso{
 Other fold generation functions: \code{\link{fold_from_foldvec}},
-  \code{\link{make_folds}},
+  \code{\link{folds2foldvec}}, \code{\link{make_folds}},
   \code{\link{make_repeated_folds}}
 }
+\concept{fold generation functions}

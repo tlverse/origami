@@ -218,18 +218,16 @@ useful for adding additional CV folds to a results object.</p></td>
 <span class='no'>time_seq</span> <span class='kw'>&lt;-</span> <span class='fu'>system.time</span>({
     <span class='no'>results_seq</span> <span class='kw'>&lt;-</span> <span class='fu'>cross_validate</span>(<span class='kw'>cv_fun</span> <span class='kw'>=</span> <span class='no'>cv_lm</span>, <span class='kw'>folds</span> <span class='kw'>=</span> <span class='no'>folds</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>,
                                   <span class='kw'>reg_form</span> <span class='kw'>=</span> <span class='st'>"mpg ~ ."</span>)
-})
-
+})</div><div class='output co'>#&gt; <span class='warning'>Warning: All iterations resulted in errors</span></div><div class='input'>
 <span class='fu'><a href='http://www.rdocumentation.org/packages/future/topics/plan'>plan</a></span>(<span class='no'>multicore</span>)
 <span class='no'>time_mc</span> <span class='kw'>&lt;-</span> <span class='fu'>system.time</span>({
     <span class='no'>results_mc</span> <span class='kw'>&lt;-</span> <span class='fu'>cross_validate</span>(<span class='kw'>cv_fun</span> <span class='kw'>=</span> <span class='no'>cv_lm</span>, <span class='kw'>folds</span> <span class='kw'>=</span> <span class='no'>folds</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>,
                                  <span class='kw'>reg_form</span> <span class='kw'>=</span> <span class='st'>"mpg ~ ."</span>)
-})
-
+})</div><div class='output co'>#&gt; <span class='warning'>Warning: All iterations resulted in errors</span></div><div class='input'>
 <span class='kw'>if</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/future/topics/availableCores'>availableCores</a></span>() <span class='kw'>&gt;</span> <span class='fl'>1</span>) {
     <span class='no'>time_mc</span>[<span class='st'>"elapsed"</span>] <span class='kw'>&lt;</span> <span class='fl'>1.2</span> * <span class='no'>time_seq</span>[<span class='st'>"elapsed"</span>]
 }</div><div class='output co'>#&gt; elapsed 
-#&gt;   FALSE </div></pre>
+#&gt;    TRUE </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

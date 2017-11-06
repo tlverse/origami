@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Make List of Folds for cross-validation — make_folds • origami</title>
+<title>Build a Fold Vector from a Fold Object — folds2foldvec • origami</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -95,57 +95,30 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Make List of Folds for cross-validation</h1>
+    <h1>Build a Fold Vector from a Fold Object</h1>
     </div>
 
     
-    <p>Generates a list of folds for a variety of cross-validation schemes.</p>
+    <p>For V-fold type cross-validation. This takes a fold object and returns a fold
+vector (validation set IDs) for use with other tools like <code>cv.glmnet</code>.</p>
     
 
-    <pre class="usage"><span class='fu'>make_folds</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fold_fun</span> <span class='kw'>=</span> <span class='no'>folds_vfold</span>, <span class='kw'>cluster_ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>strata_ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>folds2foldvec</span>(<span class='no'>folds</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>n</th>
-      <td><p>- either an integer indicating the number of observations to
-cross-validate over, or an object from which to guess the number of
-observations; can also be computed from strata_ids or cluster_ids.</p></td>
-    </tr>
-    <tr>
-      <th>fold_fun</th>
-      <td><p>- A function indicating the cross-validation scheme to use. 
-See <code><a href='fold_funs.html'>fold_funs</a></code> for a list of possibilities.</p></td>
-    </tr>
-    <tr>
-      <th>cluster_ids</th>
-      <td><p>- a vector of cluster ids. Clusters are treated as a unit
-- that is, all observations within a cluster are placed in either the
-training or validation set.</p></td>
-    </tr>
-    <tr>
-      <th>strata_ids</th>
-      <td><p>- a vector of strata ids. Strata are balanced: insofar as
-possible the distribution in the sample should be the same as the
-distribution in the training and validation sets.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>other arguments to be passed to <code>fold_fun</code>.</p></td>
+      <th>folds</th>
+      <td><p>A <code>fold</code> object as produced by <code>make_folds</code>, from
+which a <code>numeric</code> vector of the validation set fold IDs are returned.</p></td>
     </tr>
     </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A list of folds objects. Each fold consists of a list with a <code>training</code> index vector, 
-        a <code>validation</code> index vector, and a <code>fold_index</code> (its order in the list of folds).</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <p>Other fold generation functions: <code><a href='fold_from_foldvec.html'>fold_from_foldvec</a></code>,
-  <code><a href='fold_funs.html'>fold_funs</a></code>, <code><a href='folds2foldvec.html'>folds2foldvec</a></code>,
+  <code><a href='fold_funs.html'>fold_funs</a></code>, <code><a href='make_folds.html'>make_folds</a></code>,
   <code><a href='make_repeated_folds.html'>make_repeated_folds</a></code></p>
     
 
@@ -155,8 +128,6 @@ distribution in the training and validation sets.</p></td>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
-
       <li><a href="#see-also">See also</a></li>
           </ul>
 

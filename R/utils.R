@@ -1,30 +1,54 @@
-# replicate foreach error collection
-# function factory that generates wrapped version of functions
+#' Wrap a Function in a Try Statement
+#'
+#' Function factory that generates versions of functions wrapped in \code{try}.
+#'
+#' @param fun A \code{function} to be wrapped in a \code{try} statement.
+#' @param ... Additional arguments passed to the previous argument \code{fun}.
+#
 wrap_in_try <- function(fun, ...) {
     wrapped <- function(...)
     try({
         fun(...)
     }, silent = TRUE)
-    
     return(wrapped)
 }
 
-
 ################################################################################
 
-#' Build a Fold Object for V-Fold CV
+#' Build a Fold Object from a Fold Vector
 #'
-#' For V-fold type cross-validation, take a fold vector and make fold object
-#' for fold V.
+#' For V-fold type cross-validation. This takes a fold vector (validation set
+#' IDs) and builds a fold object for fold V.
 #'
 #' @family fold generation functions
 #'
-#' @param v - identifier of the fold in which observations fall for CV.
-#' @param folds - vector of the fold status for each observation for CV.
-#'
+#' @param v An identifier of the fold in which observations fall for CV.
+#' @param folds A vector of the fold status for each observation for CV.
+#
 fold_from_foldvec <- function(v, folds) {
   training_set <- which(folds != v)
   validation_set <- which(folds == v)
-  
   make_fold(v, training_set, validation_set)
 }
+
+################################################################################
+
+#' Build a Fold Vector from a Fold Object
+#'
+#' For V-fold type cross-validation. This takes a fold object and returns a fold
+#' vector (validation set IDs) for use with other tools like \code{cv.glmnet}.
+#'
+#' @family fold generation functions
+#'
+#' @param folds A \code{fold} object as produced by \code{make_folds}, from
+#'  which a \code{numeric} vector of the validation set fold IDs are returned.
+#
+folds2foldvec <- function(folds) {
+  fold_vec <- lapply(folds, function(fold) { validation() })
+  len <- sapply(fold_vec, length)
+  nums <- rep(seq_along(fold_vec), len)
+  fold_index <- unlist(fold_vec)
+  fold_id <- nums[order(fold_index)]
+  return(fold_id)
+}
+
