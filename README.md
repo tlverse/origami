@@ -19,14 +19,14 @@ developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repo
 v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 [![DOI](https://zenodo.org/badge/21994761.svg)](https://zenodo.org/badge/latestdoi/21994761)
 
-<img style="float: right; margin-right: 5%; margin-bottom: 1.5em"
-     src='./hex/origami-sticker.png' alt='origami package hex logo' width='100'>
-
 > High-powered framework for cross-validation: fold your data like it’s
 > paper\!
 
 **Authors:** [Jeremy Coyle](https://github.com/jeremyrcoyle) and [Nima
 Hejazi](http://nimahejazi.org)
+
+<img style="float: right; margin-right: 5%; margin-bottom: 1.5em"
+     src='./hex/origami-sticker.png' alt='origami package hex logo' width='100'>
 
 -----
 
