@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# R/`origami`
+# R/`origami` <img src="./hex/origami-sticker.pdf" width="50">
 
 [![Travis-CI Build Status](https://travis-ci.org/jeremyrcoyle/origami.svg?branch=master)](https://travis-ci.org/jeremyrcoyle/origami)
 [![Build status](https://ci.appveyor.com/api/projects/status/i5qwp8cjb4j4x329?svg=true)](https://ci.appveyor.com/project/jeremyrcoyle/origami)

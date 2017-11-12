@@ -1,58 +1,82 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-R/`origami`
-===========
 
-[![Travis-CI Build Status](https://travis-ci.org/jeremyrcoyle/origami.svg?branch=master)](https://travis-ci.org/jeremyrcoyle/origami) [![Build status](https://ci.appveyor.com/api/projects/status/i5qwp8cjb4j4x329?svg=true)](https://ci.appveyor.com/project/jeremyrcoyle/origami) [![Coverage Status](https://img.shields.io/codecov/c/github/jeremyrcoyle/origami/master.svg)](https://codecov.io/github/jeremyrcoyle/origami?branch=master) [![CRAN](http://www.r-pkg.org/badges/version/origami)](http://www.r-pkg.org/pkg/origami) [![CRAN downloads](https://cranlogs.r-pkg.org/badges/origami)](https://CRAN.R-project.org/package=origami) [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active) [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)[![DOI](https://zenodo.org/badge/21994761.svg)](https://zenodo.org/badge/latestdoi/21994761)
+# R/`origami` <img src="./hex/origami-sticker.pdf" width="50">
 
-> High-powered framework for cross-validation: fold your data like it's paper!
+[![Travis-CI Build
+Status](https://travis-ci.org/jeremyrcoyle/origami.svg?branch=master)](https://travis-ci.org/jeremyrcoyle/origami)
+[![Build
+status](https://ci.appveyor.com/api/projects/status/i5qwp8cjb4j4x329?svg=true)](https://ci.appveyor.com/project/jeremyrcoyle/origami)
+[![Coverage
+Status](https://img.shields.io/codecov/c/github/jeremyrcoyle/origami/master.svg)](https://codecov.io/github/jeremyrcoyle/origami?branch=master)
+[![CRAN](http://www.r-pkg.org/badges/version/origami)](http://www.r-pkg.org/pkg/origami)
+[![CRAN
+downloads](https://cranlogs.r-pkg.org/badges/origami)](https://CRAN.R-project.org/package=origami)
+[![Project Status: Active - The project has reached a stable, usable
+state and is being actively
+developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
+[![License: GPL
+v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+[![DOI](https://zenodo.org/badge/21994761.svg)](https://zenodo.org/badge/latestdoi/21994761)
 
-**Authors:** [Jeremy Coyle](https://github.com/jeremyrcoyle) and [Nima Hejazi](http://nimahejazi.org)
+> High-powered framework for cross-validation: fold your data like it’s
+> paper\!
 
-------------------------------------------------------------------------
+**Authors:** [Jeremy Coyle](https://github.com/jeremyrcoyle) and [Nima
+Hejazi](http://nimahejazi.org)
 
-Description
------------
+-----
 
-`origami` is an R package that provides a general framework for the application of cross-validation schemes to particular functions. By allowing arbitrary lists of results, `origami` accommodates a range of cross-validation applications.
+## Description
 
-------------------------------------------------------------------------
+`origami` is an R package that provides a general framework for the
+application of cross-validation schemes to particular functions. By
+allowing arbitrary lists of results, `origami` accommodates a range of
+cross-validation applications.
 
-Installation
-------------
+-----
 
-For standard use, we recommend installing the package from [CRAN](https://cran.r-project.org/) via
+## Installation
+
+For standard use, we recommend installing the package from
+[CRAN](https://cran.r-project.org/) via
 
 ``` r
 install.packages("origami")
 ```
 
-You can install a stable release of `origami` from GitHub via [`devtools`](https://www.rstudio.com/products/rpackages/devtools/) with:
+You can install a stable release of `origami` from GitHub via
+[`devtools`](https://www.rstudio.com/products/rpackages/devtools/) with:
 
 ``` r
 devtools::install_github("jeremyrcoyle/origami")
 ```
 
-------------------------------------------------------------------------
-
-Usage
 -----
 
-For details on how best to use `origami`, please consult the package [documentation](https://jeremyrcoyle.github.io/origami/) and [introductory vignette](https://jeremyrcoyle.github.io/origami/articles/generalizedCV.html) online, or do so from within [R](https://www.r-project.org/).
+## Usage
 
-------------------------------------------------------------------------
+For details on how best to use `origami`, please consult the package
+[documentation](https://jeremyrcoyle.github.io/origami/) and
+[introductory
+vignette](https://jeremyrcoyle.github.io/origami/articles/generalizedCV.html)
+online, or do so from within [R](https://www.r-project.org/).
 
-Example
--------
+-----
 
-This minimal example shows how to use `origami` to apply cross-validation to the computation of a simple descriptive statistic using a sample data set. In particular, we obtain a cross-validated estimate of the mean:
+## Example
+
+This minimal example shows how to use `origami` to apply
+cross-validation to the computation of a simple descriptive statistic
+using a sample data set. In particular, we obtain a cross-validated
+estimate of the mean:
 
 ``` r
 set.seed(4795)
 library(stringr)
 library(origami)
 #> origami: Generalized Cross-Validation Framework
-#> Version: 0.8.0
+#> Version: 0.8.2
 
 data(mtcars)
 head(mtcars)
@@ -90,45 +114,51 @@ mean(results$SE)
 #> [1] 15.22295
 ```
 
-------------------------------------------------------------------------
+-----
 
-Issues
-------
+## Issues
 
-If you encounter any bugs or have any specific feature requests, please [file an issue](https://github.com/jeremyrcoyle/origami/issues).
+If you encounter any bugs or have any specific feature requests, please
+[file an issue](https://github.com/jeremyrcoyle/origami/issues).
 
-------------------------------------------------------------------------
+-----
 
-Contributions
--------------
+## Contributions
 
-It is our hope that `origami` will grow to be adopted as a backend for most any procedure requiring cross-validation, including its integration into larger machine learning frameworks. To that end, contributions are very welcome, though we ask that interested contributors consult our [`contribution guidelines`](https://github.com/jeremyrcoyle/origami/blob/master/CONTRIBUTING.md) prior to submitting a pull request.
+It is our hope that `origami` will grow to be adopted as a backend for
+most any procedure requiring cross-validation, including its integration
+into larger machine learning frameworks. To that end, contributions are
+very welcome, though we ask that interested contributors consult our
+[`contribution
+guidelines`](https://github.com/jeremyrcoyle/origami/blob/master/CONTRIBUTING.md)
+prior to submitting a pull request.
 
-------------------------------------------------------------------------
+-----
 
-Citation
---------
+## Citation
 
 After using the `origami` R package, please cite it:
 
-        @article{coyle2017origami,
-          doi = {},
-          url = {},
-          year  = {2017},
-          month = {},
-          publisher = {The Open Journal},
-          volume = {},
-          number = {},
-          author = {Coyle, Jeremy R and Hejazi, Nima S},
-          title = {origami: A Generalized Framework for Cross-Validation in R},
-          journal = {The Journal of Open Source Software}
-        }
+``` 
+    @article{coyle2017origami,
+      doi = {},
+      url = {},
+      year  = {2017},
+      month = {},
+      publisher = {The Open Journal},
+      volume = {},
+      number = {},
+      author = {Coyle, Jeremy R and Hejazi, Nima S},
+      title = {origami: A Generalized Framework for Cross-Validation in R},
+      journal = {The Journal of Open Source Software}
+    }
+```
 
-------------------------------------------------------------------------
+-----
 
-License
--------
+## License
 
 © 2017 [Jeremy R. Coyle](https://github.com/jeremyrcoyle)
 
-The contents of this repository are distributed under the GPL-3 license. See file `LICENSE` for details.
+The contents of this repository are distributed under the GPL-3 license.
+See file `LICENSE` for details.
