@@ -1,7 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# R/`origami` <img src="./hex/origami-sticker.pdf" width="50">
+# R/`origami`
+
+<img src="hex/origami-sticker.pdf" width="50">
 
 [![Travis-CI Build
 Status](https://travis-ci.org/jeremyrcoyle/origami.svg?branch=master)](https://travis-ci.org/jeremyrcoyle/origami)
