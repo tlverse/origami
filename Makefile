@@ -13,5 +13,9 @@ test:
 doc:
 	  r -e "devtools::document()"
 
+build:
+	  r -e "devtools::build()"
+
 cov:
 	  r -e "covr::codecov()"
+

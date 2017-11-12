@@ -75,7 +75,7 @@
       <h1>Generalized Cross-Validation with Origami</h1>
                         <h4 class="author">Jeremy Coyle &amp; Nima Hejazi</h4>
             
-            <h4 class="date">2017-11-06</h4>
+            <h4 class="date">2017-11-12</h4>
           </div>
 
     
@@ -163,7 +163,7 @@ empirical process conditions from CV-TMLE step [@Zheng:2010ua].
 <pre class="sourceCode r" id="cb7"><code class="sourceCode r"><div class="sourceLine" id="cb7-1" data-line-number="1">
 <span class="kw">library</span>(origami)</div></code></pre>
 <pre><code>## origami: Generalized Cross-Validation Framework</code></pre>
-<pre><code>## Version: 0.8.0</code></pre>
+<pre><code>## Version: 0.8.1</code></pre>
 <pre class="sourceCode r" id="cb10"><code class="sourceCode r"><div class="sourceLine" id="cb10-1" data-line-number="1">
 <span class="kw">library</span>(stringr) <span class="co"># used in defining the cv_lm function above</span>
 </div></code></pre>
@@ -181,7 +181,7 @@ empirical process conditions from CV-TMLE step [@Zheng:2010ua].
 <div class="sourceLine" id="cb13-4" data-line-number="4">                               <span class="dt">reg_form =</span> <span class="st">"mpg ~ ."</span>)</div>
 <div class="sourceLine" id="cb13-5" data-line-number="5">
 <span class="kw">mean</span>(cvlm_results<span class="op">$</span>SE)</div></code></pre>
-<pre><code>## [1] 12.55014</code></pre>
+<pre><code>## [1] 17.19799</code></pre>
 <p>Having performed 10-fold cross-validation, we quickly notice that our previous estimate of the model error (by resubstitution) was quite optimistic. The honest estimate of the error is several times larger.</p>
 <hr></section><section id="general-workflow" class="level2"><h2>General workflow</h2>
 <p>Generally, <code>cross_validate</code> usage will mirror the workflow in the above example. First, the user must define folds and a function that operates on each fold. Once these are passed to <code>cross_validate</code>, the function will map the function across the folds, and combine the results in a reasonable way. More details on each step of this process will be given below.</p>
@@ -233,7 +233,7 @@ Nima: tried some re-wording to clarify; not sure how much this helped.
 <div class="sourceLine" id="cb19-3" data-line-number="3">                               <span class="dt">reg_form =</span> <span class="st">"mpg ~ ."</span>)</div>
 <div class="sourceLine" id="cb19-4" data-line-number="4">
 <span class="kw">mean</span>(cvrf_results<span class="op">$</span>SE)</div></code></pre>
-<pre><code>## [1] 7.480327</code></pre>
+<pre><code>## [1] 5.391251</code></pre>
 <p>Using 10-fold cross-validation (the default), we obtain an honest estimate of the prediction error of random forests. From this, we gather that the use of <code>origami</code>’s <code>cross_validate</code> procedure can be generalized to arbitrary esimation techniques, given availability of an appropriate <code>cv_fun</code> function.</p>
 <hr></section><section id="cross-validation-with-dependence-time-series" class="level2"><h2>Cross-validation with dependence: time series</h2>
 <p>Cross-validation can also be used for forecast model selection in a time series setting. Here, the partitioning scheme mirrors the application of the forecasting model: We’ll train the data on past observations (either all available or a recent subset), and then use the model forecast (predict), the next few observations. Consider the <code>AirPassengers</code> dataset, a monthly time series of passenger air traffic in thousands of people.</p>
@@ -299,7 +299,7 @@ Nima: tried some re-wording to clarify; not sure how much this helped.
 <hr></section><section id="session-information" class="level2"><h2>Session Information</h2>
 <pre><code>## R version 3.4.2 (2017-09-28)
 ## Platform: x86_64-apple-darwin16.7.0 (64-bit)
-## Running under: macOS Sierra 10.12.6
+## Running under: macOS High Sierra 10.13.1
 ## 
 ## Matrix products: default
 ## BLAS: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
@@ -313,7 +313,7 @@ Nima: tried some re-wording to clarify; not sure how much this helped.
 ## 
 ## other attached packages:
 ## [1] forecast_8.2        randomForest_4.6-12 stringr_1.2.0.9000 
-## [4] origami_0.8.0      
+## [4] origami_0.8.1      
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_0.12.13         compiler_3.4.2       plyr_1.8.4          

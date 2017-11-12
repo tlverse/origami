@@ -4,6 +4,8 @@
 #'
 #' @param fun A \code{function} to be wrapped in a \code{try} statement.
 #' @param ... Additional arguments passed to the previous argument \code{fun}.
+#'
+#' @export
 #
 wrap_in_try <- function(fun, ...) {
     wrapped <- function(...)
@@ -24,6 +26,8 @@ wrap_in_try <- function(fun, ...) {
 #'
 #' @param v An identifier of the fold in which observations fall for CV.
 #' @param folds A vector of the fold status for each observation for CV.
+#'
+#' @export
 #
 fold_from_foldvec <- function(v, folds) {
   training_set <- which(folds != v)
@@ -42,6 +46,8 @@ fold_from_foldvec <- function(v, folds) {
 #'
 #' @param folds A \code{fold} object as produced by \code{make_folds}, from
 #'  which a \code{numeric} vector of the validation set fold IDs are returned.
+#'
+#' @export
 #
 folds2foldvec <- function(folds) {
   fold_vec <- lapply(folds, function(fold) { validation() })
