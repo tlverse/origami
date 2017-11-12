@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# R/`origami` <img src='./hex/origami-sticker.pdf' alt='hex logo' width='50'/>
+# R/`origami`
 
 [![Travis-CI Build
 Status](https://travis-ci.org/jeremyrcoyle/origami.svg?branch=master)](https://travis-ci.org/jeremyrcoyle/origami)
@@ -18,6 +18,9 @@ developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repo
 [![License: GPL
 v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 [![DOI](https://zenodo.org/badge/21994761.svg)](https://zenodo.org/badge/latestdoi/21994761)
+
+<img style="float: right; margin-right: 5%; margin-bottom: 1.5em"
+     src='./hex/origami-sticker.png' alt='origami package hex logo' width='100'>
 
 > High-powered framework for cross-validation: fold your data like it’s
 > paper\!
