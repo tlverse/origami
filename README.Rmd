@@ -28,6 +28,9 @@ knitr::opts_chunk$set(
 __Authors:__ [Jeremy Coyle](https://github.com/jeremyrcoyle) and [Nima
 Hejazi](http://nimahejazi.org)
 
+<img style="float: right; margin-right: 5%; margin-bottom: 1.5em"
+     src='./hex/origami-sticker.png' alt='origami package hex logo' width='100'>
+
 ---
 
 ## Description
