@@ -17,7 +17,7 @@ state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![License: GPL
 v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
-[![DOI](https://zenodo.org/badge/21994761.svg)](https://zenodo.org/badge/latestdoi/21994761)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1155901.svg)](https://doi.org/10.5281/zenodo.1155901)
 
 > High-powered framework for cross-validation: fold your data like it’s
 > paper\!
@@ -143,15 +143,15 @@ prior to submitting a pull request.
 After using the `origami` R package, please cite it:
 
 ``` 
-    @article{coyle2017origami,
+    @article{coyle2018origami,
       doi = {},
       url = {},
-      year  = {2017},
+      year  = {2018},
       month = {},
       publisher = {The Open Journal},
       volume = {},
       number = {},
-      author = {Coyle, Jeremy R and Hejazi, Nima S},
+      author = {Coyle, Jeremy R and Hejazi, Nima S and Malenica, Ivana},
       title = {origami: A Generalized Framework for Cross-Validation in R},
       journal = {The Journal of Open Source Software}
     }
@@ -161,7 +161,7 @@ After using the `origami` R package, please cite it:
 
 ## License
 
-© 2017 [Jeremy R. Coyle](https://github.com/jeremyrcoyle)
+© 2017-2018 [Jeremy R. Coyle](https://github.com/jeremyrcoyle)
 
 The contents of this repository are distributed under the GPL-3 license.
 See file `LICENSE` for details.
