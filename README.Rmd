@@ -22,11 +22,12 @@ knitr::opts_chunk$set(
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1155901.svg)](https://doi.org/10.5281/zenodo.1155901)
+[![DOI](http://joss.theoj.org/papers/10.21105/joss.00512/status.svg)](https://doi.org/10.21105/joss.00512)
 
 > High-powered framework for cross-validation: fold your data like it's paper!
 
 __Authors:__ [Jeremy Coyle](https://github.com/jeremyrcoyle) and [Nima
-Hejazi](http://nimahejazi.org)
+Hejazi](https://nimahejazi.org)
 
 <img style="float: right; margin-right: 5%; margin-bottom: 1.5em"
      src='./hex/origami-sticker.png' alt='origami package hex logo' width='100'>
@@ -132,16 +133,16 @@ prior to submitting a pull request.
 After using the `origami` R package, please cite it:
 
         @article{coyle2018origami,
-          doi = {},
-          url = {},
-          year  = {2018},
-          month = {},
-          publisher = {The Open Journal},
-          volume = {},
-          number = {},
-          author = {Coyle, Jeremy R and Hejazi, Nima S and Malenica, Ivana},
+          author = {Coyle, Jeremy R and Hejazi, Nima S},
           title = {origami: A Generalized Framework for Cross-Validation in R},
-          journal = {The Journal of Open Source Software}
+          journal = {The Journal of Open Source Software},
+          volume = {3},
+          number = {21},
+          month = {January},
+          year  = {2018},
+          publisher = {The Open Journal},
+          doi = {10.21105/joss.00512},
+          url = {https://dx.doi.org/10.21105/joss.00512}
         }
 
 ---

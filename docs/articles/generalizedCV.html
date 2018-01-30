@@ -75,25 +75,29 @@
       <h1>Generalized Cross-Validation with Origami</h1>
                         <h4 class="author">Jeremy Coyle &amp; Nima Hejazi</h4>
             
-            <h4 class="date">2017-11-12</h4>
+            <h4 class="date">2018-01-30</h4>
           </div>
 
     
     
 <div class="contents">
-<section id="introduction" class="level2"><h2>Introduction</h2>
-<p>Cross-validation is an essential tool for evaluating how any given data analytic procedure extends from a sample to the target population from which the sample is derived. It has seen widespread application in all facets of statistics, perhaps most notably statistical machine learning. When used for model selection, cross-validation has powerful optimality properties <span class="citation" data-cites="vaart2006oracle">(van der Vaart, Dudoit, and van der Laan 2006,<span class="citation" data-cites="vdl2007super">van der Laan, Polley, and Hubbard (2007)</span>)</span>.</p>
+<div id="introduction" class="section level2">
+<h2 class="hasAnchor">
+<a href="#introduction" class="anchor"></a>Introduction</h2>
+<p>Cross-validation is an essential tool for evaluating how any given data analytic procedure extends from a sample to the target population from which the sample is derived. It has seen widespread application in all facets of statistics, perhaps most notably statistical machine learning. When used for model selection, cross-validation has powerful optimality properties <span class="citation">(van der Vaart, Dudoit, and van der Laan 2006,<span class="citation">@vdl2007super</span>)</span>.</p>
 <!--
 and for CV-TMLE based parameter estimation, elimination of difficult-to-assess
 empirical process conditions from CV-TMLE step [@Zheng:2010ua].
 -->
 <p>Cross-validation works by partitioning a sample into complementary subsets, applying a particular data analytic (statistical) routine on a subset (the “training” set), and evaluating the routine of choice on the complementary subset (the “testing” set). This procedure is repeated across multiple partitions of the data. A variety of different partitioning schemes exist, such as V-fold cross-validation and bootstrap cross-validation, many of which are supported by <code>origami</code>. The <code>origami</code> package provides a suite of tools that generalize the application of cross-validation to arbitrary data analytic procedures. The use of <code>origami</code> is best illustrated by example.</p>
-<hr></section><section id="cross-validation-with-linear-regression" class="level2"><h2>Cross-validation with linear regression</h2>
+<hr>
+</div>
+<div id="cross-validation-with-linear-regression" class="section level2">
+<h2 class="hasAnchor">
+<a href="#cross-validation-with-linear-regression" class="anchor"></a>Cross-validation with linear regression</h2>
 <p>We’ll start by examining a fairly simple data set:</p>
-<pre class="sourceCode r" id="cb1"><code class="sourceCode r"><div class="sourceLine" id="cb1-1" data-line-number="1">
-<span class="kw">data</span>(mtcars)</div>
-<div class="sourceLine" id="cb1-2" data-line-number="2">
-<span class="kw">head</span>(mtcars)</div></code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">data</span>(mtcars)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">head</span>(mtcars)</a></code></pre></div>
 <pre><code>##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
 ## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
 ## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
@@ -102,9 +106,8 @@ empirical process conditions from CV-TMLE step [@Zheng:2010ua].
 ## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
 ## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</code></pre>
 <p>One might be interested in examining how the efficiency of a car, as measured by miles-per-gallon (mpg), is explained by various technical aspects of the car, with data across a variety of different models of cars. Linear regression is perhaps the simplest statistical procedure that could be used to make such deductions. Let’s try it out:</p>
-<pre class="sourceCode r" id="cb3"><code class="sourceCode r"><div class="sourceLine" id="cb3-1" data-line-number="1">lm_mod &lt;-<span class="st"> </span><span class="kw">lm</span>(mpg <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> mtcars)</div>
-<div class="sourceLine" id="cb3-2" data-line-number="2">
-<span class="kw">summary</span>(lm_mod)</div></code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">lm_mod &lt;-<span class="st"> </span><span class="kw">lm</span>(mpg <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> mtcars)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">summary</span>(lm_mod)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = mpg ~ ., data = mtcars)
@@ -133,63 +136,66 @@ empirical process conditions from CV-TMLE step [@Zheng:2010ua].
 ## Multiple R-squared:  0.869,  Adjusted R-squared:  0.8066 
 ## F-statistic: 13.93 on 10 and 21 DF,  p-value: 3.793e-07</code></pre>
 <p>We can assess how well the model fits the data by comparing the predictions of the linear model to the true outcomes observed in the data set. This is the well known (and standard) mean squared error. We can extract that from the <code>lm</code> model object like so:</p>
-<pre class="sourceCode r" id="cb5"><code class="sourceCode r"><div class="sourceLine" id="cb5-1" data-line-number="1">err &lt;-<span class="st"> </span><span class="kw">mean</span>(<span class="kw">resid</span>(lm_mod)<span class="op">^</span><span class="dv">2</span>)</div></code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">err &lt;-<span class="st"> </span><span class="kw">mean</span>(<span class="kw">resid</span>(lm_mod)<span class="op">^</span><span class="dv">2</span>)</a></code></pre></div>
 <p>The mean squared error is 4.6092009. There is an important problem that arises when we assess the model in this way – that is, we have trained our linear regression model on the full data set and assessed the error on the full data set, using up all of our data. We, of course, are generally not interested in how well the model explains variation in the observed data; rather, we are interested in how the explanation provided by the model generalizes to a target population from which the sample is presumably derived. Having used all of our available data, we cannot honestly evaluate how well the model fits (and thus explains) variation at the population level.</p>
 <p>To resolve this issue, cross-validation allows for a particular procedure (e.g., linear regression) to be implemented over subsets of the data, evaluating how well the procedure fits on a testing (“validation”) set, thereby providing an honest evaluation of the error.</p>
 <p>We can easily add cross-validation to our linear regression procedure using <code>origami</code>. First, let us define a new function to perform linear regression on a specific partition of the data (called a “fold”):</p>
-<pre class="sourceCode r" id="cb6"><code class="sourceCode r"><div class="sourceLine" id="cb6-1" data-line-number="1">cv_lm &lt;-<span class="st"> </span><span class="cf">function</span>(fold, data, reg_form) {</div>
-<div class="sourceLine" id="cb6-2" data-line-number="2">  <span class="co"># get name and index of outcome variable from regression formula</span>
-</div>
-<div class="sourceLine" id="cb6-3" data-line-number="3">  out_var &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">unlist</span>(<span class="kw">str_split</span>(reg_form, <span class="st">" "</span>))[<span class="dv">1</span>])</div>
-<div class="sourceLine" id="cb6-4" data-line-number="4">  out_var_ind &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">which</span>(<span class="kw">colnames</span>(data) <span class="op">==</span><span class="st"> </span>out_var))</div>
-<div class="sourceLine" id="cb6-5" data-line-number="5"></div>
-<div class="sourceLine" id="cb6-6" data-line-number="6">  <span class="co"># split up data into training and validation sets</span>
-</div>
-<div class="sourceLine" id="cb6-7" data-line-number="7">  train_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fold_helpers.html">training</a></span>(data)</div>
-<div class="sourceLine" id="cb6-8" data-line-number="8">  valid_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fold_helpers.html">validation</a></span>(data)</div>
-<div class="sourceLine" id="cb6-9" data-line-number="9"></div>
-<div class="sourceLine" id="cb6-10" data-line-number="10">  <span class="co"># fit linear model on training set and predict on validation set</span>
-</div>
-<div class="sourceLine" id="cb6-11" data-line-number="11">  mod &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="kw">as.formula</span>(reg_form), <span class="dt">data =</span> train_data)</div>
-<div class="sourceLine" id="cb6-12" data-line-number="12">  preds &lt;-<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> valid_data)</div>
-<div class="sourceLine" id="cb6-13" data-line-number="13"></div>
-<div class="sourceLine" id="cb6-14" data-line-number="14">  <span class="co"># capture results to be returned as output</span>
-</div>
-<div class="sourceLine" id="cb6-15" data-line-number="15">  out &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">coef =</span> <span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">coef</span>(mod))),</div>
-<div class="sourceLine" id="cb6-16" data-line-number="16">              <span class="dt">SE =</span> ((preds <span class="op">-</span><span class="st"> </span>valid_data[, out_var_ind])<span class="op">^</span><span class="dv">2</span>))</div>
-<div class="sourceLine" id="cb6-17" data-line-number="17">  <span class="kw">return</span>(out)</div>
-<div class="sourceLine" id="cb6-18" data-line-number="18">}</div></code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">cv_lm &lt;-<span class="st"> </span><span class="cf">function</span>(fold, data, reg_form) {</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">  <span class="co"># get name and index of outcome variable from regression formula</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">  out_var &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">unlist</span>(<span class="kw">str_split</span>(reg_form, <span class="st">" "</span>))[<span class="dv">1</span>])</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">  out_var_ind &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">which</span>(<span class="kw">colnames</span>(data) <span class="op">==</span><span class="st"> </span>out_var))</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">  <span class="co"># split up data into training and validation sets</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">  train_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fold_helpers.html">training</a></span>(data)</a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">  valid_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fold_helpers.html">validation</a></span>(data)</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10">  <span class="co"># fit linear model on training set and predict on validation set</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11">  mod &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="kw">as.formula</span>(reg_form), <span class="dt">data =</span> train_data)</a>
+<a class="sourceLine" id="cb6-12" data-line-number="12">  preds &lt;-<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> valid_data)</a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14">  <span class="co"># capture results to be returned as output</span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15">  out &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">coef =</span> <span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">coef</span>(mod))),</a>
+<a class="sourceLine" id="cb6-16" data-line-number="16">              <span class="dt">SE =</span> ((preds <span class="op">-</span><span class="st"> </span>valid_data[, out_var_ind])<span class="op">^</span><span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb6-17" data-line-number="17">  <span class="kw">return</span>(out)</a>
+<a class="sourceLine" id="cb6-18" data-line-number="18">}</a></code></pre></div>
 <p>Our <code>cv_lm</code> function is rather simple: we merely split the available data into a training and validation sets, using the eponymous functions provided in <code>origami</code>, fit the linear model on the training set, and evaluate the model on the testing set. This is a simple example of what <code>origami</code> considers to be <code>cv_fun</code>s – functions for using cross-validation to perform a particular routine over an input data set. Having defined such a function, we can simply generate a set of partitions using <code>origami</code>’s <code>make_folds</code> function, and apply our <code>cv_lm</code> function over the resultant <code>folds</code> object. Below, we replicate the resubstitution estimate of the error – we did this “by hand” above – using the functions <code>make_folds</code> and <code>cv_lm</code>.</p>
-<pre class="sourceCode r" id="cb7"><code class="sourceCode r"><div class="sourceLine" id="cb7-1" data-line-number="1">
-<span class="kw">library</span>(origami)</div></code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">library</span>(origami)</a></code></pre></div>
 <pre><code>## origami: Generalized Cross-Validation Framework</code></pre>
-<pre><code>## Version: 0.8.1</code></pre>
-<pre class="sourceCode r" id="cb10"><code class="sourceCode r"><div class="sourceLine" id="cb10-1" data-line-number="1">
-<span class="kw">library</span>(stringr) <span class="co"># used in defining the cv_lm function above</span>
-</div></code></pre>
-<pre class="sourceCode r" id="cb11"><code class="sourceCode r"><div class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># resubstitution estimate</span></div>
-<div class="sourceLine" id="cb11-2" data-line-number="2">resub &lt;-<span class="st"> </span><span class="kw"><a href="../reference/make_folds.html">make_folds</a></span>(mtcars, <span class="dt">fold_fun =</span> folds_resubstitution)[[<span class="dv">1</span>]]</div>
-<div class="sourceLine" id="cb11-3" data-line-number="3">resub_results &lt;-<span class="st"> </span><span class="kw">cv_lm</span>(<span class="dt">fold =</span> resub, <span class="dt">data =</span> mtcars, <span class="dt">reg_form =</span> <span class="st">"mpg ~ ."</span>)</div>
-<div class="sourceLine" id="cb11-4" data-line-number="4">
-<span class="kw">mean</span>(resub_results<span class="op">$</span>SE)</div></code></pre>
+<pre><code>## Version: 0.8.2</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">library</span>(stringr) <span class="co"># used in defining the cv_lm function above</span></a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># resubstitution estimate</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">resub &lt;-<span class="st"> </span><span class="kw"><a href="../reference/make_folds.html">make_folds</a></span>(mtcars, <span class="dt">fold_fun =</span> folds_resubstitution)[[<span class="dv">1</span>]]</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">resub_results &lt;-<span class="st"> </span><span class="kw">cv_lm</span>(<span class="dt">fold =</span> resub, <span class="dt">data =</span> mtcars, <span class="dt">reg_form =</span> <span class="st">"mpg ~ ."</span>)</a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="kw">mean</span>(resub_results<span class="op">$</span>SE)</a></code></pre></div>
 <pre><code>## [1] 4.609201</code></pre>
 <p>This (very nearly) matches the estimate of the error that we obtained above.</p>
 <p>We can more honestly evaluate the error by <em>V-fold cross-validation</em>, which partitions the data into <strong>v subsets</strong>, fitting the model on <span class="math inline">\(v - 1\)</span> of the subsets and evaluating on the subset that was held out for testing. This is repeated such that each subset is used for testing. We can easily apply our <code>cv_lm</code> function using <code>origami</code>’s <code>cross_validate</code> (n.b., by default this performs 10-fold cross-validation):</p>
-<pre class="sourceCode r" id="cb13"><code class="sourceCode r"><div class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># cross-validated estimate</span></div>
-<div class="sourceLine" id="cb13-2" data-line-number="2">folds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/make_folds.html">make_folds</a></span>(mtcars)</div>
-<div class="sourceLine" id="cb13-3" data-line-number="3">cvlm_results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cross_validate.html">cross_validate</a></span>(<span class="dt">cv_fun =</span> cv_lm, <span class="dt">folds =</span> folds, <span class="dt">data =</span> mtcars,</div>
-<div class="sourceLine" id="cb13-4" data-line-number="4">                               <span class="dt">reg_form =</span> <span class="st">"mpg ~ ."</span>)</div>
-<div class="sourceLine" id="cb13-5" data-line-number="5">
-<span class="kw">mean</span>(cvlm_results<span class="op">$</span>SE)</div></code></pre>
-<pre><code>## [1] 17.19799</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># cross-validated estimate</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">folds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/make_folds.html">make_folds</a></span>(mtcars)</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">cvlm_results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cross_validate.html">cross_validate</a></span>(<span class="dt">cv_fun =</span> cv_lm, <span class="dt">folds =</span> folds, <span class="dt">data =</span> mtcars,</a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">                               <span class="dt">reg_form =</span> <span class="st">"mpg ~ ."</span>)</a>
+<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="kw">mean</span>(cvlm_results<span class="op">$</span>SE)</a></code></pre></div>
+<pre><code>## [1] 11.89101</code></pre>
 <p>Having performed 10-fold cross-validation, we quickly notice that our previous estimate of the model error (by resubstitution) was quite optimistic. The honest estimate of the error is several times larger.</p>
-<hr></section><section id="general-workflow" class="level2"><h2>General workflow</h2>
+<hr>
+</div>
+<div id="general-workflow" class="section level2">
+<h2 class="hasAnchor">
+<a href="#general-workflow" class="anchor"></a>General workflow</h2>
 <p>Generally, <code>cross_validate</code> usage will mirror the workflow in the above example. First, the user must define folds and a function that operates on each fold. Once these are passed to <code>cross_validate</code>, the function will map the function across the folds, and combine the results in a reasonable way. More details on each step of this process will be given below.</p>
-<section id="define-folds" class="level3"><h3>Define folds</h3>
+<div id="define-folds" class="section level3">
+<h3 class="hasAnchor">
+<a href="#define-folds" class="anchor"></a>Define folds</h3>
 <p>The <code>folds</code> object passed to <code>cross_validate</code> is a list of folds. Such lists can be generated using the <code>make_folds</code> function. Each <code>fold</code> consists of a list with a <code>training</code> index vector, a <code>validation</code> index vector, and a <code>fold_index</code> (its order in the list of folds). This function supports a variety of cross-validation schemes including <em>v-fold</em> and <em>bootstrap</em> cross-validation as well as time series methods like <em>“Rolling Window”</em>. It can balance across levels of a variable (<code>stratify_ids</code>), and it can also keep all observations from the same independent unit together (<code>cluster_ids</code>). See the documentation of the <code>make_folds</code> function for details about supported cross-validation schemes and arguments.</p>
-</section><section id="define-fold-function" class="level3"><h3>Define fold function</h3>
+</div>
+<div id="define-fold-function" class="section level3">
+<h3 class="hasAnchor">
+<a href="#define-fold-function" class="anchor"></a>Define fold function</h3>
 <p>The <code>cv_fun</code> argument to <code>cross_validate</code> is a function that will perform some operation on each fold. The first argument to this function must be <code>fold</code>, which will receive an individual fold object to operate on. Additional arguments can be passed to <code>cv_fun</code> using the <code>...</code> argument to <code>cross_validate</code>. Within this function, the convenience functions <code>training</code>, <code>validation</code> and <code>fold_index</code> can return the various components of a fold object. They do this by retrieving the <code>fold</code> object from their calling environment. It can also be specified directly. If <code>training</code> or <code>validation</code> is passed an object, it will index into it in a sensible way. For instance, if it is a vector, it will index the vector directly. If it is a <code>data.frame</code> or <code>matrix</code>, it will index rows. This allows the user to easily partition data into training and validation sets. This fold function must return a named list of results containing whatever fold-specific outputs are generated.</p>
-</section><section id="apply-cross_validate" class="level3"><h3>Apply <code>cross_validate</code>
+</div>
+<div id="apply-cross_validate" class="section level3">
+<h3 class="hasAnchor">
+<a href="#apply-cross_validate" class="anchor"></a>Apply <code>cross_validate</code>
 </h3>
 <p>After defining folds, <code>cross_validate</code> can be used to map the <code>cv_fun</code> across the <code>folds</code> using <code>future_lapply</code>. This means that it can be easily parallelized by specifying a parallelization scheme (i.e., a <code>plan</code>). See the <a href="https://github.com/HenrikBengtsson/future"><code>future</code> package</a> for more details.</p>
 <!--
@@ -198,49 +204,50 @@ Nima: tried some re-wording to clarify; not sure how much this helped.
 -->
 <p>The application of <code>cross_validate</code> generates a list of results. As described above, each call to <code>cv_fun</code> itself returns a list of results, with different elements for each type of result we care about. The main loop generates a list of these individual lists of results (a sort of “meta-list”). This “meta-list” is then inverted such that there is one element per result type (this too is a list of the results for each fold). By default, <code>combine_results</code> is used to combine these results type lists.</p>
 <p>For instance, in the above <code>mtcars</code> example, the results type lists contains one <code>coef</code> <code>data.frame</code> from each fold. These are <code>rbind</code>ed together to form one <code>data.frame</code> containing the <code>coefs</code> from all folds in different rows. How results are combined is determined automatically by examining the data types of the results from the first fold. This can be modified by specifying a list of arguments to <code>.combine_control</code>. See the help for <code>combine_results</code> for more details. In most cases, the defaults should suffice.</p>
-<hr></section></section><section id="cross-validation-with-random-forests" class="level2"><h2>Cross-validation with random forests</h2>
+<hr>
+</div>
+</div>
+<div id="cross-validation-with-random-forests" class="section level2">
+<h2 class="hasAnchor">
+<a href="#cross-validation-with-random-forests" class="anchor"></a>Cross-validation with random forests</h2>
 <p>To examine <code>origami</code> further, let us return to our example analysis using the <code>mtcars</code> data set. Here, we will write a new <code>cv_fun</code> type object. As an example, we will use L. Breiman’s <code>randomForest</code>:</p>
-<pre class="sourceCode r" id="cb15"><code class="sourceCode r"><div class="sourceLine" id="cb15-1" data-line-number="1">cv_rf &lt;-<span class="st"> </span><span class="cf">function</span>(fold, data, reg_form) {</div>
-<div class="sourceLine" id="cb15-2" data-line-number="2">  <span class="co"># get name and index of outcome variable from regression formula</span>
-</div>
-<div class="sourceLine" id="cb15-3" data-line-number="3">  out_var &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">unlist</span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/stringr/topics/str_split">str_split</a></span>(reg_form, <span class="st">" "</span>))[<span class="dv">1</span>])</div>
-<div class="sourceLine" id="cb15-4" data-line-number="4">  out_var_ind &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">which</span>(<span class="kw">colnames</span>(data) <span class="op">==</span><span class="st"> </span>out_var))</div>
-<div class="sourceLine" id="cb15-5" data-line-number="5"></div>
-<div class="sourceLine" id="cb15-6" data-line-number="6">  <span class="co"># define training and validation sets based on input object of class "folds"</span>
-</div>
-<div class="sourceLine" id="cb15-7" data-line-number="7">  train_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fold_helpers.html">training</a></span>(data)</div>
-<div class="sourceLine" id="cb15-8" data-line-number="8">  valid_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fold_helpers.html">validation</a></span>(data)</div>
-<div class="sourceLine" id="cb15-9" data-line-number="9"></div>
-<div class="sourceLine" id="cb15-10" data-line-number="10">  <span class="co"># fit Random Forest regression on training set and predict on holdout set</span>
-</div>
-<div class="sourceLine" id="cb15-11" data-line-number="11">  mod &lt;-<span class="st"> </span><span class="kw">randomForest</span>(<span class="dt">formula =</span> <span class="kw">as.formula</span>(reg_form), <span class="dt">data =</span> train_data)</div>
-<div class="sourceLine" id="cb15-12" data-line-number="12">  preds &lt;-<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> valid_data)</div>
-<div class="sourceLine" id="cb15-13" data-line-number="13"></div>
-<div class="sourceLine" id="cb15-14" data-line-number="14">  <span class="co"># define output object to be returned as list (for flexibility)</span>
-</div>
-<div class="sourceLine" id="cb15-15" data-line-number="15">  out &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">coef =</span> <span class="kw">data.frame</span>(mod<span class="op">$</span>coefs),</div>
-<div class="sourceLine" id="cb15-16" data-line-number="16">              <span class="dt">SE =</span> ((preds <span class="op">-</span><span class="st"> </span>valid_data[, out_var_ind])<span class="op">^</span><span class="dv">2</span>))</div>
-<div class="sourceLine" id="cb15-17" data-line-number="17">  <span class="kw">return</span>(out)</div>
-<div class="sourceLine" id="cb15-18" data-line-number="18">}</div></code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">cv_rf &lt;-<span class="st"> </span><span class="cf">function</span>(fold, data, reg_form) {</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">  <span class="co"># get name and index of outcome variable from regression formula</span></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">  out_var &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">unlist</span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/stringr/topics/str_split">str_split</a></span>(reg_form, <span class="st">" "</span>))[<span class="dv">1</span>])</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">  out_var_ind &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">which</span>(<span class="kw">colnames</span>(data) <span class="op">==</span><span class="st"> </span>out_var))</a>
+<a class="sourceLine" id="cb15-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb15-6" data-line-number="6">  <span class="co"># define training and validation sets based on input object of class "folds"</span></a>
+<a class="sourceLine" id="cb15-7" data-line-number="7">  train_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fold_helpers.html">training</a></span>(data)</a>
+<a class="sourceLine" id="cb15-8" data-line-number="8">  valid_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fold_helpers.html">validation</a></span>(data)</a>
+<a class="sourceLine" id="cb15-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb15-10" data-line-number="10">  <span class="co"># fit Random Forest regression on training set and predict on holdout set</span></a>
+<a class="sourceLine" id="cb15-11" data-line-number="11">  mod &lt;-<span class="st"> </span><span class="kw">randomForest</span>(<span class="dt">formula =</span> <span class="kw">as.formula</span>(reg_form), <span class="dt">data =</span> train_data)</a>
+<a class="sourceLine" id="cb15-12" data-line-number="12">  preds &lt;-<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> valid_data)</a>
+<a class="sourceLine" id="cb15-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb15-14" data-line-number="14">  <span class="co"># define output object to be returned as list (for flexibility)</span></a>
+<a class="sourceLine" id="cb15-15" data-line-number="15">  out &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">coef =</span> <span class="kw">data.frame</span>(mod<span class="op">$</span>coefs),</a>
+<a class="sourceLine" id="cb15-16" data-line-number="16">              <span class="dt">SE =</span> ((preds <span class="op">-</span><span class="st"> </span>valid_data[, out_var_ind])<span class="op">^</span><span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb15-17" data-line-number="17">  <span class="kw">return</span>(out)</a>
+<a class="sourceLine" id="cb15-18" data-line-number="18">}</a></code></pre></div>
 <p>Above, in writing our <code>cv_rf</code> function to cross-validate <code>randomForest</code>, we used our previous function <code>cv_lm</code> as an example. For now, individual <code>cv_fun</code>s must be written by hand; however, in future releases, a wrapper may be available to support auto-generating <code>cv_fun</code>s to be used with <code>origami</code>.</p>
 <p>Below, we use <code>cross_validate</code> to apply our new <code>cv_rf</code> function over the <code>folds</code> object generated by <code>make_folds</code>.</p>
-<pre class="sourceCode r" id="cb16"><code class="sourceCode r"><div class="sourceLine" id="cb16-1" data-line-number="1">
-<span class="kw">library</span>(randomForest)</div></code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">library</span>(randomForest)</a></code></pre></div>
 <pre><code>## randomForest 4.6-12</code></pre>
 <pre><code>## Type rfNews() to see new features/changes/bug fixes.</code></pre>
-<pre class="sourceCode r" id="cb19"><code class="sourceCode r"><div class="sourceLine" id="cb19-1" data-line-number="1">folds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/make_folds.html">make_folds</a></span>(mtcars)</div>
-<div class="sourceLine" id="cb19-2" data-line-number="2">cvrf_results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cross_validate.html">cross_validate</a></span>(<span class="dt">cv_fun =</span> cv_rf, <span class="dt">folds =</span> folds, <span class="dt">data =</span> mtcars,</div>
-<div class="sourceLine" id="cb19-3" data-line-number="3">                               <span class="dt">reg_form =</span> <span class="st">"mpg ~ ."</span>)</div>
-<div class="sourceLine" id="cb19-4" data-line-number="4">
-<span class="kw">mean</span>(cvrf_results<span class="op">$</span>SE)</div></code></pre>
-<pre><code>## [1] 5.391251</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">folds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/make_folds.html">make_folds</a></span>(mtcars)</a>
+<a class="sourceLine" id="cb19-2" data-line-number="2">cvrf_results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cross_validate.html">cross_validate</a></span>(<span class="dt">cv_fun =</span> cv_rf, <span class="dt">folds =</span> folds, <span class="dt">data =</span> mtcars,</a>
+<a class="sourceLine" id="cb19-3" data-line-number="3">                               <span class="dt">reg_form =</span> <span class="st">"mpg ~ ."</span>)</a>
+<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="kw">mean</span>(cvrf_results<span class="op">$</span>SE)</a></code></pre></div>
+<pre><code>## [1] 5.446015</code></pre>
 <p>Using 10-fold cross-validation (the default), we obtain an honest estimate of the prediction error of random forests. From this, we gather that the use of <code>origami</code>’s <code>cross_validate</code> procedure can be generalized to arbitrary esimation techniques, given availability of an appropriate <code>cv_fun</code> function.</p>
-<hr></section><section id="cross-validation-with-dependence-time-series" class="level2"><h2>Cross-validation with dependence: time series</h2>
+<hr>
+</div>
+<div id="cross-validation-with-dependence-time-series" class="section level2">
+<h2 class="hasAnchor">
+<a href="#cross-validation-with-dependence-time-series" class="anchor"></a>Cross-validation with dependence: time series</h2>
 <p>Cross-validation can also be used for forecast model selection in a time series setting. Here, the partitioning scheme mirrors the application of the forecasting model: We’ll train the data on past observations (either all available or a recent subset), and then use the model forecast (predict), the next few observations. Consider the <code>AirPassengers</code> dataset, a monthly time series of passenger air traffic in thousands of people.</p>
-<pre class="sourceCode r" id="cb21"><code class="sourceCode r"><div class="sourceLine" id="cb21-1" data-line-number="1">
-<span class="kw">data</span>(AirPassengers)</div>
-<div class="sourceLine" id="cb21-2" data-line-number="2">
-<span class="kw">print</span>(AirPassengers)</div></code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw">data</span>(AirPassengers)</a>
+<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="kw">print</span>(AirPassengers)</a></code></pre></div>
 <pre><code>##      Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
 ## 1949 112 118 132 129 121 135 148 148 136 119 104 118
 ## 1950 115 126 141 135 125 149 170 170 158 133 114 140
@@ -255,51 +262,51 @@ Nima: tried some re-wording to clarify; not sure how much this helped.
 ## 1959 360 342 406 396 420 472 548 559 463 407 362 405
 ## 1960 417 391 419 461 472 535 622 606 508 461 390 432</code></pre>
 <p>Suppose we want to pick between two forecasting models, <code>stl</code>, and <code>arima</code> (the details of these models are not important for this example). We can do that by evaluating their forecasting performance.</p>
-<pre class="sourceCode r" id="cb23"><code class="sourceCode r"><div class="sourceLine" id="cb23-1" data-line-number="1">
-<span class="kw">library</span>(forecast)</div>
-<div class="sourceLine" id="cb23-2" data-line-number="2">folds =<span class="st"> </span><span class="kw"><a href="../reference/make_folds.html">make_folds</a></span>(AirPassengers, <span class="dt">fold_fun=</span>folds_rolling_origin,</div>
-<div class="sourceLine" id="cb23-3" data-line-number="3">                   <span class="dt">first_window =</span> <span class="dv">36</span>, <span class="dt">validation_size =</span> <span class="dv">24</span>)</div>
-<div class="sourceLine" id="cb23-4" data-line-number="4">fold =<span class="st"> </span>folds[[<span class="dv">1</span>]]</div>
-<div class="sourceLine" id="cb23-5" data-line-number="5"></div>
-<div class="sourceLine" id="cb23-6" data-line-number="6"><span class="co"># function to calculate cross-validated squared error</span></div>
-<div class="sourceLine" id="cb23-7" data-line-number="7">cv_forecasts &lt;-<span class="st"> </span><span class="cf">function</span>(fold, data) {</div>
-<div class="sourceLine" id="cb23-8" data-line-number="8">  train_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fold_helpers.html">training</a></span>(data)</div>
-<div class="sourceLine" id="cb23-9" data-line-number="9">  valid_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fold_helpers.html">validation</a></span>(data)</div>
-<div class="sourceLine" id="cb23-10" data-line-number="10">  valid_size &lt;-<span class="st"> </span><span class="kw">length</span>(valid_data)</div>
-<div class="sourceLine" id="cb23-11" data-line-number="11"></div>
-<div class="sourceLine" id="cb23-12" data-line-number="12">  train_ts &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="kw">log10</span>(train_data), <span class="dt">frequency =</span> <span class="dv">12</span>)</div>
-<div class="sourceLine" id="cb23-13" data-line-number="13"></div>
-<div class="sourceLine" id="cb23-14" data-line-number="14">  <span class="co"># borrowed from AirPassengers help</span>
-</div>
-<div class="sourceLine" id="cb23-15" data-line-number="15">  arima_fit &lt;-<span class="st"> </span><span class="kw">arima</span>(train_ts, <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>),</div>
-<div class="sourceLine" id="cb23-16" data-line-number="16">                     <span class="dt">seasonal =</span> <span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>),</div>
-<div class="sourceLine" id="cb23-17" data-line-number="17">                                     <span class="dt">period =</span> <span class="dv">12</span>))</div>
-<div class="sourceLine" id="cb23-18" data-line-number="18">  raw_arima_pred &lt;-<span class="st"> </span><span class="kw">predict</span>(arima_fit, <span class="dt">n.ahead =</span> valid_size)</div>
-<div class="sourceLine" id="cb23-19" data-line-number="19">  arima_pred &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span>raw_arima_pred<span class="op">$</span>pred</div>
-<div class="sourceLine" id="cb23-20" data-line-number="20">  arima_MSE &lt;-<span class="st"> </span><span class="kw">mean</span>((arima_pred <span class="op">-</span><span class="st"> </span>valid_data)<span class="op">^</span><span class="dv">2</span>)</div>
-<div class="sourceLine" id="cb23-21" data-line-number="21"></div>
-<div class="sourceLine" id="cb23-22" data-line-number="22">  <span class="co"># stl model</span>
-</div>
-<div class="sourceLine" id="cb23-23" data-line-number="23">  stl_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/forecast/topics/forecast.stl">stlm</a></span>(train_ts, <span class="dt">s.window =</span> <span class="dv">12</span>)</div>
-<div class="sourceLine" id="cb23-24" data-line-number="24">  raw_stl_pred =<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/forecast/topics/forecast">forecast</a></span>(stl_fit, <span class="dt">h =</span> valid_size)</div>
-<div class="sourceLine" id="cb23-25" data-line-number="25">  stl_pred &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span>raw_stl_pred<span class="op">$</span>mean</div>
-<div class="sourceLine" id="cb23-26" data-line-number="26">  stl_MSE &lt;-<span class="st"> </span><span class="kw">mean</span>((stl_pred <span class="op">-</span><span class="st"> </span>valid_data)<span class="op">^</span><span class="dv">2</span>)</div>
-<div class="sourceLine" id="cb23-27" data-line-number="27"></div>
-<div class="sourceLine" id="cb23-28" data-line-number="28">  out &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">mse =</span> <span class="kw">data.frame</span>(<span class="dt">fold =</span> <span class="kw"><a href="../reference/fold_helpers.html">fold_index</a></span>(),</div>
-<div class="sourceLine" id="cb23-29" data-line-number="29">                               <span class="dt">arima =</span> arima_MSE, <span class="dt">stl =</span> stl_MSE))</div>
-<div class="sourceLine" id="cb23-30" data-line-number="30">  <span class="kw">return</span>(out)</div>
-<div class="sourceLine" id="cb23-31" data-line-number="31">}</div>
-<div class="sourceLine" id="cb23-32" data-line-number="32"></div>
-<div class="sourceLine" id="cb23-33" data-line-number="33">mses =<span class="st"> </span><span class="kw"><a href="../reference/cross_validate.html">cross_validate</a></span>(<span class="dt">cv_fun =</span> cv_forecasts, <span class="dt">folds =</span> folds,</div>
-<div class="sourceLine" id="cb23-34" data-line-number="34">                      <span class="dt">data =</span> AirPassengers)<span class="op">$</span>mse</div>
-<div class="sourceLine" id="cb23-35" data-line-number="35">
-<span class="kw">colMeans</span>(mses[, <span class="kw">c</span>(<span class="st">"arima"</span>, <span class="st">"stl"</span>)])</div></code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw">library</span>(forecast)</a>
+<a class="sourceLine" id="cb23-2" data-line-number="2">folds =<span class="st"> </span><span class="kw"><a href="../reference/make_folds.html">make_folds</a></span>(AirPassengers, <span class="dt">fold_fun=</span>folds_rolling_origin,</a>
+<a class="sourceLine" id="cb23-3" data-line-number="3">                   <span class="dt">first_window =</span> <span class="dv">36</span>, <span class="dt">validation_size =</span> <span class="dv">24</span>)</a>
+<a class="sourceLine" id="cb23-4" data-line-number="4">fold =<span class="st"> </span>folds[[<span class="dv">1</span>]]</a>
+<a class="sourceLine" id="cb23-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb23-6" data-line-number="6"><span class="co"># function to calculate cross-validated squared error</span></a>
+<a class="sourceLine" id="cb23-7" data-line-number="7">cv_forecasts &lt;-<span class="st"> </span><span class="cf">function</span>(fold, data) {</a>
+<a class="sourceLine" id="cb23-8" data-line-number="8">  train_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fold_helpers.html">training</a></span>(data)</a>
+<a class="sourceLine" id="cb23-9" data-line-number="9">  valid_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fold_helpers.html">validation</a></span>(data)</a>
+<a class="sourceLine" id="cb23-10" data-line-number="10">  valid_size &lt;-<span class="st"> </span><span class="kw">length</span>(valid_data)</a>
+<a class="sourceLine" id="cb23-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb23-12" data-line-number="12">  train_ts &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="kw">log10</span>(train_data), <span class="dt">frequency =</span> <span class="dv">12</span>)</a>
+<a class="sourceLine" id="cb23-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb23-14" data-line-number="14">  <span class="co"># borrowed from AirPassengers help</span></a>
+<a class="sourceLine" id="cb23-15" data-line-number="15">  arima_fit &lt;-<span class="st"> </span><span class="kw">arima</span>(train_ts, <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb23-16" data-line-number="16">                     <span class="dt">seasonal =</span> <span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb23-17" data-line-number="17">                                     <span class="dt">period =</span> <span class="dv">12</span>))</a>
+<a class="sourceLine" id="cb23-18" data-line-number="18">  raw_arima_pred &lt;-<span class="st"> </span><span class="kw">predict</span>(arima_fit, <span class="dt">n.ahead =</span> valid_size)</a>
+<a class="sourceLine" id="cb23-19" data-line-number="19">  arima_pred &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span>raw_arima_pred<span class="op">$</span>pred</a>
+<a class="sourceLine" id="cb23-20" data-line-number="20">  arima_MSE &lt;-<span class="st"> </span><span class="kw">mean</span>((arima_pred <span class="op">-</span><span class="st"> </span>valid_data)<span class="op">^</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb23-21" data-line-number="21"></a>
+<a class="sourceLine" id="cb23-22" data-line-number="22">  <span class="co"># stl model</span></a>
+<a class="sourceLine" id="cb23-23" data-line-number="23">  stl_fit &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/forecast/topics/forecast.stl">stlm</a></span>(train_ts, <span class="dt">s.window =</span> <span class="dv">12</span>)</a>
+<a class="sourceLine" id="cb23-24" data-line-number="24">  raw_stl_pred =<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/forecast/topics/forecast">forecast</a></span>(stl_fit, <span class="dt">h =</span> valid_size)</a>
+<a class="sourceLine" id="cb23-25" data-line-number="25">  stl_pred &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span>raw_stl_pred<span class="op">$</span>mean</a>
+<a class="sourceLine" id="cb23-26" data-line-number="26">  stl_MSE &lt;-<span class="st"> </span><span class="kw">mean</span>((stl_pred <span class="op">-</span><span class="st"> </span>valid_data)<span class="op">^</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb23-27" data-line-number="27"></a>
+<a class="sourceLine" id="cb23-28" data-line-number="28">  out &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">mse =</span> <span class="kw">data.frame</span>(<span class="dt">fold =</span> <span class="kw"><a href="../reference/fold_helpers.html">fold_index</a></span>(),</a>
+<a class="sourceLine" id="cb23-29" data-line-number="29">                               <span class="dt">arima =</span> arima_MSE, <span class="dt">stl =</span> stl_MSE))</a>
+<a class="sourceLine" id="cb23-30" data-line-number="30">  <span class="kw">return</span>(out)</a>
+<a class="sourceLine" id="cb23-31" data-line-number="31">}</a>
+<a class="sourceLine" id="cb23-32" data-line-number="32"></a>
+<a class="sourceLine" id="cb23-33" data-line-number="33">mses =<span class="st"> </span><span class="kw"><a href="../reference/cross_validate.html">cross_validate</a></span>(<span class="dt">cv_fun =</span> cv_forecasts, <span class="dt">folds =</span> folds,</a>
+<a class="sourceLine" id="cb23-34" data-line-number="34">                      <span class="dt">data =</span> AirPassengers)<span class="op">$</span>mse</a>
+<a class="sourceLine" id="cb23-35" data-line-number="35"><span class="kw">colMeans</span>(mses[, <span class="kw">c</span>(<span class="st">"arima"</span>, <span class="st">"stl"</span>)])</a></code></pre></div>
 <pre><code>##    arima      stl 
 ## 667.2478 916.4425</code></pre>
-<hr></section><section id="session-information" class="level2"><h2>Session Information</h2>
-<pre><code>## R version 3.4.2 (2017-09-28)
-## Platform: x86_64-apple-darwin16.7.0 (64-bit)
-## Running under: macOS High Sierra 10.13.1
+<hr>
+</div>
+<div id="session-information" class="section level2">
+<h2 class="hasAnchor">
+<a href="#session-information" class="anchor"></a>Session Information</h2>
+<pre><code>## R version 3.4.3 (2017-11-30)
+## Platform: x86_64-apple-darwin17.3.0 (64-bit)
+## Running under: macOS High Sierra 10.13.2
 ## 
 ## Matrix products: default
 ## BLAS: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
@@ -309,37 +316,42 @@ Nima: tried some re-wording to clarify; not sure how much this helped.
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 ## 
 ## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## [1] stats     graphics  grDevices utils     datasets  base     
 ## 
 ## other attached packages:
 ## [1] forecast_8.2        randomForest_4.6-12 stringr_1.2.0.9000 
-## [4] origami_0.8.1      
+## [4] origami_0.8.2      
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.13         compiler_3.4.2       plyr_1.8.4          
-##  [4] xts_0.10-0           tseries_0.10-42      tools_3.4.2         
-##  [7] digest_0.6.12        evaluate_0.10.1      tibble_1.3.4        
-## [10] gtable_0.2.0         lattice_0.20-35      rlang_0.1.2.9000    
-## [13] curl_3.0             yaml_2.1.14          parallel_3.4.2      
-## [16] knitr_1.17           globals_0.10.3       rprojroot_1.2       
-## [19] lmtest_0.9-35        grid_3.4.2           nnet_7.3-12         
-## [22] data.table_1.10.4-3  listenv_0.6.0        rmarkdown_1.6.0.9009
-## [25] TTR_0.23-2           ggplot2_2.2.1        magrittr_1.5        
-## [28] backports_1.1.1      scales_0.5.0         codetools_0.2-15    
-## [31] htmltools_0.3.6      quantmod_0.4-11      abind_1.4-5         
-## [34] future_1.6.2         timeDate_3012.100    colorspace_1.3-2    
-## [37] fracdiff_1.4-2       quadprog_1.5-5       stringi_1.1.5       
-## [40] lazyeval_0.2.1       munsell_0.4.3        zoo_1.8-0</code></pre>
-<hr></section><section id="references" class="level2 unnumbered"><h2>References</h2>
+##  [1] Rcpp_0.12.15       compiler_3.4.3     pillar_1.1.0      
+##  [4] plyr_1.8.4         xts_0.10-1         methods_3.4.3     
+##  [7] tseries_0.10-42    tools_3.4.3        digest_0.6.14     
+## [10] evaluate_0.10.1    tibble_1.4.2       gtable_0.2.0      
+## [13] lattice_0.20-35    rlang_0.1.6        curl_3.1          
+## [16] yaml_2.1.16        parallel_3.4.3     knitr_1.19        
+## [19] globals_0.11.0     rprojroot_1.3-2    lmtest_0.9-35     
+## [22] grid_3.4.3         nnet_7.3-12        data.table_1.10.5 
+## [25] listenv_0.6.0      rmarkdown_1.8.10   TTR_0.23-2        
+## [28] ggplot2_2.2.1.9000 magrittr_1.5       backports_1.1.2   
+## [31] scales_0.5.0.9000  codetools_0.2-15   htmltools_0.3.6   
+## [34] quantmod_0.4-12    abind_1.4-5        future_1.6.2      
+## [37] timeDate_3042.101  colorspace_1.3-2   fracdiff_1.4-2    
+## [40] quadprog_1.5-5     stringi_1.1.6      lazyeval_0.2.1    
+## [43] munsell_0.4.3      zoo_1.8-1</code></pre>
+<hr>
+</div>
+<div id="references" class="section level2 unnumbered">
+<h2 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h2>
 <div id="refs" class="references">
 <div id="ref-vdl2007super">
 <p>van der Laan, Mark J, Eric C Polley, and Alan E Hubbard. 2007. “Super Learner.” <em>Statistical Applications in Genetics and Molecular Biology</em> 6 (1).</p>
 </div>
 <div id="ref-vaart2006oracle">
-<p>van der Vaart, Aad W, Sandrine Dudoit, and Mark J van der Laan. 2006. “Oracle Inequalities for Multi-Fold Cross Validation.” <em>Statistics &amp; Decisions</em> 24 (3): 351–71.</p>
+<p>van der Vaart, Aad W, Sandrine Dudoit, and Mark J van der Laan. 2006. “Oracle Inequalities for Multi-Fold Cross Validation.” <em>Statistics &amp; Decisions</em> 24 (3):351–71.</p>
 </div>
 </div>
-</section>
+</div>
 </div>
   </div>
 
