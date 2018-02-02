@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# R/`origami`
+# R/`origami` <img src="./hex/origami-sticker.png" align="right" />
 
 [![Travis-CI Build
 Status](https://travis-ci.org/jeremyrcoyle/origami.svg?branch=master)](https://travis-ci.org/jeremyrcoyle/origami)
@@ -25,9 +25,6 @@ v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/
 
 **Authors:** [Jeremy Coyle](https://github.com/jeremyrcoyle) and [Nima
 Hejazi](https://nimahejazi.org)
-
-<img style="float: right; margin-right: 5%; margin-bottom: 1.5em"
-     src='./hex/origami-sticker.png' alt='origami package hex logo' width='100'>
 
 -----
 

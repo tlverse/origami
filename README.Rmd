@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# R/`origami`
+# R/`origami` <img src="./hex/origami-sticker.png" align="right" />
 
 [![Travis-CI Build Status](https://travis-ci.org/jeremyrcoyle/origami.svg?branch=master)](https://travis-ci.org/jeremyrcoyle/origami)
 [![Build status](https://ci.appveyor.com/api/projects/status/i5qwp8cjb4j4x329?svg=true)](https://ci.appveyor.com/project/jeremyrcoyle/origami)
@@ -28,9 +28,6 @@ knitr::opts_chunk$set(
 
 __Authors:__ [Jeremy Coyle](https://github.com/jeremyrcoyle) and [Nima
 Hejazi](https://nimahejazi.org)
-
-<img style="float: right; margin-right: 5%; margin-bottom: 1.5em"
-     src='./hex/origami-sticker.png' alt='origami package hex logo' width='100'>
 
 ---
 
