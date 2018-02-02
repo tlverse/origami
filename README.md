@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# R/`origami` <img src="./hex/origami-sticker.png" align="right" width='100'/>
+# R/`origami` <img src="./hex/origami-sticker.png" align="right" width='125'/>
 
 [![Travis-CI Build
 Status](https://travis-ci.org/jeremyrcoyle/origami.svg?branch=master)](https://travis-ci.org/jeremyrcoyle/origami)
@@ -20,7 +20,7 @@ v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1155901.svg)](https://doi.org/10.5281/zenodo.1155901)
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.00512/status.svg)](https://doi.org/10.21105/joss.00512)
 
-> High-powered framework for cross-validation: fold your data like it’s
+> High-powered framework for cross-validation. Fold your data like it’s
 > paper\!
 
 **Authors:** [Jeremy Coyle](https://github.com/jeremyrcoyle) and [Nima
@@ -73,11 +73,11 @@ using a sample data set. In particular, we obtain a cross-validated
 estimate of the mean:
 
 ``` r
-set.seed(4795)
 library(stringr)
 library(origami)
 #> origami: Generalized Cross-Validation Framework
 #> Version: 0.8.2
+set.seed(4795)
 
 data(mtcars)
 head(mtcars)
@@ -112,7 +112,7 @@ folds <- make_folds(mtcars)
 results <- cross_validate(cv_fun = cv_lm, folds = folds, data = mtcars,
                           reg_form = "mpg ~ .")
 mean(results$SE)
-#> [1] 15.22295
+#> [1] 11.37989
 ```
 
 -----
@@ -130,8 +130,8 @@ It is our hope that `origami` will grow to be adopted as a backend for
 most any procedure requiring cross-validation, including its integration
 into larger machine learning frameworks. To that end, contributions are
 very welcome, though we ask that interested contributors consult our
-[`contribution
-guidelines`](https://github.com/jeremyrcoyle/origami/blob/master/CONTRIBUTING.md)
+[contribution
+guidelines](https://github.com/jeremyrcoyle/origami/blob/master/CONTRIBUTING.md)
 prior to submitting a pull request.
 
 -----
