@@ -8,6 +8,7 @@ before_install:
 
 r_packages:
   - covr
+  - devtools
 
 r:
   - oldrel

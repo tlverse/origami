@@ -4,7 +4,7 @@
 \alias{cross_validate}
 \title{Main Cross-Validation Function}
 \usage{
-cross_validate(cv_fun, folds, ..., .combine = TRUE,
+cross_validate(cv_fun, folds, use_future = TRUE, ..., .combine = TRUE,
   .combine_control = list(), .old_results = NULL)
 }
 \arguments{
@@ -14,6 +14,9 @@ returns a list of results from that fold.}
 \item{folds}{a list of folds to loop over generated using
 \code{\link{make_folds}}.}
 
+\item{use_future}{\code{logical} option for whether to run the main loop of
+cross-validation with \code{future_lapply} or with \code{lapply}.}
+
 \item{...}{other arguments passed to \code{cvfun}.}
 
 \item{.combine}{(logical) - should \code{\link{combine_results}} be called.}
@@ -21,8 +24,8 @@ returns a list of results from that fold.}
 \item{.combine_control}{(list) - arguments to \code{\link{combine_results}}.}
 
 \item{.old_results}{(list) - the returned result from a previous call to
-This function. Will be combined with the current results. This is
-useful for adding additional CV folds to a results object.}
+This function. Will be combined with the current results. This is useful
+for adding additional CV folds to a results object.}
 }
 \value{
 A list of results, combined across folds.

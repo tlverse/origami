@@ -30,7 +30,8 @@ folds_rolling_window(n, window_size, validation_size, gap = 0, batch = 1)
 
 \item{V}{(integer) - number of folds.}
 
-\item{pvalidation}{(double) - proportion of observation to be in validation fold.}
+\item{pvalidation}{(double) - proportion of observation to be in validation
+fold.}
 
 \item{first_window}{(integer) - number of observations in the first training
 sample.}
@@ -38,11 +39,12 @@ sample.}
 \item{validation_size}{(integer) - number of points in the validation
 samples; should be equal to the largest forecast horizon.}
 
-\item{gap}{(integer) - number of points not included in the training or validation 
-samples; Default is 0.}
+\item{gap}{(integer) - number of points not included in the training or
+validation samples; Default is 0.}
 
-\item{batch}{(integer) - Increases the number of time-points added to the training
-set each CV iteration. Applicable for larger time-series. Default is 1.}
+\item{batch}{(integer) - Increases the number of time-points added to the
+training set each CV iteration. Applicable for larger time-series. Default
+is 1.}
 
 \item{window_size}{(integer) - number of observations in each training
 sample.}
@@ -51,10 +53,12 @@ sample.}
 A list of Folds.
 }
 \description{
-These functions represent different cross-validation schemes that can be used with origami.
-They should be used as options for the \code{fold_fun} argument to the \code{\link{make_folds}} 
-function in this package. \code{\link{make_folds}} will call the requested function specify \code{n}, 
-based on its arguments, and pass any remaining arguments (e.g. \code{V} or \code{pvalidation}) on.
+These functions represent different cross-validation schemes that can be used
+with origami. They should be used as options for the \code{fold_fun} argument
+to the \code{\link{make_folds}} function in this package.
+\code{\link{make_folds}} will call the requested function specify \code{n},
+based on its arguments, and pass any remaining arguments (e.g. \code{V} or
+\code{pvalidation}) on.
 }
 \seealso{
 Other fold generation functions: \code{\link{fold_from_foldvec}},
