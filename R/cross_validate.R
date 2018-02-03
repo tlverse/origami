@@ -7,9 +7,9 @@
 #'  returns a list of results from that fold.
 #' @param folds a list of folds to loop over generated using
 #'  \code{\link{make_folds}}.
+#' @param ... other arguments passed to \code{cvfun}.
 #' @param use_future \code{logical} option for whether to run the main loop of
 #'  cross-validation with \code{future_lapply} or with \code{lapply}.
-#' @param ... other arguments passed to \code{cvfun}.
 #' @param .combine (logical) - should \code{\link{combine_results}} be called.
 #' @param .combine_control (list) - arguments to \code{\link{combine_results}}.
 #' @param .old_results (list) - the returned result from a previous call to
@@ -30,8 +30,8 @@
 #
 cross_validate <- function(cv_fun,
                            folds,
-                           use_future = TRUE,
                            ...,
+                           use_future = TRUE,
                            .combine = TRUE,
                            .combine_control = list(),
                            .old_results = NULL) {
