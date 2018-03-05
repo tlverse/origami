@@ -1,5 +1,3 @@
-library(origami)
-library(data.table)
 library(future)
 context("Future Plan")
 
@@ -23,6 +21,7 @@ plan(sequential)
 time_seq <- system.time({
   results_seq <- cross_validate(cvlm, folds)
 })
+
 plan(multicore)
 time_mc <- system.time({
   results_mc <- cross_validate(cvlm, folds)

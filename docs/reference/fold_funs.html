@@ -99,10 +99,12 @@
     </div>
 
     
-    <p>These functions represent different cross-validation schemes that can be used with origami.
-They should be used as options for the <code>fold_fun</code> argument to the <code><a href='make_folds.html'>make_folds</a></code> 
-function in this package. <code><a href='make_folds.html'>make_folds</a></code> will call the requested function specify <code>n</code>, 
-based on its arguments, and pass any remaining arguments (e.g. <code>V</code> or <code>pvalidation</code>) on.</p>
+    <p>These functions represent different cross-validation schemes that can be used
+with origami. They should be used as options for the <code>fold_fun</code> argument
+to the <code><a href='make_folds.html'>make_folds</a></code> function in this package.
+<code><a href='make_folds.html'>make_folds</a></code> will call the requested function specify <code>n</code>,
+based on its arguments, and pass any remaining arguments (e.g. <code>V</code> or
+<code>pvalidation</code>) on.</p>
     
 
     <pre class="usage"><span class='fu'>folds_vfold</span>(<span class='no'>n</span>, <span class='kw'>V</span> <span class='kw'>=</span> <span class='fl'>10</span>)
@@ -132,7 +134,8 @@ based on its arguments, and pass any remaining arguments (e.g. <code>V</code> or
     </tr>
     <tr>
       <th>pvalidation</th>
-      <td><p>(double) - proportion of observation to be in validation fold.</p></td>
+      <td><p>(double) - proportion of observation to be in validation
+fold.</p></td>
     </tr>
     <tr>
       <th>first_window</th>
@@ -146,13 +149,14 @@ samples; should be equal to the largest forecast horizon.</p></td>
     </tr>
     <tr>
       <th>gap</th>
-      <td><p>(integer) - number of points not included in the training or validation 
-samples; Default is 0.</p></td>
+      <td><p>(integer) - number of points not included in the training or
+validation samples; Default is 0.</p></td>
     </tr>
     <tr>
       <th>batch</th>
-      <td><p>(integer) - Increases the number of time-points added to the training
-set each CV iteration. Applicable for larger time-series. Default is 1.</p></td>
+      <td><p>(integer) - Increases the number of time-points added to the
+training set each CV iteration. Applicable for larger time-series. Default
+is 1.</p></td>
     </tr>
     <tr>
       <th>window_size</th>

@@ -1,4 +1,3 @@
-library(origami)
 library(forecast)
 context("Overall Test for Time Series")
 
@@ -46,10 +45,9 @@ mses <- cross_validate(cvforecasts, folds)$mse
 mses_mean <- colMeans(mses[, c("arima", "stl")])
 
 # Test we get the same result as in the vignette example:
-test_that("CV MSE matches previous value", expect_equal(
-  mses_mean[[1]],
-  667.2478, tolerance = 0.01
-))
+test_that("CV MSE matches previous value", {
+  expect_equal(mses_mean[[1]], 667.2478, tolerance = 0.01)
+})
 
 # Tests with gap and batch parameters:
 folds <- make_folds(
@@ -61,10 +59,9 @@ fold <- folds[[1]]
 mses <- cross_validate(cvforecasts, folds)$mse
 mses_mean <- colMeans(mses[, c("arima", "stl")])
 
-test_that("CV MSE with gap and bacth matches previous value", expect_equal(
-  mses_mean[[1]],
-  6004.730, tolerance = 0.01
-))
+test_that("CV MSE with gap and bacth matches previous value", {
+  expect_equal(mses_mean[[1]], 6004.730, tolerance = 0.01)
+})
 
 
 # Tests with gap and batch parameters for rolling window CV:
@@ -77,7 +74,6 @@ fold <- folds[[1]]
 mses <- cross_validate(cvforecasts, folds)$mse
 mses_mean <- colMeans(mses[, c("arima", "stl")])
 
-test_that("CV MSE with rolling window matches previous value", expect_equal(
-  mses_mean[[1]],
-  7580.455, tolerance = 0.01
-))
+test_that("CV MSE with rolling window matches previous value", {
+  expect_equal(mses_mean[[1]], 7580.455, tolerance = 0.01)
+})

@@ -99,11 +99,11 @@
     </div>
 
     
-    <p>Applies <code>cvfun</code> to the folds using <code>future_lapply</code> and combines the
-results across folds using <code>combine_results</code>.</p>
+    <p>Applies <code>cv_fun</code> to the folds using <code>future_lapply</code> and combines
+the results across folds using <code>combine_results</code>.</p>
     
 
-    <pre class="usage"><span class='fu'>cross_validate</span>(<span class='no'>cv_fun</span>, <span class='no'>folds</span>, <span class='no'>...</span>, <span class='kw'>.combine</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+    <pre class="usage"><span class='fu'>cross_validate</span>(<span class='no'>cv_fun</span>, <span class='no'>folds</span>, <span class='no'>...</span>, <span class='kw'>use_future</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>.combine</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>.combine_control</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>.old_results</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -112,7 +112,9 @@ results across folds using <code>combine_results</code>.</p>
     <tr>
       <th>cv_fun</th>
       <td><p>a function that takes a 'fold' as it's first argument and
-returns a list of results from that fold.</p></td>
+ returns a list of results from that fold. NOTE: the use of an argument named
+'X' is specifically disallowed in any input function for compliance with the
+ functions <code>lapply</code> and <code><a href='http://www.rdocumentation.org/packages/future.apply/topics/future_lapply'>future.apply::future_lapply</a></code>.</p></td>
     </tr>
     <tr>
       <th>folds</th>
@@ -122,6 +124,11 @@ returns a list of results from that fold.</p></td>
     <tr>
       <th>...</th>
       <td><p>other arguments passed to <code>cvfun</code>.</p></td>
+    </tr>
+    <tr>
+      <th>use_future</th>
+      <td><p><code>logical</code> option for whether to run the main loop of
+cross-validation with <code>future_lapply</code> or with <code>lapply</code>.</p></td>
     </tr>
     <tr>
       <th>.combine</th>
@@ -134,8 +141,8 @@ returns a list of results from that fold.</p></td>
     <tr>
       <th>.old_results</th>
       <td><p>(list) - the returned result from a previous call to
-This function. Will be combined with the current results. This is
-useful for adding additional CV folds to a results object.</p></td>
+This function. Will be combined with the current results. This is useful
+for adding additional CV folds to a results object.</p></td>
     </tr>
     </table>
     
@@ -187,8 +194,10 @@ useful for adding additional CV folds to a results object.</p></td>
 <span class='co'>###############################################################################</span>
 
 <span class='fu'>suppressMessages</span>(<span class='fu'>library</span>(<span class='no'>data.table</span>))
-<span class='fu'>library</span>(<span class='no'>future</span>)
-<span class='fu'>data</span>(<span class='no'>mtcars</span>)
+<span class='fu'>library</span>(<span class='no'>future</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘future’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:origami’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    future_lapply</span></div><div class='input'><span class='fu'>data</span>(<span class='no'>mtcars</span>)
 <span class='fu'>set.seed</span>(<span class='fl'>1</span>)
 
 <span class='co'># make a lot of folds</span>
@@ -227,7 +236,7 @@ useful for adding additional CV folds to a results object.</p></td>
 <span class='kw'>if</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/future/topics/availableCores'>availableCores</a></span>() <span class='kw'>&gt;</span> <span class='fl'>1</span>) {
     <span class='no'>time_mc</span>[<span class='st'>"elapsed"</span>] <span class='kw'>&lt;</span> <span class='fl'>1.2</span> * <span class='no'>time_seq</span>[<span class='st'>"elapsed"</span>]
 }</div><div class='output co'>#&gt; elapsed 
-#&gt;   FALSE </div></pre>
+#&gt;    TRUE </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

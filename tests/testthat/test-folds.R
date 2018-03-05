@@ -1,5 +1,3 @@
-library(origami)
-library(data.table)
 context("Folds")
 
 ############################ generic test should be applied to all generated fold
@@ -38,16 +36,14 @@ get_validation_sets <- function(fold) {
 validation_sets <- cross_validate(get_validation_sets, folds)
 validation_dt <- validation_sets$fold_data
 all_indicies <- seq_len(n)
-test_that("V-fold validation sets are exhaustive", expect_equivalent(
-  sort(validation_dt$validation),
-  all_indicies
-))
+test_that("V-fold validation sets are exhaustive", {
+  expect_equivalent(sort(validation_dt$validation), all_indicies)
+})
 
 max_index_count <- max(table(validation_dt$validation))
-test_that("V-fold validation sets are mutually exclusive", expect_equal(
-  max_index_count,
-  1
-))
+test_that("V-fold validation sets are mutually exclusive", {
+  expect_equal(max_index_count, 1)
+})
 
 ############################
 
@@ -75,10 +71,9 @@ validation_dt <- validation_sets$fold_data
 idtab <- table(validation_dt$id, validation_dt$fold)
 fold_counts <- rowSums(idtab > 0)
 max_fold_count <- max(fold_counts)
-test_that("Each ID only appears in one fold", expect_equal(
-  max_fold_count,
-  1
-))
+test_that("Each ID only appears in one fold", {
+  expect_equal(max_fold_count, 1)
+})
 
 ############################
 
@@ -103,10 +98,9 @@ one_counts <- validation_dt[
   by = list(fold)
 ]
 count_range <- diff(range(one_counts$one_count))
-test_that("Strata are roughly balanced", expect_lte(
-  count_range,
-  nfolds
-))
+test_that("Strata are roughly balanced", {
+  expect_lte(count_range, nfolds)
+})
 
 ############################
 
@@ -125,15 +119,16 @@ suppressWarnings({
 })
 test_splits(folds)
 
-test_that("V fold falls back to LOO for small n, large V", expect_length(
-  folds,
-  smalln
-))
+test_that("V fold falls back to LOO for small n, large V", {
+  expect_length(folds, smalln)
+})
 
 ############################
 
 # Error if no way to guess n
-test_that("Error if we can't guess n", expect_error(make_folds()))
+test_that("Error if we can't guess n", {
+  expect_error(make_folds())
+})
 
 ############################
 

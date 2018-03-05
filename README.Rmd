@@ -80,6 +80,7 @@ set.seed(4795)
 data(mtcars)
 head(mtcars)
 
+# build a cv_fun that wraps around lm
 cv_lm <- function(fold, data, reg_form) {
   # get name and index of outcome variable from regression formula
   out_var <- as.character(unlist(str_split(reg_form, " "))[1])
@@ -104,6 +105,10 @@ results <- cross_validate(cv_fun = cv_lm, folds = folds, data = mtcars,
                           reg_form = "mpg ~ .")
 mean(results$SE)
 ```
+
+For details on how to write wrappers (`cv_fun`s) for use with
+`origami::cross_validate`, please consult the documentation and vignettes that
+accompany the package.
 
 ---
 

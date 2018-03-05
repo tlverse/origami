@@ -1,10 +1,12 @@
 #' Main Cross-Validation Function
 #'
-#' Applies \code{cvfun} to the folds using \code{future_lapply} and combines the
-#' results across folds using \code{combine_results}.
+#' Applies \code{cv_fun} to the folds using \code{future_lapply} and combines
+#' the results across folds using \code{combine_results}.
 #'
 #' @param cv_fun a function that takes a 'fold' as it's first argument and
-#'  returns a list of results from that fold.
+#'  returns a list of results from that fold. NOTE: the use of an argument named
+#' 'X' is specifically disallowed in any input function for compliance with the
+#'  functions \code{lapply} and \code{future.apply::future_lapply}.
 #' @param folds a list of folds to loop over generated using
 #'  \code{\link{make_folds}}.
 #' @param ... other arguments passed to \code{cvfun}.
@@ -35,6 +37,12 @@ cross_validate <- function(cv_fun,
                            .combine = TRUE,
                            .combine_control = list(),
                            .old_results = NULL) {
+
+  # argument 'X' is specifically disallowed since reserved by lapply family
+  args_cv_fun <- names(formals(cv_fun))
+  if ("X" %in% args_cv_fun) {
+    stop("cv_fun names argument 'X' - not allowed for compliance with lapply.")
+  }
 
   # catch and return errors if they occur
   wrapped_fun <- wrap_in_try(cv_fun)

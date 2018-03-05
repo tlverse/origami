@@ -9,7 +9,9 @@ cross_validate(cv_fun, folds, ..., use_future = TRUE, .combine = TRUE,
 }
 \arguments{
 \item{cv_fun}{a function that takes a 'fold' as it's first argument and
-returns a list of results from that fold.}
+ returns a list of results from that fold. NOTE: the use of an argument named
+'X' is specifically disallowed in any input function for compliance with the
+ functions \code{lapply} and \code{future.apply::future_lapply}.}
 
 \item{folds}{a list of folds to loop over generated using
 \code{\link{make_folds}}.}
@@ -31,8 +33,8 @@ for adding additional CV folds to a results object.}
 A list of results, combined across folds.
 }
 \description{
-Applies \code{cvfun} to the folds using \code{future_lapply} and combines the
-results across folds using \code{combine_results}.
+Applies \code{cv_fun} to the folds using \code{future_lapply} and combines
+the results across folds using \code{combine_results}.
 }
 \examples{
 ###############################################################################
