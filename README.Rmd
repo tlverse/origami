@@ -61,7 +61,7 @@ devtools::install_github("tlverse/origami")
 
 For details on how best to use `origami`, please consult the package
 [documentation](http://origami.tlverse.org) and [introductory
-vignette](https://origami.tlverse.org/origami/articles/generalizedCV.html)
+vignette](http://origami.tlverse.org/origami/articles/generalizedCV.html)
 online, or do so from within [R](https://www.r-project.org/).
 
 ---
