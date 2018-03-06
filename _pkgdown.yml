@@ -1,0 +1,21 @@
+title: origami
+url: https://origami.tlverse.org
+template:
+  params:
+    bootswatch: flatly
+    ganalytics: UA-115145808-1
+navbar:
+  title: ""
+  left:
+    - text: "tlverse"
+      href: https://tlverse.org
+    - text: "origami"
+      href: "index.html"
+    - text: "Overview"
+      href: articles/framework.html
+    - text: "Reference"
+      href: "reference/index.html"
+  right:
+    - icon: fa-github fa-lg
+      href: https://github.com/tlverse/origami
+
