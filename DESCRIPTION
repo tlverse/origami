@@ -19,8 +19,8 @@ Description: Provides a general framework for the application of
 Depends:
     R (>= 3.0.0),
 License: GPL-3
-URL: https://github.com/jeremyrcoyle/origami
-BugReports: https://github.com/jeremyrcoyle/origami/issues
+URL: http://origami.tlverse.org
+BugReports: https://github.com/tlverse/origami/issues
 Encoding: UTF-8
 Imports:
     abind,

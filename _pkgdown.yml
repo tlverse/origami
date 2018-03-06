@@ -1,5 +1,5 @@
 title: origami
-url: https://origami.tlverse.org
+url: http://origami.tlverse.org
 template:
   params:
     bootswatch: flatly
@@ -8,7 +8,7 @@ navbar:
   title: ""
   left:
     - text: "tlverse"
-      href: https://tlverse.org
+      href: http://tlverse.org
     - text: "origami"
       href: "index.html"
     - text: "Overview"
