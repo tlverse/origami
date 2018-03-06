@@ -21,6 +21,7 @@
 #' @importFrom future future values plan sequential multicore multisession
 #' @importFrom future.apply future_lapply
 #' @importFrom listenv listenv
+#' @import methods
 #'
 #' @return A list of results, combined across folds.
 #'

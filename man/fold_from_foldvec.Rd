@@ -20,4 +20,3 @@ Other fold generation functions: \code{\link{fold_funs}},
   \code{\link{folds2foldvec}}, \code{\link{make_folds}},
   \code{\link{make_repeated_folds}}
 }
-\concept{fold generation functions}
