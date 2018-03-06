@@ -4,11 +4,11 @@
 # R/`origami` <img src="./hex/origami-sticker.png" align="right" width='125'/>
 
 [![Travis-CI Build
-Status](https://travis-ci.org/jeremyrcoyle/origami.svg?branch=master)](https://travis-ci.org/jeremyrcoyle/origami)
+Status](https://travis-ci.org/tlverse/origami.svg?branch=master)](https://travis-ci.org/tlverse/origami)
 [![Build
-status](https://ci.appveyor.com/api/projects/status/i5qwp8cjb4j4x329?svg=true)](https://ci.appveyor.com/project/jeremyrcoyle/origami)
+status](https://ci.appveyor.com/api/projects/status/i5qwp8cjb4j4x329?svg=true)](https://ci.appveyor.com/project/tlverse/origami)
 [![Coverage
-Status](https://img.shields.io/codecov/c/github/jeremyrcoyle/origami/master.svg)](https://codecov.io/github/jeremyrcoyle/origami?branch=master)
+Status](https://codecov.io/gh/tlverse/origami/branch/master/graph/badge.svg)](https://codecov.io/gh/tlverse/origami)
 [![CRAN](http://www.r-pkg.org/badges/version/origami)](http://www.r-pkg.org/pkg/origami)
 [![CRAN
 downloads](https://cranlogs.r-pkg.org/badges/origami)](https://CRAN.R-project.org/package=origami)
@@ -50,7 +50,7 @@ You can install a stable release of `origami` from GitHub via
 [`devtools`](https://www.rstudio.com/products/rpackages/devtools/) with:
 
 ``` r
-devtools::install_github("jeremyrcoyle/origami")
+devtools::install_github("tlverse/origami")
 ```
 
 -----
@@ -58,9 +58,8 @@ devtools::install_github("jeremyrcoyle/origami")
 ## Usage
 
 For details on how best to use `origami`, please consult the package
-[documentation](https://jeremyrcoyle.github.io/origami/) and
-[introductory
-vignette](https://jeremyrcoyle.github.io/origami/articles/generalizedCV.html)
+[documentation](https://tlverse.github.io/origami/) and [introductory
+vignette](https://tlverse.github.io/origami/articles/generalizedCV.html)
 online, or do so from within [R](https://www.r-project.org/).
 
 -----
@@ -125,7 +124,7 @@ vignettes that accompany the package.
 ## Issues
 
 If you encounter any bugs or have any specific feature requests, please
-[file an issue](https://github.com/jeremyrcoyle/origami/issues).
+[file an issue](https://github.com/tlverse/origami/issues).
 
 -----
 
@@ -136,7 +135,7 @@ most any procedure requiring cross-validation, including its integration
 into larger machine learning frameworks. To that end, contributions are
 very welcome, though we ask that interested contributors consult our
 [contribution
-guidelines](https://github.com/jeremyrcoyle/origami/blob/master/CONTRIBUTING.md)
+guidelines](https://github.com/tlverse/origami/blob/master/CONTRIBUTING.md)
 prior to submitting a pull request.
 
 -----
@@ -164,7 +163,7 @@ After using the `origami` R package, please cite it:
 
 ## License
 
-© 2017-2018 [Jeremy R. Coyle](https://github.com/jeremyrcoyle)
+© 2018 [The TLverse Group](https://github.com/tlverse)
 
 The contents of this repository are distributed under the GPL-3 license.
 See file `LICENSE` for details.
