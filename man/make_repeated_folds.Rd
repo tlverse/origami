@@ -21,3 +21,4 @@ Other fold generation functions: \code{\link{fold_from_foldvec}},
   \code{\link{fold_funs}}, \code{\link{folds2foldvec}},
   \code{\link{make_folds}}
 }
+\concept{fold generation functions}
