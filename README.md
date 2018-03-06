@@ -52,7 +52,7 @@ library(stringr)
 #> Warning: package 'stringr' was built under R version 3.4.3
 library(origami)
 #> origami: Generalized Cross-Validation Framework
-#> Version: 0.8.2
+#> Version: 1.0.0
 set.seed(4795)
 
 data(mtcars)
