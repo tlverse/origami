@@ -194,8 +194,10 @@ for adding additional CV folds to a results object.</p></td>
 <span class='co'>###############################################################################</span>
 
 <span class='fu'>suppressMessages</span>(<span class='fu'>library</span>(<span class='no'>data.table</span>))
-<span class='fu'>library</span>(<span class='no'>future</span>)
-<span class='fu'>data</span>(<span class='no'>mtcars</span>)
+<span class='fu'>library</span>(<span class='no'>future</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘future’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:origami’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    future_lapply</span></div><div class='input'><span class='fu'>data</span>(<span class='no'>mtcars</span>)
 <span class='fu'>set.seed</span>(<span class='fl'>1</span>)
 
 <span class='co'># make a lot of folds</span>
@@ -234,7 +236,7 @@ for adding additional CV folds to a results object.</p></td>
 <span class='kw'>if</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/future/topics/availableCores'>availableCores</a></span>() <span class='kw'>&gt;</span> <span class='fl'>1</span>) {
     <span class='no'>time_mc</span>[<span class='st'>"elapsed"</span>] <span class='kw'>&lt;</span> <span class='fl'>1.2</span> * <span class='no'>time_seq</span>[<span class='st'>"elapsed"</span>]
 }</div><div class='output co'>#&gt; elapsed 
-#&gt;   FALSE </div></pre>
+#&gt;    TRUE </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

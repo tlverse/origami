@@ -76,7 +76,7 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <div id="rorigami" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#rorigami" class="anchor"></a>R/<code>origami</code> <img src="./hex/origami-sticker.png" align="right" width="125">
+<a href="#rorigami" class="anchor"></a>R/<code>origami</code> <img src="hex/origami-sticker.png" align="right" width="125">
 </h1></div>
 
 <blockquote>
@@ -94,9 +94,9 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>For standard use, we recommend installing the package from <a href="https://cran.r-project.org/">CRAN</a> via</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"origami"</span>)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">"origami"</span>)</a></code></pre></div>
 <p>You can install a stable release of <code>origami</code> from GitHub via <a href="https://www.rstudio.com/products/rpackages/devtools/"><code>devtools</code></a> with:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"tlverse/origami"</span>)</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"tlverse/origami"</span>)</a></code></pre></div>
 <hr>
 </div>
 <div id="usage" class="section level2">
@@ -109,48 +109,47 @@
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
 <p>This minimal example shows how to use <code>origami</code> to apply cross-validation to the computation of a simple descriptive statistic using a sample data set. In particular, we obtain a cross-validated estimate of the mean:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(stringr)
-<span class="co">#&gt; Warning: package 'stringr' was built under R version 3.4.3</span>
-<span class="kw">library</span>(origami)
-<span class="co">#&gt; origami: Generalized Cross-Validation Framework</span>
-<span class="co">#&gt; Version: 1.0.0</span>
-<span class="kw">set.seed</span>(<span class="dv">4795</span>)
-
-<span class="kw">data</span>(mtcars)
-<span class="kw">head</span>(mtcars)
-<span class="co">#&gt;                    mpg cyl disp  hp drat    wt  qsec vs am gear carb</span>
-<span class="co">#&gt; Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4</span>
-<span class="co">#&gt; Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4</span>
-<span class="co">#&gt; Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1</span>
-<span class="co">#&gt; Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1</span>
-<span class="co">#&gt; Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2</span>
-<span class="co">#&gt; Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</span>
-
-<span class="co"># build a cv_fun that wraps around lm</span>
-cv_lm &lt;-<span class="st"> </span><span class="cf">function</span>(fold, data, reg_form) {
-  <span class="co"># get name and index of outcome variable from regression formula</span>
-  out_var &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">unlist</span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/stringr/topics/str_split">str_split</a></span>(reg_form, <span class="st">" "</span>))[<span class="dv">1</span>])
-  out_var_ind &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">which</span>(<span class="kw">colnames</span>(data) <span class="op">==</span><span class="st"> </span>out_var))
-
-  <span class="co"># split up data into training and validation sets</span>
-  train_data &lt;-<span class="st"> </span><span class="kw"><a href="reference/fold_helpers.html">training</a></span>(data)
-  valid_data &lt;-<span class="st"> </span><span class="kw"><a href="reference/fold_helpers.html">validation</a></span>(data)
-
-  <span class="co"># fit linear model on training set and predict on validation set</span>
-  mod &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="kw">as.formula</span>(reg_form), <span class="dt">data =</span> train_data)
-  preds &lt;-<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> valid_data)
-
-  <span class="co"># capture results to be returned as output</span>
-  out &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">coef =</span> <span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">coef</span>(mod))),
-              <span class="dt">SE =</span> ((preds <span class="op">-</span><span class="st"> </span>valid_data[, out_var_ind])<span class="op">^</span><span class="dv">2</span>))
-  <span class="kw">return</span>(out)
-}
-
-folds &lt;-<span class="st"> </span><span class="kw"><a href="reference/make_folds.html">make_folds</a></span>(mtcars)
-results &lt;-<span class="st"> </span><span class="kw"><a href="reference/cross_validate.html">cross_validate</a></span>(<span class="dt">cv_fun =</span> cv_lm, <span class="dt">folds =</span> folds, <span class="dt">data =</span> mtcars,
-                          <span class="dt">reg_form =</span> <span class="st">"mpg ~ ."</span>)
-<span class="kw">mean</span>(results<span class="op">$</span>SE)
-<span class="co">#&gt; [1] 11.37989</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(stringr)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">library</span>(origami)</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; origami: Generalized Cross-Validation Framework</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; Version: 1.0.0</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="kw">set.seed</span>(<span class="dv">4795</span>)</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="kw">data</span>(mtcars)</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="kw">head</span>(mtcars)</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt;                    mpg cyl disp  hp drat    wt  qsec vs am gear carb</span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt; Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1</span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt; Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2</span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt; Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co"># build a cv_fun that wraps around lm</span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18">cv_lm &lt;-<span class="st"> </span><span class="cf">function</span>(fold, data, reg_form) {</a>
+<a class="sourceLine" id="cb3-19" data-line-number="19">  <span class="co"># get name and index of outcome variable from regression formula</span></a>
+<a class="sourceLine" id="cb3-20" data-line-number="20">  out_var &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">unlist</span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/stringr/topics/str_split">str_split</a></span>(reg_form, <span class="st">" "</span>))[<span class="dv">1</span>])</a>
+<a class="sourceLine" id="cb3-21" data-line-number="21">  out_var_ind &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">which</span>(<span class="kw">colnames</span>(data) <span class="op">==</span><span class="st"> </span>out_var))</a>
+<a class="sourceLine" id="cb3-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb3-23" data-line-number="23">  <span class="co"># split up data into training and validation sets</span></a>
+<a class="sourceLine" id="cb3-24" data-line-number="24">  train_data &lt;-<span class="st"> </span><span class="kw"><a href="reference/fold_helpers.html">training</a></span>(data)</a>
+<a class="sourceLine" id="cb3-25" data-line-number="25">  valid_data &lt;-<span class="st"> </span><span class="kw"><a href="reference/fold_helpers.html">validation</a></span>(data)</a>
+<a class="sourceLine" id="cb3-26" data-line-number="26"></a>
+<a class="sourceLine" id="cb3-27" data-line-number="27">  <span class="co"># fit linear model on training set and predict on validation set</span></a>
+<a class="sourceLine" id="cb3-28" data-line-number="28">  mod &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="kw">as.formula</span>(reg_form), <span class="dt">data =</span> train_data)</a>
+<a class="sourceLine" id="cb3-29" data-line-number="29">  preds &lt;-<span class="st"> </span><span class="kw">predict</span>(mod, <span class="dt">newdata =</span> valid_data)</a>
+<a class="sourceLine" id="cb3-30" data-line-number="30"></a>
+<a class="sourceLine" id="cb3-31" data-line-number="31">  <span class="co"># capture results to be returned as output</span></a>
+<a class="sourceLine" id="cb3-32" data-line-number="32">  out &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">coef =</span> <span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">coef</span>(mod))),</a>
+<a class="sourceLine" id="cb3-33" data-line-number="33">              <span class="dt">SE =</span> ((preds <span class="op">-</span><span class="st"> </span>valid_data[, out_var_ind])<span class="op">^</span><span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb3-34" data-line-number="34">  <span class="kw">return</span>(out)</a>
+<a class="sourceLine" id="cb3-35" data-line-number="35">}</a>
+<a class="sourceLine" id="cb3-36" data-line-number="36"></a>
+<a class="sourceLine" id="cb3-37" data-line-number="37">folds &lt;-<span class="st"> </span><span class="kw"><a href="reference/make_folds.html">make_folds</a></span>(mtcars)</a>
+<a class="sourceLine" id="cb3-38" data-line-number="38">results &lt;-<span class="st"> </span><span class="kw"><a href="reference/cross_validate.html">cross_validate</a></span>(<span class="dt">cv_fun =</span> cv_lm, <span class="dt">folds =</span> folds, <span class="dt">data =</span> mtcars,</a>
+<a class="sourceLine" id="cb3-39" data-line-number="39">                          <span class="dt">reg_form =</span> <span class="st">"mpg ~ ."</span>)</a>
+<a class="sourceLine" id="cb3-40" data-line-number="40"><span class="kw">mean</span>(results<span class="op">$</span>SE)</a>
+<a class="sourceLine" id="cb3-41" data-line-number="41"><span class="co">#&gt; [1] 11.37989</span></a></code></pre></div>
 <p>For details on how to write wrappers (<code>cv_fun</code>s) for use with <code><a href="http://www.rdocumentation.org/packages/origami/topics/cross_validate">origami::cross_validate</a></code>, please consult the documentation and vignettes that accompany the package.</p>
 <hr>
 </div>
@@ -187,7 +186,7 @@ results &lt;-<span class="st"> </span><span class="kw"><a href="reference/cross_
 <div id="license" class="section level2">
 <h2 class="hasAnchor">
 <a href="#license" class="anchor"></a>License</h2>
-<p>© 2018 <a href="https://github.com/tlverse">The TLverse Group</a></p>
+<p>© 2017-2018 <a href="https://github.com/jeremyrcoyle">Jeremy R. Coyle</a></p>
 <p>The contents of this repository are distributed under the GPL-3 license. See file <code>LICENSE</code> for details.</p>
 </div>
 </div>
