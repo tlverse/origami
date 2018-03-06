@@ -22,7 +22,7 @@ will be pulled from the calling environment, if available.}
 }
 \value{
 The elements of \code{x} corresponding to the indexes, or the
-        indexes themselves if \code{x} is missing.
+ indexes themselves if \code{x} is missing.
 }
 \description{
 Accessors and indexers for the different parts of a fold.

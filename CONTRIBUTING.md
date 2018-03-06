@@ -71,7 +71,7 @@ Pull requests will be evaluated against the a checklist:
    how your pull request solves it as concisely as possible.
 
    Also include this motivation in `NEWS` so that when a new release of
-   ggplot2 comes out it's easy for users to see what's changed. Add your
+   `origami` comes out it's easy for users to see what's changed. Add your
    item at the top of the file and use markdown for formatting. The
    news item should end with `(@yourGithubUsername, #the_issue_number)`.
 
@@ -86,18 +86,21 @@ Pull requests will be evaluated against the a checklist:
     and don't submit any others until the first one has been processed.
 
 3.  __Use `origami` coding style__. Please follow the
-    [official ggplot2 style](http://adv-r.had.co.nz/Style.html). Maintaing
+    [official tidyverse style guide](http://style.tidyverse.org/). Maintaining
     a consistent style across the whole code base makes it much easier to
-    jump into the code. If you're modifying existing ggplot2 code that
+    jump into the code. If you're modifying existing `origami` code that
     doesn't follow the style guide, a separate pull request to fix the
-    style would be greatly appreciated.
+    style would be greatly appreciated. To lower the burden on contributors,
+    we've included a recipe `make style` that will re-format code to follow
+    these conventions, provided that you've installed the
+    [`styler`](http://styler.r-lib.org/) package.
 
 4.  If you're adding new parameters or a new function, you'll also need
     to document them with [roxygen](https://github.com/klutometis/roxygen).
     Make sure to re-run `devtools::document()` on the code before submitting.
 
 This seems like a lot of work but don't worry if your pull request isn't
-perfect. It's a learning process. A pull request is a process, and unless 
+perfect. It's a learning process. A pull request is a process, and unless
 you've submitted a few in the past it's unlikely that your pull request will be
 accepted as is. Please don't submit pull requests that change existing
 behaviour. Instead, think about how you can add a new feature in a minimally

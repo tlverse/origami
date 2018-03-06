@@ -11,8 +11,8 @@
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -34,6 +34,18 @@
 <![endif]-->
 
 
+<!-- Google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-115145808-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
   </head>
 
   <body>
@@ -47,39 +59,27 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">origami</a>
+      <a class="navbar-brand" href="../index.html"></a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
+  <a href="https://tlverse.org">tlverse</a>
+</li>
+<li>
+  <a href="../index.html">origami</a>
+</li>
+<li>
+  <a href="../articles/framework.html">Overview</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/generalizedCV.html">Generalized Cross-Validation with Origami</a>
-    </li>
-  </ul>
-</li>
-<li>
-  <a href="../news/index.html">News</a>
 </li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/jeremyrcoyle/origami">
+  <a href="https://github.com/tlverse/origami">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -99,11 +99,11 @@
     </div>
 
     
-    <p>Applies <code>cvfun</code> to the folds using <code>future_lapply</code> and combines the
-results across folds using <code>combine_results</code>.</p>
+    <p>Applies <code>cv_fun</code> to the folds using <code>future_lapply</code> and combines
+the results across folds using <code>combine_results</code>.</p>
     
 
-    <pre class="usage"><span class='fu'>cross_validate</span>(<span class='no'>cv_fun</span>, <span class='no'>folds</span>, <span class='no'>...</span>, <span class='kw'>.combine</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+    <pre class="usage"><span class='fu'>cross_validate</span>(<span class='no'>cv_fun</span>, <span class='no'>folds</span>, <span class='no'>...</span>, <span class='kw'>use_future</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>.combine</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>.combine_control</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>.old_results</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -112,7 +112,9 @@ results across folds using <code>combine_results</code>.</p>
     <tr>
       <th>cv_fun</th>
       <td><p>a function that takes a 'fold' as it's first argument and
-returns a list of results from that fold.</p></td>
+ returns a list of results from that fold. NOTE: the use of an argument named
+'X' is specifically disallowed in any input function for compliance with the
+ functions <code>lapply</code> and <code><a href='http://www.rdocumentation.org/packages/future.apply/topics/future_lapply'>future.apply::future_lapply</a></code>.</p></td>
     </tr>
     <tr>
       <th>folds</th>
@@ -122,6 +124,11 @@ returns a list of results from that fold.</p></td>
     <tr>
       <th>...</th>
       <td><p>other arguments passed to <code>cvfun</code>.</p></td>
+    </tr>
+    <tr>
+      <th>use_future</th>
+      <td><p><code>logical</code> option for whether to run the main loop of
+cross-validation with <code>future_lapply</code> or with <code>lapply</code>.</p></td>
     </tr>
     <tr>
       <th>.combine</th>
@@ -134,8 +141,8 @@ returns a list of results from that fold.</p></td>
     <tr>
       <th>.old_results</th>
       <td><p>(list) - the returned result from a previous call to
-This function. Will be combined with the current results. This is
-useful for adding additional CV folds to a results object.</p></td>
+This function. Will be combined with the current results. This is useful
+for adding additional CV folds to a results object.</p></td>
     </tr>
     </table>
     
@@ -187,8 +194,10 @@ useful for adding additional CV folds to a results object.</p></td>
 <span class='co'>###############################################################################</span>
 
 <span class='fu'>suppressMessages</span>(<span class='fu'>library</span>(<span class='no'>data.table</span>))
-<span class='fu'>library</span>(<span class='no'>future</span>)
-<span class='fu'>data</span>(<span class='no'>mtcars</span>)
+<span class='fu'>library</span>(<span class='no'>future</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘future’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:origami’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    future_lapply</span></div><div class='input'><span class='fu'>data</span>(<span class='no'>mtcars</span>)
 <span class='fu'>set.seed</span>(<span class='fl'>1</span>)
 
 <span class='co'># make a lot of folds</span>

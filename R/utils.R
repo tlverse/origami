@@ -8,11 +8,11 @@
 #' @export
 #
 wrap_in_try <- function(fun, ...) {
-    wrapped <- function(...)
+  wrapped <- function(...)
     try({
-        fun(...)
+      fun(...)
     }, silent = TRUE)
-    return(wrapped)
+  return(wrapped)
 }
 
 ################################################################################
@@ -50,11 +50,12 @@ fold_from_foldvec <- function(v, folds) {
 #' @export
 #
 folds2foldvec <- function(folds) {
-  fold_vec <- lapply(folds, function(fold) { validation() })
+  fold_vec <- lapply(folds, function(fold) {
+    validation()
+  })
   len <- sapply(fold_vec, length)
   nums <- rep(seq_along(fold_vec), len)
   fold_index <- unlist(fold_vec)
   fold_id <- nums[order(fold_index)]
   return(fold_id)
 }
-

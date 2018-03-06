@@ -25,8 +25,8 @@ structured results, to a list of such lists.
 }
 \details{
 In theory you should never call this function directly, because it
-         is called automatically by cross_validate. The defaults, combiners
-         guessed based on data type, should work in most cases.
+ is called automatically by cross_validate. The defaults, combiners guessed
+ based on data type, should work in most cases.
 }
 \seealso{
 \link{Combiners}

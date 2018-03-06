@@ -3,6 +3,7 @@
 ^\.travis\.yml$
 ^appveyor\.yml$
 ^codecov\.yml$
+^_pkgdown\.yml$
 ^CONTRIBUTING\.md$
 ^TODO\.md$
 ^LICENSE$
@@ -11,6 +12,7 @@
 ^\.gitignore$
 ^paper$
 ^docs$
+^hex$
 ^cran-comments.md$
 ^revdep$
 ^NEWS\.md$
