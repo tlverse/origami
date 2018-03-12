@@ -155,7 +155,7 @@ After using the `origami` R package, please cite it:
       year  = {2018},
       publisher = {The Open Journal},
       doi = {10.21105/joss.00512},
-      url = {https://dx.doi.org/10.21105/joss.00512}
+      url = {https://doi.org/10.21105/joss.00512}
     }
 ```
 
