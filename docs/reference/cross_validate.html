@@ -18,6 +18,8 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -25,6 +27,11 @@
 <script src="../pkgdown.js"></script>
   
   
+<meta property="og:title" content="Main Cross-Validation Function — cross_validate" />
+
+<meta property="og:description" content="Applies cv_fun to the folds using future_lapply and combines
+the results across folds using combine_results." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -236,7 +243,7 @@ for adding additional CV folds to a results object.</p></td>
 <span class='kw'>if</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/future/topics/availableCores'>availableCores</a></span>() <span class='kw'>&gt;</span> <span class='fl'>1</span>) {
     <span class='no'>time_mc</span>[<span class='st'>"elapsed"</span>] <span class='kw'>&lt;</span> <span class='fl'>1.2</span> * <span class='no'>time_seq</span>[<span class='st'>"elapsed"</span>]
 }</div><div class='output co'>#&gt; elapsed 
-#&gt;    TRUE </div></pre>
+#&gt;   FALSE </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -257,7 +264,7 @@ for adding additional CV folds to a results object.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
@@ -265,3 +272,4 @@ for adding additional CV folds to a results object.</p></td>
 
   </body>
 </html>
+

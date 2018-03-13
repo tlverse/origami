@@ -17,7 +17,7 @@ procedure extends from a sample to the target population from which the sample
 is derived. It has seen widespread application in all facets of statistics,
 perhaps most notably statistical machine learning.  When used for model
 selection, cross-validation has powerful optimality properties
-[@vaart2006oracle,@vdl2007super].
+[@vaart2006oracle], [@vdl2007super].
 
 <!--
 and for CV-TMLE based parameter estimation, elimination of difficult-to-assess
