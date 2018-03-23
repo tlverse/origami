@@ -41,13 +41,13 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="http://tlverse.org">tlverse</a>
+  <a href="https://tlverse.org">tlverse</a>
 </li>
 <li>
   <a href="../index.html">origami</a>
 </li>
 <li>
-  <a href="../articles/framework.html">Overview</a>
+  <a href="../articles/generalizedCV.html">Overview</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -75,7 +75,7 @@
       <h1>Generalized Cross-Validation with Origami</h1>
                         <h4 class="author">Jeremy Coyle &amp; Nima Hejazi</h4>
             
-            <h4 class="date">2018-03-13</h4>
+            <h4 class="date">2018-03-22</h4>
           </div>
 
     
@@ -175,7 +175,7 @@ empirical process conditions from CV-TMLE step [@Zheng:2010ua].
 <a class="sourceLine" id="cb13-3" data-line-number="3">cvlm_results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cross_validate.html">cross_validate</a></span>(<span class="dt">cv_fun =</span> cv_lm, <span class="dt">folds =</span> folds, <span class="dt">data =</span> mtcars,</a>
 <a class="sourceLine" id="cb13-4" data-line-number="4">                               <span class="dt">reg_form =</span> <span class="st">"mpg ~ ."</span>)</a>
 <a class="sourceLine" id="cb13-5" data-line-number="5"><span class="kw">mean</span>(cvlm_results<span class="op">$</span>SE)</a></code></pre></div>
-<pre><code>## [1] 12.49652</code></pre>
+<pre><code>## [1] 12.23618</code></pre>
 <p>Having performed 10-fold cross-validation, we quickly notice that our previous estimate of the model error (by resubstitution) was quite optimistic. The honest estimate of the error is several times larger.</p>
 <hr>
 </div>
@@ -238,7 +238,7 @@ Nima: tried some re-wording to clarify; not sure how much this helped.
 <a class="sourceLine" id="cb19-2" data-line-number="2">cvrf_results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cross_validate.html">cross_validate</a></span>(<span class="dt">cv_fun =</span> cv_rf, <span class="dt">folds =</span> folds, <span class="dt">data =</span> mtcars,</a>
 <a class="sourceLine" id="cb19-3" data-line-number="3">                               <span class="dt">reg_form =</span> <span class="st">"mpg ~ ."</span>)</a>
 <a class="sourceLine" id="cb19-4" data-line-number="4"><span class="kw">mean</span>(cvrf_results<span class="op">$</span>SE)</a></code></pre></div>
-<pre><code>## [1] 5.312742</code></pre>
+<pre><code>## [1] 7.121997</code></pre>
 <p>Using 10-fold cross-validation (the default), we obtain an honest estimate of the prediction error of random forests. From this, we gather that the use of <code>origami</code>’s <code>cross_validate</code> procedure can be generalized to arbitrary esimation techniques, given availability of an appropriate <code>cv_fun</code> function.</p>
 <hr>
 </div>
@@ -304,7 +304,7 @@ Nima: tried some re-wording to clarify; not sure how much this helped.
 <div id="session-information" class="section level2">
 <h2 class="hasAnchor">
 <a href="#session-information" class="anchor"></a>Session Information</h2>
-<pre><code>## R version 3.4.3 (2017-11-30)
+<pre><code>## R version 3.4.4 (2018-03-15)
 ## Platform: x86_64-apple-darwin17.3.0 (64-bit)
 ## Running under: macOS High Sierra 10.13.3
 ## 
@@ -323,14 +323,14 @@ Nima: tried some re-wording to clarify; not sure how much this helped.
 ## [4] origami_1.0.0      
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.15       compiler_3.4.3     pillar_1.2.1      
-##  [4] plyr_1.8.4         xts_0.10-1         tseries_0.10-43   
-##  [7] methods_3.4.3      tools_3.4.3        digest_0.6.15     
+##  [1] Rcpp_0.12.16       compiler_3.4.4     pillar_1.2.1      
+##  [4] plyr_1.8.4         xts_0.10-2         tseries_0.10-43   
+##  [7] methods_3.4.4      tools_3.4.4        digest_0.6.15     
 ## [10] evaluate_0.10.1    tibble_1.4.2       gtable_0.2.0      
 ## [13] lattice_0.20-35    rlang_0.2.0.9000   curl_3.1          
-## [16] yaml_2.1.18        parallel_3.4.3     knitr_1.20        
+## [16] yaml_2.1.18        parallel_3.4.4     knitr_1.20        
 ## [19] globals_0.11.0     rprojroot_1.3-2    lmtest_0.9-35     
-## [22] grid_3.4.3         nnet_7.3-12        data.table_1.10.5 
+## [22] grid_3.4.4         nnet_7.3-12        data.table_1.10.5 
 ## [25] listenv_0.7.0      future.apply_0.1.0 rmarkdown_1.9.4   
 ## [28] TTR_0.23-3         ggplot2_2.2.1      magrittr_1.5      
 ## [31] backports_1.1.2    scales_0.5.0.9000  codetools_0.2-15  

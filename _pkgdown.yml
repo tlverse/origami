@@ -8,11 +8,11 @@ navbar:
   title: ""
   left:
     - text: "tlverse"
-      href: http://tlverse.org
+      href: https://tlverse.org
     - text: "origami"
       href: "index.html"
     - text: "Overview"
-      href: articles/framework.html
+      href: articles/generalizedCV.html
     - text: "Reference"
       href: "reference/index.html"
   right:
