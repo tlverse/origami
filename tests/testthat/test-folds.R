@@ -93,10 +93,8 @@ validation_sets <- cross_validate(
   strata_ids
 )
 validation_dt <- validation_sets$fold_data
-one_counts <- validation_dt
-[, list(one_count = sum(strata_ids)),
-  by = list(fold)
-]
+one_counts <- validation_dt[, list(one_count = sum(strata_ids)),
+                              by = list(fold)]
 count_range <- diff(range(one_counts$one_count))
 test_that("Strata are roughly balanced", {
   expect_lte(count_range, nfolds)
