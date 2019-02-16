@@ -6,7 +6,8 @@ data(AirPassengers)
 
 # simple fold
 folds <- make_folds(
-  AirPassengers, fold_fun = folds_rolling_origin,
+  AirPassengers,
+  fold_fun = folds_rolling_origin,
   first_window = 36, validation_size = 24, gap = 0, batch = 1
 )
 
@@ -29,14 +30,14 @@ cvforecasts <- function(fold) {
     )
   )
   raw_arima_pred <- predict(arima_fit, n.ahead = valid_size)
-  arima_pred <- 10 ^ raw_arima_pred$pred
-  arima_MSE <- mean((arima_pred - valid_data) ^ 2)
+  arima_pred <- 10^raw_arima_pred$pred
+  arima_MSE <- mean((arima_pred - valid_data)^2)
 
   # stl model
   stl_fit <- stlm(train_ts, s.window = 12)
   raw_stl_pred <- forecast(stl_fit, h = valid_size)
-  stl_pred <- 10 ^ raw_stl_pred$mean
-  stl_MSE <- mean((stl_pred - valid_data) ^ 2)
+  stl_pred <- 10^raw_stl_pred$mean
+  stl_MSE <- mean((stl_pred - valid_data)^2)
 
   list(mse = data.frame(fold = fold_index(), arima = arima_MSE, stl = stl_MSE))
 }
@@ -51,7 +52,8 @@ test_that("CV MSE matches previous value", {
 
 # Tests with gap and batch parameters:
 folds <- make_folds(
-  AirPassengers, fold_fun = folds_rolling_origin,
+  AirPassengers,
+  fold_fun = folds_rolling_origin,
   first_window = 36, validation_size = 24, gap = 5, batch = 10
 )
 
@@ -66,7 +68,8 @@ test_that("CV MSE with gap and bacth matches previous value", {
 
 # Tests with gap and batch parameters for rolling window CV:
 folds <- make_folds(
-  AirPassengers, fold_fun = folds_rolling_window,
+  AirPassengers,
+  fold_fun = folds_rolling_window,
   window_size = 36, validation_size = 24, gap = 5, batch = 2
 )
 

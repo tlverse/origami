@@ -14,7 +14,7 @@ cvlm <- function(fold) {
 
   r <- lm(mpg ~ ., data = train_data)
   preds <- predict(r, newdata = valid_data)
-  list(coef = data.frame(t(coef(r))), SE = ((preds - valid_data$mpg) ^ 2))
+  list(coef = data.frame(t(coef(r))), SE = ((preds - valid_data$mpg)^2))
 }
 
 plan(sequential)

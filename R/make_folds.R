@@ -78,29 +78,29 @@ make_folds <- function(n = NULL,
 
 ################################################################################
 
-#' Convert ID Folds to Observation Folds 
-#' 
+#' Convert ID Folds to Observation Folds
+#'
 #' This function convertsf olds that subset ids to folds that subset observations
 #' @param idfolds folds that subset ids
 #' @param cluster_ids a vector of cluster ids indicating which observations are in which clusters
 #' @export
-id_folds_to_folds <- function(idfolds, cluster_ids){
+id_folds_to_folds <- function(idfolds, cluster_ids) {
   idfac <- factor(cluster_ids)
   nclusters <- length(levels(idfac))
   clusternums <- as.numeric(idfac)
-  
-  reindex <- function(index,fold_index){
-    which(index%in%fold_index)  
+
+  reindex <- function(index, fold_index) {
+    which(index %in% fold_index)
   }
-  
+
   folds <- lapply(idfolds, function(idfold) {
     make_fold(
       v = fold_index(fold = idfold),
-      training_set = reindex(clusternums,training(fold=idfold)),
-      validation_set = reindex(clusternums,validation(fold=idfold))
+      training_set = reindex(clusternums, training(fold = idfold)),
+      validation_set = reindex(clusternums, validation(fold = idfold))
     )
   })
-  
+
   return(folds)
 }
 

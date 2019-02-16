@@ -104,7 +104,7 @@ folds_bootstrap <- function(n, V = 1000) {
 
 #' @rdname fold_funs
 #' @export
-folds_rolling_origin <- function(n, first_window, validation_size, gap=0, batch=1) {
+folds_rolling_origin <- function(n, first_window, validation_size, gap = 0, batch = 1) {
   last_window <- n - (validation_size + gap)
   origins <- seq.int(first_window, last_window, by = batch)
 
@@ -120,7 +120,7 @@ folds_rolling_origin <- function(n, first_window, validation_size, gap=0, batch=
 
 #' @rdname fold_funs
 #' @export
-folds_rolling_window <- function(n, window_size, validation_size, gap=0, batch=1) {
+folds_rolling_window <- function(n, window_size, validation_size, gap = 0, batch = 1) {
   last_window <- n - (validation_size + gap)
   origins <- seq.int(window_size, last_window, by = batch)
 
