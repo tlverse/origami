@@ -78,28 +78,47 @@ make_folds <- function(n = NULL,
 
 ################################################################################
 
+#' Convert ID Folds to Observation Folds
+#'
+#' This function convertsf olds that subset ids to folds that subset observations
+#' @param idfolds folds that subset ids
+#' @param cluster_ids a vector of cluster ids indicating which observations are in which clusters
+#' @export
+id_folds_to_folds <- function(idfolds, cluster_ids) {
+  idfac <- factor(cluster_ids)
+  nclusters <- length(levels(idfac))
+  clusternums <- as.numeric(idfac)
+
+  reindex <- function(index, fold_index) {
+    which(index %in% fold_index)
+  }
+
+  folds <- lapply(idfolds, function(idfold) {
+    make_fold(
+      v = fold_index(fold = idfold),
+      training_set = reindex(clusternums, training(fold = idfold)),
+      validation_set = reindex(clusternums, validation(fold = idfold))
+    )
+  })
+
+  return(folds)
+}
+
 # Generate folds for clusters, and then convert into folds for observations
-# this is kind of for a large number of IDs. Should be improved.
 cluster_folds <- function(fold_fun, cluster_ids, ...) {
   # convert ids to numeric 1:n
   idfac <- factor(cluster_ids)
   nclusters <- length(levels(idfac))
   clusternums <- as.numeric(idfac)
-  id_indexes <- by(seq_along(cluster_ids), list(id = clusternums), list)
+  # id_indexes <- by(seq_along(cluster_ids), list(id = clusternums), list)
 
   # generate folds for ids
   idfolds <- make_folds(
     n = nclusters, fold_fun = fold_fun,
     cluster_ids = NULL, ...
   )
-  # convert this into folds for observations
-  folds <- lapply(idfolds, function(idfold) {
-    make_fold(
-      v = fold_index(fold = idfold),
-      training_set = unlist(training(id_indexes, idfold)),
-      validation_set = unlist(validation(id_indexes, idfold))
-    )
-  })
+
+  folds <- id_folds_to_folds(idfolds, cluster_ids)
   return(folds)
 }
 

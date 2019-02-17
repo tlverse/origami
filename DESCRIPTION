@@ -30,7 +30,6 @@ Imports:
     future.apply,
     listenv
 Suggests:
-    future.batchtools,
     testthat,
     class,
     rmarkdown,
@@ -40,4 +39,4 @@ Suggests:
     randomForest
 LazyData: true
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 6.1.1

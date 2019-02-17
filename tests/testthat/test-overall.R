@@ -8,7 +8,7 @@ data(mtcars)
 
 # resubstitution MSE
 r <- lm(mpg ~ ., data = mtcars)
-simple_resub_MSE <- mean(resid(r) ^ 2)
+simple_resub_MSE <- mean(resid(r)^2)
 
 # function to calculate cross-validated squared error
 cvlm <- function(fold) {
@@ -17,7 +17,7 @@ cvlm <- function(fold) {
 
   r <- lm(mpg ~ ., data = train_data)
   preds <- predict(r, newdata = valid_data)
-  list(coef = data.frame(t(coef(r))), SE = ((preds - valid_data$mpg) ^ 2))
+  list(coef = data.frame(t(coef(r))), SE = ((preds - valid_data$mpg)^2))
 }
 
 # replicate the resubstitution estimate
