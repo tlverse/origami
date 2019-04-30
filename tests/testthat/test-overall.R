@@ -3,10 +3,9 @@ library(data.table)
 context("Overall Test")
 
 set.seed(1)
-
 data(mtcars)
 
-# resubstitution MSE
+# re-substitution MSE
 r <- lm(mpg ~ ., data = mtcars)
 simple_resub_MSE <- mean(resid(r)^2)
 
@@ -33,5 +32,5 @@ folds <- make_folds(mtcars)
 results <- cross_validate(cvlm, folds)
 cv_MSE <- mean(results$SE)
 test_that("CV MSE matches previous value", {
-  expect_equal(cv_MSE, 13.32, tolerance = 0.01)
+  expect_equal(cv_MSE, 14.111, tolerance = 0.01)
 })
