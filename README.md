@@ -163,7 +163,7 @@ After using the `origami` R package, please cite it:
 
 ## License
 
-© 2017-2018 [Jeremy R. Coyle](https://github.com/jeremyrcoyle)
+© 2017-2019 [Jeremy R. Coyle](https://github.com/jeremyrcoyle)
 
 The contents of this repository are distributed under the GPL-3 license.
 See file `LICENSE` for details.
