@@ -2,6 +2,13 @@ library(origami)
 library(data.table)
 context("Overall Test")
 
+r_major <- as.numeric(R.Version()$major)
+r_minor <- as.numeric(R.Version()$minor)
+if (r_major == 3 && r_minor < 6) {
+  cvmse_result <- 13.32
+} else {
+  cvmse_result <- 14.11
+}
 set.seed(1)
 data(mtcars)
 
@@ -32,5 +39,5 @@ folds <- make_folds(mtcars)
 results <- cross_validate(cvlm, folds)
 cv_MSE <- mean(results$SE)
 test_that("CV MSE matches previous value", {
-  expect_equal(cv_MSE, 14.111, tolerance = 0.01)
+  expect_equal(cv_MSE, cvmse_result, tolerance = 0.01)
 })
