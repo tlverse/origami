@@ -1,6 +1,6 @@
 Package: origami
 Title: Generalized Framework for Cross-Validation
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(
   person("Jeremy", "Coyle", email = "jeremyrcoyle@gmail.com",
          role = c("aut", "cre", "cph"),
@@ -9,17 +9,17 @@ Authors@R: c(
          role = "aut",
          comment = c(ORCID = "0000-0002-7127-2789")),
   person("Ivana", "Malenica", email = "imalenica@berkeley.edu",
-         role = "ctb")
+         role = "ctb",
+         comment = c(ORCID = "0000-0002-7404-8088"))
   )
 Maintainer: Jeremy Coyle <jeremyrcoyle@gmail.com>
-Description: Provides a general framework for the application of
-    cross-validation schemes to particular functions. By allowing arbitrary
-    lists of results, origami accommodates a range of cross-validation
-    applications.
+Description: A general framework for the application of cross-validation schemes
+    to particular functions. By allowing arbitrary lists of results, origami
+    accommodates a range of cross-validation applications.
 Depends:
     R (>= 3.0.0),
 License: GPL-3
-URL: https://origami.tlverse.org
+URL: https://tlverse.org/origami
 BugReports: https://github.com/tlverse/origami/issues
 Encoding: UTF-8
 Imports:

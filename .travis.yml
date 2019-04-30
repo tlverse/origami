@@ -1,6 +1,15 @@
+branches:
+  only:
+    - master
+
+env:
+  global:
+    - RGL_USE_NULL=TRUE
+
 language: r
 sudo: required
 cache: packages
+cran: https://cran.rstudio.com
 warnings_are_errors: true
 
 before_install:
@@ -16,7 +25,8 @@ r:
   - devel
 
 r_github_packages:
-  - jimhester/covr
+  - r-lib/covr
+  - r-lib/sessioninfo
 
 after_success:
   - Rscript -e 'covr::codecov()'

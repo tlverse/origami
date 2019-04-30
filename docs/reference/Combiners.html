@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Flexible Guessing and Mapping for Combining Data Types — guess_combiner • origami</title>
+<title>Combiners — Combiners • origami</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Flexible Guessing and Mapping for Combining Data Types — guess_combiner" />
+<meta property="og:title" content="Combiners — Combiners" />
 
-<meta property="og:description" content="Maps data types into standard combiners that should be sensible." />
+<meta property="og:description" content="Combiners are functions that collapse across a list of similarly structured
+results. These are standard idioms for combining lists of certain data types." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,31 +113,38 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Flexible Guessing and Mapping for Combining Data Types</h1>
+    <h1>Combiners</h1>
     
-    <div class="hidden name"><code>guess_combiner.Rd</code></div>
+    <div class="hidden name"><code>Combiners.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Maps data types into standard combiners that should be sensible.</p>
+    <p>Combiners are functions that collapse across a list of similarly structured
+results. These are standard idioms for combining lists of certain data types.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>guess_combiner</span>(<span class='no'>result</span>)</pre>
+    <pre class="usage"><span class='fu'>combiner_rbind</span>(<span class='no'>x</span>)
+
+<span class='fu'>combiner_c</span>(<span class='no'>x</span>)
+
+<span class='fu'>combiner_factor</span>(<span class='no'>x</span>)
+
+<span class='fu'>combiner_array</span>(<span class='no'>x</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>result</th>
-      <td><p>- a single result; flexibly accepts several object classes.</p></td>
+      <th>x</th>
+      <td><p>(list) - a list of similar results to be combined.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A function to combine a list of such results.</p>
+    <p>A combined results object.</p>
     
 
   </div>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Flexible Guessing and Mapping for Combining Data Types — guess_combiner • origami</title>
+<title>Convert ID Folds to Observation Folds — id_folds_to_folds • origami</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Flexible Guessing and Mapping for Combining Data Types — guess_combiner" />
+<meta property="og:title" content="Convert ID Folds to Observation Folds — id_folds_to_folds" />
 
-<meta property="og:description" content="Maps data types into standard combiners that should be sensible." />
+<meta property="og:description" content="This function convertsf olds that subset ids to folds that subset observations" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,31 +112,31 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Flexible Guessing and Mapping for Combining Data Types</h1>
+    <h1>Convert ID Folds to Observation Folds</h1>
     
-    <div class="hidden name"><code>guess_combiner.Rd</code></div>
+    <div class="hidden name"><code>id_folds_to_folds.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Maps data types into standard combiners that should be sensible.</p>
+    <p>This function convertsf olds that subset ids to folds that subset observations</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>guess_combiner</span>(<span class='no'>result</span>)</pre>
+    <pre class="usage"><span class='fu'>id_folds_to_folds</span>(<span class='no'>idfolds</span>, <span class='no'>cluster_ids</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>result</th>
-      <td><p>- a single result; flexibly accepts several object classes.</p></td>
+      <th>idfolds</th>
+      <td><p>folds that subset ids</p></td>
+    </tr>
+    <tr>
+      <th>cluster_ids</th>
+      <td><p>a vector of cluster ids indicating which observations are in which clusters</p></td>
     </tr>
     </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A function to combine a list of such results.</p>
     
 
   </div>
@@ -144,9 +144,7 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-          </ul>
+                </ul>
 
   </div>
 </div>
