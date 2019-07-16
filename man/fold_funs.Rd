@@ -9,6 +9,7 @@
 \alias{folds_bootstrap}
 \alias{folds_rolling_origin}
 \alias{folds_rolling_window}
+\alias{folds_vfold_rolling_origin_pooled}
 \alias{folds_rolling_origin_pooled}
 \title{Cross-Validation Schemes}
 \usage{
@@ -28,8 +29,11 @@ folds_rolling_origin(n, first_window, validation_size, gap = 0,
 folds_rolling_window(n, window_size, validation_size, gap = 0,
   batch = 1)
 
+folds_vfold_rolling_origin_pooled(dat, id, V = 10, first_window,
+  validation_size, gap = 0, batch = 1)
+
 folds_rolling_origin_pooled(dat, id, first_window, validation_size,
-  gap = 0, batch = 1, V = 10)
+  gap = 0, batch = 1)
 }
 \arguments{
 \item{n}{(integer) - number of observations.}

@@ -140,15 +140,11 @@ folds_rolling_window <- function(n, window_size, validation_size, gap = 0, batch
 
 ################################################################################
 
-# This function pertains to mutliple time-series on different subjects, where
-# all subjects must have equal numbers of observations. The function splits
-# ids into Vfolds and then performs folds_rolling_origin, so that training and
-# validation sets in folds_rolling_origin correspond to the Vfold id allocation.
-
 #' @rdname fold_funs
 #' @export
-folds_rolling_origin_pooled <- function(dat, id, first_window, validation_size,
-                                        gap = 0, batch = 1, V = 10) {
+folds_vfold_rolling_origin_pooled <- function(dat, id, V = 10, first_window, 
+                                              validation_size, gap = 0, 
+                                              batch = 1) {
   
   if(length(levels(factor(dat[, .(.N), by = .(get(id))]$N))) > 1){
     stop("all id's must have equal number of observations")
@@ -204,4 +200,43 @@ folds_rolling_origin_pooled <- function(dat, id, first_window, validation_size,
     Vfolds_rolling_origin_pooled[[i]][["v"]] <- i
   }
   return(Vfolds_rolling_origin_pooled)
+}
+
+################################################################################
+
+#' @rdname fold_funs
+#' @export
+folds_rolling_origin_pooled <- function(dat, id, first_window, validation_size,
+                                        gap = 0, batch = 1) {
+  
+  if(length(levels(factor(dat[, .(.N), by = .(get(id))]$N))) > 1){
+    stop("all id's must have equal number of observations")
+    }
+  
+  # no. observations for each id
+  n_id <- as.numeric(levels(factor(dat[, .(.N), by = .(get(id))]$N)))
+  
+  # index the observations
+  dat$index <- seq(1:nrow(dat))
+  ids <- dat[, id, with = FALSE]
+  ids <- levels(unlist(unique(ids)))
+  
+  # establish rolling origin forecast for time-series cross-validation
+  rolling_origin_skeleton <- folds_rolling_origin(n_id, first_window,
+                                                  validation_size, gap, batch)
+  
+  folds_rolling_origin <- lapply(rolling_origin_skeleton, function(h){
+    train_indices <- lapply(ids, function(i){
+      train <- dat[get(id) == i, ]
+      train[h$training_set, ]$index
+      })
+    val_indices <- lapply(validation_ids, function(j){
+      val <- dat[get(id) == j, ]
+      val[h$validation_set, ]$index
+      })
+    list(v = h$v,
+         training_set = unlist(train_indices),
+         validation_set = unlist(val_indices))
+    })
+  return(folds_rolling_origin)
 }
