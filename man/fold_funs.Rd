@@ -9,6 +9,7 @@
 \alias{folds_bootstrap}
 \alias{folds_rolling_origin}
 \alias{folds_rolling_window}
+\alias{folds_rolling_origin_pooled}
 \title{Cross-Validation Schemes}
 \usage{
 folds_vfold(n, V = 10)
@@ -26,6 +27,9 @@ folds_rolling_origin(n, first_window, validation_size, gap = 0,
 
 folds_rolling_window(n, window_size, validation_size, gap = 0,
   batch = 1)
+
+folds_rolling_origin_pooled(dat, id, first_window, validation_size,
+  gap = 0, batch = 1, V = 10)
 }
 \arguments{
 \item{n}{(integer) - number of observations.}
@@ -50,6 +54,12 @@ is 1.}
 
 \item{window_size}{(integer) - number of observations in each training
 sample.}
+
+\item{dat}{(data.table) - data as a data.table, required for
+folds_rolling_origin_pooled.}
+
+\item{id}{(data.table) - column name of dat for Vfold cross-validation
+specification, required in folds_rolling_origin_pooled.}
 }
 \value{
 A list of Folds.
