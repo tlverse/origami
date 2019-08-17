@@ -228,9 +228,8 @@ folds_rolling_origin_pooled <- function(n, t, first_window, validation_size,
       val <- dat[dat$id == j, ]
       val[h$validation_set, ]$index
     })
-    list(v = h$v,
-         training_set = unlist(train_indices),
-         validation_set = unlist(val_indices))
+    make_fold(v=h$v, training_set=unlist(train_indices), 
+              validation_set=unlist(val_indices))
   })
   return(folds_rolling_origin)
 }
