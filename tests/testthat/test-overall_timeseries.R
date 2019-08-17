@@ -80,3 +80,19 @@ mses_mean <- colMeans(mses[, c("arima", "stl")])
 test_that("CV MSE with rolling window matches previous value", {
   expect_equal(mses_mean[[1]], 7580.455, tolerance = 0.01)
 })
+
+### Test multiple time-series functionality
+
+# pretend each month is a separate time-series... 
+test_data<-data.table::data.table(data.table::melt(data.frame(AirPassengers)))
+
+folds <- make_folds(test_data,
+                    fold_fun = folds_rolling_origin_pooled,
+                    t=12, first_window = 4, 
+                    validation_size = 4, gap = 0, batch = 2)
+
+fold <- folds[[1]]
+test_that("Size of the first fold is ok", {
+  expect_equal(length(fold$training_set), 48, tolerance = 0.01)
+})
+

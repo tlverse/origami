@@ -206,37 +206,31 @@ folds_vfold_rolling_origin_pooled <- function(dat, id, V = 10, first_window,
 
 #' @rdname fold_funs
 #' @export
-folds_rolling_origin_pooled <- function(dat, id, first_window, validation_size,
+folds_rolling_origin_pooled <- function(n, t, first_window, validation_size,
                                         gap = 0, batch = 1) {
   
-  if(length(levels(factor(dat[, .(.N), by = .(get(id))]$N))) > 1){
-    stop("all id's must have equal number of observations")
-    }
+  message(paste("Processing", n/t, "samples with", t, "time points."))
   
-  # no. observations for each id
-  n_id <- as.numeric(levels(factor(dat[, .(.N), by = .(get(id))]$N)))
-  
-  # index the observations
-  dat$index <- seq(1:nrow(dat))
-  ids <- dat[, id, with = FALSE]
-  ids <- levels(unlist(unique(ids)))
+  #Index the observations
+  dat <- cbind.data.frame(index=seq(n),time=rep(seq(t),n/t),id=rep(seq(n/t), each=t))
+  ids <- unique(dat$id)
   
   # establish rolling origin forecast for time-series cross-validation
-  rolling_origin_skeleton <- folds_rolling_origin(n_id, first_window,
+  rolling_origin_skeleton <- folds_rolling_origin(t, first_window,
                                                   validation_size, gap, batch)
   
   folds_rolling_origin <- lapply(rolling_origin_skeleton, function(h){
     train_indices <- lapply(ids, function(i){
-      train <- dat[get(id) == i, ]
+      train <- dat[dat$id == i, ]
       train[h$training_set, ]$index
-      })
-    val_indices <- lapply(validation_ids, function(j){
-      val <- dat[get(id) == j, ]
+    })
+    val_indices <- lapply(ids, function(j){
+      val <- dat[dat$id == j, ]
       val[h$validation_set, ]$index
-      })
+    })
     list(v = h$v,
          training_set = unlist(train_indices),
          validation_set = unlist(val_indices))
-    })
+  })
   return(folds_rolling_origin)
 }

@@ -32,8 +32,8 @@ folds_rolling_window(n, window_size, validation_size, gap = 0,
 folds_vfold_rolling_origin_pooled(dat, id, V = 10, first_window,
   validation_size, gap = 0, batch = 1)
 
-folds_rolling_origin_pooled(dat, id, first_window, validation_size,
-  gap = 0, batch = 1)
+folds_rolling_origin_pooled(n, t, first_window, validation_size, gap = 0,
+  batch = 1)
 }
 \arguments{
 \item{n}{(integer) - number of observations.}
