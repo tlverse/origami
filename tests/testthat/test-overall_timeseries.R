@@ -81,16 +81,18 @@ test_that("CV MSE with rolling window matches previous value", {
   expect_equal(mses_mean[[1]], 7580.455, tolerance = 0.01)
 })
 
+#############################################
 ### Test multiple time-series functionality
+#############################################
 
-# pretend each month is a separate time-series... 
 test_data<-data.table::data.table(data.table::melt(data.frame(AirPassengers)))
 
+### Independent samples example
 folds <- make_folds(test_data,
                     fold_fun = folds_rolling_origin_pooled,
                     t=12, first_window = 4, 
                     validation_size = 4, gap = 0, batch = 2)
-test_that("Size of the first fold of rolling origin pooled is ok", {
+test_that("Size of the first fold of rolling origin pooled CV", {
   expect_equal(length(folds[[1]]$training_set), 48, tolerance = 0.01)
 })
 
@@ -98,6 +100,23 @@ folds <- make_folds(test_data,
                     fold_fun = folds_rolling_window_pooled,
                     t=12, window_size = 4, 
                     validation_size = 4, gap = 0, batch = 2)
-test_that("Size of the first fold of rolling window pooled is ok", {
+test_that("Size of the first fold of rolling window pooled CV", {
   expect_equal(length(folds[[1]]$training_set), 48, tolerance = 0.01)
+})
+
+### Dependent samples example
+folds <- make_folds(test_data,
+                    fold_fun = folds_vfold_rolling_origin_pooled,
+                    t=12, first_window = 6, V=5,
+                    validation_size = 2, gap = 0, batch = 2)
+test_that("Dimension of folds for the V-fold rolling origin pooled CV", {
+  expect_equal(length(folds), 15, tolerance = 0.01)
+})
+
+folds <- make_folds(test_data,
+                    fold_fun = folds_vfold_rolling_window_pooled,
+                    t=12, window_size = 6, V=5,
+                    validation_size = 2, gap = 0, batch = 3)
+test_that("Dimension of folds for the V-fold rolling window pooled CV", {
+  expect_equal(length(folds), 10, tolerance = 0.01)
 })

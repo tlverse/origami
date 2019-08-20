@@ -11,6 +11,8 @@
 \alias{folds_rolling_window}
 \alias{folds_rolling_origin_pooled}
 \alias{folds_rolling_window_pooled}
+\alias{folds_vfold_rolling_origin_pooled}
+\alias{folds_vfold_rolling_window_pooled}
 \title{Cross-Validation Schemes}
 \usage{
 folds_vfold(n, V = 10)
@@ -34,6 +36,12 @@ folds_rolling_origin_pooled(n, t, first_window, validation_size, gap = 0,
 
 folds_rolling_window_pooled(n, t, window_size, validation_size, gap = 0,
   batch = 1)
+
+folds_vfold_rolling_origin_pooled(n, t, V = 10, first_window,
+  validation_size, gap = 0, batch = 1)
+
+folds_vfold_rolling_window_pooled(n, t, V = 10, window_size,
+  validation_size, gap = 0, batch = 1)
 }
 \arguments{
 \item{n}{(integer) - number of observations.}
