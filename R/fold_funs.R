@@ -24,10 +24,7 @@
 #' @param batch (integer) - Increases the number of time-points added to the
 #'  training set each CV iteration. Applicable for larger time-series. Default
 #'  is 1.
-#' @param dat (data.table) - data as a data.table, required for
-#'  folds_rolling_origin_pooled.
-#' @param id (data.table) - column name of dat for Vfold cross-validation
-#'  specification, required in folds_rolling_origin_pooled.
+#' @param t (integer) - Number of time points per time-series sample.
 #'
 #' @return A list of Folds.
 #' @name fold_funs
@@ -142,70 +139,6 @@ folds_rolling_window <- function(n, window_size, validation_size, gap = 0, batch
 
 #' @rdname fold_funs
 #' @export
-folds_vfold_rolling_origin_pooled <- function(dat, id, V = 10, first_window, 
-                                              validation_size, gap = 0, 
-                                              batch = 1) {
-  
-  if(length(levels(factor(dat[, .(.N), by = .(get(id))]$N))) > 1){
-    stop("all id's must have equal number of observations")
-    }
-  
-  # no. observations for each id
-  n_id <- as.numeric(levels(factor(dat[, .(.N), by = .(get(id))]$N)))
-  
-  # index the observations
-  dat$index <- seq(1:nrow(dat))
-  ids <- dat[, id, with = FALSE]
-  ids <- levels(unlist(unique(ids)))
-  
-  # establish V folds for cross-validating ids
-  Vfold_allocation <- sample(rep(seq_len(V), length = length(ids)))
-  Vfolds_skeleton <- lapply(1:V, fold_from_foldvec, Vfold_allocation)
-  Vfolds_skeleton <- lapply(Vfolds_skeleton, function(v){
-    list(v = v$v,
-         training_set = ids[v$training_set],
-         validation_set = ids[v$validation_set])
-    })
-  
-  # establish rolling origin forecast for time-series cross-validation
-  rolling_origin_skeleton <- folds_rolling_origin(n_id, first_window,
-                                                  validation_size, gap, batch)
-  
-  # put it all together
-  Vfolds_rolling_origin <- lapply(Vfolds_skeleton, function(g){
-    
-    training_ids <- g$training_set
-    validation_ids <- g$validation_set
-    
-    folds_rolling_origin <- lapply(rolling_origin_skeleton, function(h){
-        train_indices <- lapply(training_ids, function(i){
-          train <- dat[get(id) == i, ]
-          train[h$training_set, ]$index
-          })
-        val_indices <- lapply(validation_ids, function(j){
-          val <- dat[get(id) == j, ]
-          val[h$validation_set, ]$index
-          })
-        list(v = "",
-             training_set = unlist(train_indices),
-             validation_set = unlist(val_indices))
-        })
-    return(folds_rolling_origin)
-    })
-  # remove nested list structure
-  Vfolds_rolling_origin_pooled <- unlist(Vfolds_rolling_origin, 
-                                         recursive = FALSE)
-  # label folds appropriately
-  for(i in 1:length(Vfolds_rolling_origin_pooled)){
-    Vfolds_rolling_origin_pooled[[i]][["v"]] <- i
-  }
-  return(Vfolds_rolling_origin_pooled)
-}
-
-################################################################################
-
-#' @rdname fold_funs
-#' @export
 folds_rolling_origin_pooled <- function(n, t, first_window, validation_size,
                                         gap = 0, batch = 1) {
   
@@ -232,4 +165,34 @@ folds_rolling_origin_pooled <- function(n, t, first_window, validation_size,
               validation_set=unlist(val_indices))
   })
   return(folds_rolling_origin)
+}
+
+#' @rdname fold_funs
+#' @export
+folds_rolling_window_pooled <- function(n, t, window_size, validation_size,
+                                        gap = 0, batch = 1) {
+  
+  message(paste("Processing", n/t, "samples with", t, "time points."))
+  
+  #Index the observations
+  dat <- cbind.data.frame(index=seq(n),time=rep(seq(t),n/t),id=rep(seq(n/t), each=t))
+  ids <- unique(dat$id)
+  
+  # establish rolling window forecast for time-series cross-validation
+  rolling_window_skeleton <- folds_rolling_window(t, window_size,
+                                                  validation_size, gap, batch)
+  
+  folds_rolling_window <- lapply(rolling_window_skeleton, function(h){
+    train_indices <- lapply(ids, function(i){
+      train <- dat[dat$id == i, ]
+      train[h$training_set, ]$index
+    })
+    val_indices <- lapply(ids, function(j){
+      val <- dat[dat$id == j, ]
+      val[h$validation_set, ]$index
+    })
+    make_fold(v=h$v, training_set=unlist(train_indices), 
+              validation_set=unlist(val_indices))
+  })
+  return(folds_rolling_window)
 }

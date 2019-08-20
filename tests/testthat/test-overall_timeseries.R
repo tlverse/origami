@@ -90,9 +90,14 @@ folds <- make_folds(test_data,
                     fold_fun = folds_rolling_origin_pooled,
                     t=12, first_window = 4, 
                     validation_size = 4, gap = 0, batch = 2)
-
-fold <- folds[[1]]
-test_that("Size of the first fold is ok", {
-  expect_equal(length(fold$training_set), 48, tolerance = 0.01)
+test_that("Size of the first fold of rolling origin pooled is ok", {
+  expect_equal(length(folds[[1]]$training_set), 48, tolerance = 0.01)
 })
 
+folds <- make_folds(test_data,
+                    fold_fun = folds_rolling_window_pooled,
+                    t=12, window_size = 4, 
+                    validation_size = 4, gap = 0, batch = 2)
+test_that("Size of the first fold of rolling window pooled is ok", {
+  expect_equal(length(folds[[1]]$training_set), 48, tolerance = 0.01)
+})
