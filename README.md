@@ -75,7 +75,7 @@ estimate of the mean:
 library(stringr)
 library(origami)
 #> origami: Generalized Cross-Validation Framework
-#> Version: 1.0.0
+#> Version: 1.0.2
 set.seed(4795)
 
 data(mtcars)
@@ -112,7 +112,7 @@ folds <- make_folds(mtcars)
 results <- cross_validate(cv_fun = cv_lm, folds = folds, data = mtcars,
                           reg_form = "mpg ~ .")
 mean(results$SE)
-#> [1] 11.37989
+#> [1] 15.18558
 ```
 
 For details on how to write wrappers (`cv_fun`s) for use with
