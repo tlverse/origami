@@ -5,8 +5,8 @@
 
 [![Travis-CI Build
 Status](https://travis-ci.org/tlverse/origami.svg?branch=master)](https://travis-ci.org/tlverse/origami)
-[\[Build
-status\](https://ci.appveyor.com/api/projects/status/bfe2jd9a065jhql7?svg=true](https://ci.appveyor.com/project/tlverse/origami)
+[![Build
+status](https://ci.appveyor.com/api/projects/status/bfe2jd9a065jhql7?svg=true)](https://ci.appveyor.com/project/tlverse/origami)
 [![Coverage
 Status](https://codecov.io/gh/tlverse/origami/branch/master/graph/badge.svg)](https://codecov.io/gh/tlverse/origami)
 [![CRAN](http://www.r-pkg.org/badges/version/origami)](http://www.r-pkg.org/pkg/origami)
