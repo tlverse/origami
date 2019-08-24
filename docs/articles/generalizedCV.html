@@ -181,7 +181,7 @@ empirical process conditions from CV-TMLE step [@Zheng:2010ua].
 <a class="sourceLine" id="cb13-3" data-line-number="3">cvlm_results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cross_validate.html">cross_validate</a></span>(<span class="dt">cv_fun =</span> cv_lm, <span class="dt">folds =</span> folds, <span class="dt">data =</span> mtcars,</a>
 <a class="sourceLine" id="cb13-4" data-line-number="4">                               <span class="dt">reg_form =</span> <span class="st">"mpg ~ ."</span>)</a>
 <a class="sourceLine" id="cb13-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(cvlm_results<span class="op">$</span>SE)</a></code></pre></div>
-<pre><code>## [1] 14.23446</code></pre>
+<pre><code>## [1] 10.93681</code></pre>
 <p>Having performed 10-fold cross-validation, we quickly notice that our previous estimate of the model error (by resubstitution) was quite optimistic. The honest estimate of the error is several times larger.</p>
 <hr>
 </div>
@@ -244,7 +244,7 @@ Nima: tried some re-wording to clarify; not sure how much this helped.
 <a class="sourceLine" id="cb19-2" data-line-number="2">cvrf_results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cross_validate.html">cross_validate</a></span>(<span class="dt">cv_fun =</span> cv_rf, <span class="dt">folds =</span> folds, <span class="dt">data =</span> mtcars,</a>
 <a class="sourceLine" id="cb19-3" data-line-number="3">                               <span class="dt">reg_form =</span> <span class="st">"mpg ~ ."</span>)</a>
 <a class="sourceLine" id="cb19-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(cvrf_results<span class="op">$</span>SE)</a></code></pre></div>
-<pre><code>## [1] 5.524763</code></pre>
+<pre><code>## [1] 6.030682</code></pre>
 <p>Using 10-fold cross-validation (the default), we obtain an honest estimate of the prediction error of random forests. From this, we gather that the use of <code>origami</code>’s <code>cross_validate</code> procedure can be generalized to arbitrary esimation techniques, given availability of an appropriate <code>cv_fun</code> function.</p>
 <hr>
 </div>
