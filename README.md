@@ -6,7 +6,7 @@
 [![Travis-CI Build
 Status](https://travis-ci.org/tlverse/origami.svg?branch=master)](https://travis-ci.org/tlverse/origami)
 [![Build
-status](https://ci.appveyor.com/api/projects/status/i5qwp8cjb4j4x329?svg=true)](https://ci.appveyor.com/project/tlverse/origami)
+status](https://ci.appveyor.com/api/projects/status/bfe2jd9a065jhql7?svg=true)](https://ci.appveyor.com/project/tlverse/origami)
 [![Coverage
 Status](https://codecov.io/gh/tlverse/origami/branch/master/graph/badge.svg)](https://codecov.io/gh/tlverse/origami)
 [![CRAN](http://www.r-pkg.org/badges/version/origami)](http://www.r-pkg.org/pkg/origami)
@@ -75,7 +75,7 @@ estimate of the mean:
 library(stringr)
 library(origami)
 #> origami: Generalized Cross-Validation Framework
-#> Version: 1.0.0
+#> Version: 1.0.2
 set.seed(4795)
 
 data(mtcars)
@@ -112,7 +112,7 @@ folds <- make_folds(mtcars)
 results <- cross_validate(cv_fun = cv_lm, folds = folds, data = mtcars,
                           reg_form = "mpg ~ .")
 mean(results$SE)
-#> [1] 11.37989
+#> [1] 15.18558
 ```
 
 For details on how to write wrappers (`cv_fun`s) for use with

@@ -5,11 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Generalized Framework for Cross-Validation • origami</title>
+<title>origami • origami</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Generalized Framework for Cross-Validation">
+<script src="pkgdown.js"></script><meta property="og:title" content="origami">
 <meta property="og:description" content="A general framework for the application of cross-validation schemes
     to particular functions. By allowing arbitrary lists of results, origami
     accommodates a range of cross-validation applications.">
@@ -100,9 +101,9 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>For standard use, we recommend installing the package from <a href="https://cran.r-project.org/">CRAN</a> via</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"origami"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"origami"</span>)</a></code></pre></div>
 <p>You can install a stable release of <code>origami</code> from GitHub via <a href="https://www.rstudio.com/products/rpackages/devtools/"><code>devtools</code></a> with:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"tlverse/origami"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/reexports.html">install_github</a></span>(<span class="st">"tlverse/origami"</span>)</a></code></pre></div>
 <hr>
 </div>
 <div id="usage" class="section level2">
@@ -115,14 +116,14 @@
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
 <p>This minimal example shows how to use <code>origami</code> to apply cross-validation to the computation of a simple descriptive statistic using a sample data set. In particular, we obtain a cross-validated estimate of the mean:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(stringr)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(origami)</a>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(stringr)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(origami)</a>
 <a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; origami: Generalized Cross-Validation Framework</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; Version: 1.0.0</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">4795</span>)</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; Version: 1.0.2</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">4795</span>)</a>
 <a class="sourceLine" id="cb3-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(mtcars)</a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(mtcars)</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(mtcars)</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(mtcars)</a>
 <a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt;                    mpg cyl disp  hp drat    wt  qsec vs am gear carb</span></a>
 <a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4</span></a>
 <a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4</span></a>
@@ -134,28 +135,28 @@
 <a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co"># build a cv_fun that wraps around lm</span></a>
 <a class="sourceLine" id="cb3-18" data-line-number="18">cv_lm &lt;-<span class="st"> </span><span class="cf">function</span>(fold, data, reg_form) {</a>
 <a class="sourceLine" id="cb3-19" data-line-number="19">  <span class="co"># get name and index of outcome variable from regression formula</span></a>
-<a class="sourceLine" id="cb3-20" data-line-number="20">  out_var &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/character">as.character</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/unlist">unlist</a></span>(<span class="kw"><a href="https://stringr.tidyverse.org/reference/str_split.html">str_split</a></span>(reg_form, <span class="st">" "</span>))[<span class="dv">1</span>])</a>
-<a class="sourceLine" id="cb3-21" data-line-number="21">  out_var_ind &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">as.numeric</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/which">which</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(data) <span class="op">==</span><span class="st"> </span>out_var))</a>
+<a class="sourceLine" id="cb3-20" data-line-number="20">  out_var &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="kw"><a href="https://stringr.tidyverse.org/reference/str_split.html">str_split</a></span>(reg_form, <span class="st">" "</span>))[<span class="dv">1</span>])</a>
+<a class="sourceLine" id="cb3-21" data-line-number="21">  out_var_ind &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/which.html">which</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(data) <span class="op">==</span><span class="st"> </span>out_var))</a>
 <a class="sourceLine" id="cb3-22" data-line-number="22"></a>
 <a class="sourceLine" id="cb3-23" data-line-number="23">  <span class="co"># split up data into training and validation sets</span></a>
 <a class="sourceLine" id="cb3-24" data-line-number="24">  train_data &lt;-<span class="st"> </span><span class="kw"><a href="reference/fold_helpers.html">training</a></span>(data)</a>
 <a class="sourceLine" id="cb3-25" data-line-number="25">  valid_data &lt;-<span class="st"> </span><span class="kw"><a href="reference/fold_helpers.html">validation</a></span>(data)</a>
 <a class="sourceLine" id="cb3-26" data-line-number="26"></a>
 <a class="sourceLine" id="cb3-27" data-line-number="27">  <span class="co"># fit linear model on training set and predict on validation set</span></a>
-<a class="sourceLine" id="cb3-28" data-line-number="28">  mod &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/formula">as.formula</a></span>(reg_form), <span class="dt">data =</span> train_data)</a>
-<a class="sourceLine" id="cb3-29" data-line-number="29">  preds &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(mod, <span class="dt">newdata =</span> valid_data)</a>
+<a class="sourceLine" id="cb3-28" data-line-number="28">  mod &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="kw"><a href="https://rdrr.io/r/stats/formula.html">as.formula</a></span>(reg_form), <span class="dt">data =</span> train_data)</a>
+<a class="sourceLine" id="cb3-29" data-line-number="29">  preds &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(mod, <span class="dt">newdata =</span> valid_data)</a>
 <a class="sourceLine" id="cb3-30" data-line-number="30"></a>
 <a class="sourceLine" id="cb3-31" data-line-number="31">  <span class="co"># capture results to be returned as output</span></a>
-<a class="sourceLine" id="cb3-32" data-line-number="32">  out &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">coef =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/t">t</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/coef">coef</a></span>(mod))),</a>
+<a class="sourceLine" id="cb3-32" data-line-number="32">  out &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">coef =</span> <span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="kw"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span>(mod))),</a>
 <a class="sourceLine" id="cb3-33" data-line-number="33">              <span class="dt">SE =</span> ((preds <span class="op">-</span><span class="st"> </span>valid_data[, out_var_ind])<span class="op">^</span><span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb3-34" data-line-number="34">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/function">return</a></span>(out)</a>
+<a class="sourceLine" id="cb3-34" data-line-number="34">  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span>(out)</a>
 <a class="sourceLine" id="cb3-35" data-line-number="35">}</a>
 <a class="sourceLine" id="cb3-36" data-line-number="36"></a>
 <a class="sourceLine" id="cb3-37" data-line-number="37">folds &lt;-<span class="st"> </span><span class="kw"><a href="reference/make_folds.html">make_folds</a></span>(mtcars)</a>
 <a class="sourceLine" id="cb3-38" data-line-number="38">results &lt;-<span class="st"> </span><span class="kw"><a href="reference/cross_validate.html">cross_validate</a></span>(<span class="dt">cv_fun =</span> cv_lm, <span class="dt">folds =</span> folds, <span class="dt">data =</span> mtcars,</a>
 <a class="sourceLine" id="cb3-39" data-line-number="39">                          <span class="dt">reg_form =</span> <span class="st">"mpg ~ ."</span>)</a>
-<a class="sourceLine" id="cb3-40" data-line-number="40"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(results<span class="op">$</span>SE)</a>
-<a class="sourceLine" id="cb3-41" data-line-number="41"><span class="co">#&gt; [1] 11.37989</span></a></code></pre></div>
+<a class="sourceLine" id="cb3-40" data-line-number="40"><span class="kw"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(results<span class="op">$</span>SE)</a>
+<a class="sourceLine" id="cb3-41" data-line-number="41"><span class="co">#&gt; [1] 15.18558</span></a></code></pre></div>
 <p>For details on how to write wrappers (<code>cv_fun</code>s) for use with <code><a href="reference/cross_validate.html">origami::cross_validate</a></code>, please consult the documentation and vignettes that accompany the package.</p>
 <hr>
 </div>
@@ -227,7 +228,7 @@
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://travis-ci.org/tlverse/origami"><img src="https://travis-ci.org/tlverse/origami.svg?branch=master" alt="Travis-CI Build Status"></a></li>
-<li><a href="https://ci.appveyor.com/project/tlverse/origami"><img src="https://ci.appveyor.com/api/projects/status/i5qwp8cjb4j4x329?svg=true" alt="Build status"></a></li>
+<li><a href="https://ci.appveyor.com/project/tlverse/origami"><img src="https://ci.appveyor.com/api/projects/status/bfe2jd9a065jhql7?svg=true" alt="Build status"></a></li>
 <li><a href="https://codecov.io/gh/tlverse/origami"><img src="https://codecov.io/gh/tlverse/origami/branch/master/graph/badge.svg" alt="Coverage Status"></a></li>
 <li><a href="http://www.r-pkg.org/pkg/origami"><img src="http://www.r-pkg.org/badges/version/origami" alt="CRAN"></a></li>
 <li><a href="https://CRAN.R-project.org/package=origami"><img src="https://cranlogs.r-pkg.org/badges/origami" alt="CRAN downloads"></a></li>
@@ -247,7 +248,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
       </footer>
 </div>
