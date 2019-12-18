@@ -8,10 +8,12 @@
 
 <title>Main Cross-Validation Function — cross_validate • origami</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -22,8 +24,9 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -31,11 +34,12 @@
 
 
 
-<meta property="og:title" content="Main Cross-Validation Function — cross_validate" />
 
+<meta property="og:title" content="Main Cross-Validation Function — cross_validate" />
 <meta property="og:description" content="Applies cv_fun to the folds using future_lapply and combines
 the results across folds using combine_results." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -59,6 +63,7 @@ the results across folds using combine_results." />
   gtag('config', 'UA-115145808-1');
 </script>
 
+
   </head>
 
   <body>
@@ -75,7 +80,7 @@ the results across folds using combine_results." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">origami</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
       </span>
     </div>
 
@@ -94,7 +99,6 @@ the results across folds using combine_results." />
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/tlverse/origami">
@@ -109,6 +113,7 @@ the results across folds using combine_results." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -120,15 +125,20 @@ the results across folds using combine_results." />
     </div>
 
     <div class="ref-description">
-    
     <p>Applies <code>cv_fun</code> to the folds using <code>future_lapply</code> and combines
 the results across folds using <code>combine_results</code>.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>cross_validate</span>(<span class='no'>cv_fun</span>, <span class='no'>folds</span>, <span class='no'>...</span>, <span class='kw'>use_future</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>.combine</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>.combine_control</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>.old_results</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>cross_validate</span>(
+  <span class='no'>cv_fun</span>,
+  <span class='no'>folds</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>use_future</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>.combine</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>.combine_control</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
+  <span class='kw'>.old_results</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -168,11 +178,10 @@ This function. Will be combined with the current results. This is useful
 for adding additional CV folds to a results object.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list of results, combined across folds.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>###############################################################################</span>
@@ -263,14 +272,13 @@ for adding additional CV folds to a results object.</p></td>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -278,13 +286,16 @@ for adding additional CV folds to a results object.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

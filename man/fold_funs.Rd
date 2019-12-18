@@ -25,23 +25,47 @@ folds_montecarlo(n, V = 1000, pvalidation = 0.2)
 
 folds_bootstrap(n, V = 1000)
 
-folds_rolling_origin(n, first_window, validation_size, gap = 0,
-  batch = 1)
+folds_rolling_origin(n, first_window, validation_size, gap = 0, batch = 1)
 
-folds_rolling_window(n, window_size, validation_size, gap = 0,
-  batch = 1)
+folds_rolling_window(n, window_size, validation_size, gap = 0, batch = 1)
 
-folds_rolling_origin_pooled(n, t, first_window, validation_size, gap = 0,
-  batch = 1)
+folds_rolling_origin_pooled(
+  n,
+  t,
+  first_window,
+  validation_size,
+  gap = 0,
+  batch = 1
+)
 
-folds_rolling_window_pooled(n, t, window_size, validation_size, gap = 0,
-  batch = 1)
+folds_rolling_window_pooled(
+  n,
+  t,
+  window_size,
+  validation_size,
+  gap = 0,
+  batch = 1
+)
 
-folds_vfold_rolling_origin_pooled(n, t, V = 10, first_window,
-  validation_size, gap = 0, batch = 1)
+folds_vfold_rolling_origin_pooled(
+  n,
+  t,
+  V = 10,
+  first_window,
+  validation_size,
+  gap = 0,
+  batch = 1
+)
 
-folds_vfold_rolling_window_pooled(n, t, V = 10, window_size,
-  validation_size, gap = 0, batch = 1)
+folds_vfold_rolling_window_pooled(
+  n,
+  t,
+  V = 10,
+  window_size,
+  validation_size,
+  gap = 0,
+  batch = 1
+)
 }
 \arguments{
 \item{n}{(integer) - number of observations.}
@@ -81,8 +105,10 @@ based on its arguments, and pass any remaining arguments (e.g. \code{V} or
 \code{pvalidation}) on.
 }
 \seealso{
-Other fold generation functions: \code{\link{fold_from_foldvec}},
-  \code{\link{folds2foldvec}}, \code{\link{make_folds}},
-  \code{\link{make_repeated_folds}}
+Other fold generation functions: 
+\code{\link{fold_from_foldvec}()},
+\code{\link{folds2foldvec}()},
+\code{\link{make_folds}()},
+\code{\link{make_repeated_folds}()}
 }
 \concept{fold generation functions}

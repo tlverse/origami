@@ -8,10 +8,14 @@
 #' @export
 #
 wrap_in_try <- function(fun, ...) {
-  wrapped <- function(...)
-    try({
-      fun(...)
-    }, silent = TRUE)
+  wrapped <- function(...) {
+    try(
+      {
+        fun(...)
+      },
+      silent = TRUE
+    )
+  }
   return(wrapped)
 }
 
