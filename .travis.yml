@@ -20,7 +20,6 @@ r_packages:
   - devtools
 
 r:
-  - oldrel
   - release
   - devel
 
