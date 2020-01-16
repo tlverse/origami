@@ -7,18 +7,20 @@
 make_repeated_folds(repeats, ...)
 }
 \arguments{
-\item{repeats}{integer; number of repeats}
+\item{repeats}{An integer indicating the number of repeats.}
 
-\item{...}{arguments passed to \link{make_folds}}
+\item{...}{Arguments passed to \code{\link{make_folds}}.}
 }
 \description{
 Implementation of repeated window cross-validation: generates fold objects
-for repeated cross-validation by making repeated calls to \link{make_folds}
-and concatenating the results.
+for repeated cross-validation by making repeated calls to
+\code{\link{make_folds}} and concatenating the results.
 }
 \seealso{
-Other fold generation functions: \code{\link{fold_from_foldvec}},
-  \code{\link{fold_funs}}, \code{\link{folds2foldvec}},
-  \code{\link{make_folds}}
+Other fold generation functions: 
+\code{\link{fold_from_foldvec}()},
+\code{\link{fold_funs}},
+\code{\link{folds2foldvec}()},
+\code{\link{make_folds}()}
 }
 \concept{fold generation functions}

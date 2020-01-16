@@ -1,7 +1,6 @@
 .onAttach <- function(...) {
-  packageStartupMessage("origami: Generalized Cross-Validation Framework")
-  packageStartupMessage(
-    "Version: ",
-    utils::packageDescription("origami")$Version
-  )
+  packageStartupMessage(paste0(
+    "origami v", utils::packageDescription("origami")$Version,
+    ": ", utils::packageDescription("origami")$Title
+  ))
 }

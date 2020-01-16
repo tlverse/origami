@@ -17,7 +17,7 @@ combiner_factor(x)
 combiner_array(x)
 }
 \arguments{
-\item{x}{(list) - a list of similar results to be combined.}
+\item{x}{A \code{list} of similar results to be combined.}
 }
 \value{
 A combined results object.

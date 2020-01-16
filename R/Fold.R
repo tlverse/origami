@@ -1,18 +1,17 @@
 #' Fold
 #'
-#' Functions to make a fold. Current representation is a simple list.
+#' Functions to make a fold. Current representation is a simple \code{list}.
 #'
-#' @param v integer index of fold in larger scheme.
-#' @param training_set - integer vector of indexes corresponding to the
+#' @param v An integer index of folds in the larger scheme.
+#' @param training_set An integer vector of indexes corresponding to the
 #'  training set.
-#' @param validation_set - integer vector of indexes corresponding to the
+#' @param validation_set An integer vector of indexes corresponding to the
 #'  validation set.
 #' @return A list containing these elements.
 #'
 #' @seealso \code{\link{fold_helpers}}
 #'
 #' @export
-#
 make_fold <- function(v, training_set, validation_set) {
   fold <- list(
     v = v,
@@ -75,7 +74,6 @@ get_from_fold <- function(component) {
 #' @name fold_helpers
 #'
 #' @seealso \code{\link{make_fold}}
-#
 NULL
 
 #' @rdname fold_helpers

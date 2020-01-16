@@ -192,10 +192,6 @@ the `folds` using `future_lapply`. This means that it can be easily parallelized
 by specifying a parallelization scheme (i.e., a `plan`). See the [`future`
 package](https://github.com/HenrikBengtsson/future) for more details.
 
-<!--
-Jeremy: this part is probably hard to read. Not sure how to clarify.
-Nima: tried some re-wording to clarify; not sure how much this helped.
--->
 The application of `cross_validate` generates a list of results. As described
 above, each call to `cv_fun` itself returns a list of results, with different
 elements for each type of result we care about. The main loop generates a list

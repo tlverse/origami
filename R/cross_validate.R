@@ -1,36 +1,39 @@
 #' Main Cross-Validation Function
 #'
 #' Applies \code{cv_fun} to the folds using \code{future_lapply} and combines
-#' the results across folds using \code{combine_results}.
+#' the results across folds using \code{\link{combine_results}}.
 #'
-#' @param cv_fun a function that takes a 'fold' as it's first argument and
-#'  returns a list of results from that fold. NOTE: the use of an argument named
-#' 'X' is specifically disallowed in any input function for compliance with the
-#'  functions \code{lapply} and \code{future.apply::future_lapply}.
-#' @param folds a list of folds to loop over generated using
+#' @param cv_fun A function that takes a 'fold' as it's first argument and
+#'  returns a list of results from that fold. NOTE: the use of an argument
+#'  named 'X' is specifically disallowed in any input function for compliance
+#'  with the functions \code{\link[future.apply]{future_lapply}} and
+#'  \code{lapply}.
+#' @param folds A list of folds to loop over generated using
 #'  \code{\link{make_folds}}.
-#' @param ... other arguments passed to \code{cvfun}.
-#' @param use_future \code{logical} option for whether to run the main loop of
-#'  cross-validation with \code{future_lapply} or with \code{lapply}.
-#' @param .combine (logical) - should \code{\link{combine_results}} be called.
-#' @param .combine_control (list) - arguments to \code{\link{combine_results}}.
-#' @param .old_results (list) - the returned result from a previous call to
-#'  This function. Will be combined with the current results. This is useful
-#'  for adding additional CV folds to a results object.
+#' @param ... Other arguments passed to \code{cvfun}.
+#' @param use_future A \code{logical} option for whether to run the main loop
+#'  of cross-validation with \code{\link[future.apply]{future_lapply}} or with
+#'  \code{lapply}.
+#' @param .combine A \code{logical} indicating if \code{\link{combine_results}}
+#'  should be called.
+#' @param .combine_control A \code{list} of arguments to
+#'  \code{\link{combine_results}}.
+#' @param .old_results A \code{list} containing the returned result from a
+#'  previous call to this function. Will be combined with the current results.
+#'  This is useful for adding additional CV folds to a results object.
 #'
+#' @importFrom assertthat assert_that
 #' @importFrom future future values plan sequential multicore multisession
 #' @importFrom future.apply future_lapply
 #' @importFrom listenv listenv
 #' @import methods
 #'
-#' @return A list of results, combined across folds.
+#' @return A \code{list} of results, combined across folds.
 #'
 #' @export
 #'
 #' @example /inst/examples/cv_simple_example.R
-#'
 #' @example /inst/examples/cv_parallel_example.R
-#
 cross_validate <- function(cv_fun,
                            folds,
                            ...,
@@ -41,9 +44,9 @@ cross_validate <- function(cv_fun,
 
   # argument 'X' is specifically disallowed since reserved by lapply family
   args_cv_fun <- names(formals(cv_fun))
-  if ("X" %in% args_cv_fun) {
-    stop("cv_fun names argument 'X' - not allowed for compliance with lapply.")
-  }
+  assertthat::assert_that(!("X" %in% args_cv_fun),
+    msg = "Argument name 'X' not allowed in cv_fun"
+  )
 
   # catch and return errors if they occur
   wrapped_fun <- wrap_in_try(cv_fun)

@@ -25,64 +25,90 @@ folds_montecarlo(n, V = 1000, pvalidation = 0.2)
 
 folds_bootstrap(n, V = 1000)
 
-folds_rolling_origin(n, first_window, validation_size, gap = 0,
-  batch = 1)
+folds_rolling_origin(n, first_window, validation_size, gap = 0, batch = 1)
 
-folds_rolling_window(n, window_size, validation_size, gap = 0,
-  batch = 1)
+folds_rolling_window(n, window_size, validation_size, gap = 0, batch = 1)
 
-folds_rolling_origin_pooled(n, t, first_window, validation_size, gap = 0,
-  batch = 1)
+folds_rolling_origin_pooled(
+  n,
+  t,
+  first_window,
+  validation_size,
+  gap = 0,
+  batch = 1
+)
 
-folds_rolling_window_pooled(n, t, window_size, validation_size, gap = 0,
-  batch = 1)
+folds_rolling_window_pooled(
+  n,
+  t,
+  window_size,
+  validation_size,
+  gap = 0,
+  batch = 1
+)
 
-folds_vfold_rolling_origin_pooled(n, t, V = 10, first_window,
-  validation_size, gap = 0, batch = 1)
+folds_vfold_rolling_origin_pooled(
+  n,
+  t,
+  V = 10,
+  first_window,
+  validation_size,
+  gap = 0,
+  batch = 1
+)
 
-folds_vfold_rolling_window_pooled(n, t, V = 10, window_size,
-  validation_size, gap = 0, batch = 1)
+folds_vfold_rolling_window_pooled(
+  n,
+  t,
+  V = 10,
+  window_size,
+  validation_size,
+  gap = 0,
+  batch = 1
+)
 }
 \arguments{
-\item{n}{(integer) - number of observations.}
+\item{n}{An integer indicating the number of observations.}
 
-\item{V}{(integer) - number of folds.}
+\item{V}{An integer indicating the number of folds.}
 
-\item{pvalidation}{(double) - proportion of observation to be in validation
-fold.}
+\item{pvalidation}{A \code{numeric} indicating the proportion of observation
+to be placed in the validation fold.}
 
-\item{first_window}{(integer) - number of observations in the first training
+\item{first_window}{An integer indicating the number of observations in the
+first training sample.}
+
+\item{validation_size}{An integer indicating the number of points in the
+validation samples; should be equal to the largest forecast horizon.}
+
+\item{gap}{An integer indicating the number of points not included in the
+training or validation samples. The default is zero.}
+
+\item{batch}{An integer indicating increases in the number of time points
+added to the training set in each iteration of cross-validation. Applicable
+for larger time-series. The default is one.}
+
+\item{window_size}{An integer indicating the number of observations in each
+training sample.}
+
+\item{t}{An integer indicating the number of time points per time-series
 sample.}
-
-\item{validation_size}{(integer) - number of points in the validation
-samples; should be equal to the largest forecast horizon.}
-
-\item{gap}{(integer) - number of points not included in the training or
-validation samples; Default is 0.}
-
-\item{batch}{(integer) - Increases the number of time-points added to the
-training set each CV iteration. Applicable for larger time-series. Default
-is 1.}
-
-\item{window_size}{(integer) - number of observations in each training
-sample.}
-
-\item{t}{(integer) - Number of time points per time-series sample.}
 }
 \value{
 A list of Folds.
 }
 \description{
 These functions represent different cross-validation schemes that can be used
-with origami. They should be used as options for the \code{fold_fun} argument
-to the \code{\link{make_folds}} function in this package.
-\code{\link{make_folds}} will call the requested function specify \code{n},
-based on its arguments, and pass any remaining arguments (e.g. \code{V} or
-\code{pvalidation}) on.
+with \pkg{origami}. They should be used as options for the \code{fold_fun}
+argument to \code{\link{make_folds}}, which will call the requested function
+specify \code{n}, based on its arguments, and pass any remaining arguments
+(e.g. \code{V} or \code{pvalidation}) on.
 }
 \seealso{
-Other fold generation functions: \code{\link{fold_from_foldvec}},
-  \code{\link{folds2foldvec}}, \code{\link{make_folds}},
-  \code{\link{make_repeated_folds}}
+Other fold generation functions: 
+\code{\link{fold_from_foldvec}()},
+\code{\link{folds2foldvec}()},
+\code{\link{make_folds}()},
+\code{\link{make_repeated_folds}()}
 }
 \concept{fold generation functions}

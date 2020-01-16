@@ -7,7 +7,7 @@
 guess_combiner(result)
 }
 \arguments{
-\item{result}{- a single result; flexibly accepts several object classes.}
+\item{result}{A single result; flexibly accepts several object classes.}
 }
 \value{
 A function to combine a list of such results.

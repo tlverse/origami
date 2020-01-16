@@ -4,37 +4,48 @@
 \alias{cross_validate}
 \title{Main Cross-Validation Function}
 \usage{
-cross_validate(cv_fun, folds, ..., use_future = TRUE, .combine = TRUE,
-  .combine_control = list(), .old_results = NULL)
+cross_validate(
+  cv_fun,
+  folds,
+  ...,
+  use_future = TRUE,
+  .combine = TRUE,
+  .combine_control = list(),
+  .old_results = NULL
+)
 }
 \arguments{
-\item{cv_fun}{a function that takes a 'fold' as it's first argument and
- returns a list of results from that fold. NOTE: the use of an argument named
-'X' is specifically disallowed in any input function for compliance with the
- functions \code{lapply} and \code{future.apply::future_lapply}.}
+\item{cv_fun}{A function that takes a 'fold' as it's first argument and
+returns a list of results from that fold. NOTE: the use of an argument
+named 'X' is specifically disallowed in any input function for compliance
+with the functions \code{\link[future.apply]{future_lapply}} and
+\code{lapply}.}
 
-\item{folds}{a list of folds to loop over generated using
+\item{folds}{A list of folds to loop over generated using
 \code{\link{make_folds}}.}
 
-\item{...}{other arguments passed to \code{cvfun}.}
+\item{...}{Other arguments passed to \code{cvfun}.}
 
-\item{use_future}{\code{logical} option for whether to run the main loop of
-cross-validation with \code{future_lapply} or with \code{lapply}.}
+\item{use_future}{A \code{logical} option for whether to run the main loop
+of cross-validation with \code{\link[future.apply]{future_lapply}} or with
+\code{lapply}.}
 
-\item{.combine}{(logical) - should \code{\link{combine_results}} be called.}
+\item{.combine}{A \code{logical} indicating if \code{\link{combine_results}}
+should be called.}
 
-\item{.combine_control}{(list) - arguments to \code{\link{combine_results}}.}
+\item{.combine_control}{A \code{list} of arguments to
+\code{\link{combine_results}}.}
 
-\item{.old_results}{(list) - the returned result from a previous call to
-This function. Will be combined with the current results. This is useful
-for adding additional CV folds to a results object.}
+\item{.old_results}{A \code{list} containing the returned result from a
+previous call to this function. Will be combined with the current results.
+This is useful for adding additional CV folds to a results object.}
 }
 \value{
-A list of results, combined across folds.
+A \code{list} of results, combined across folds.
 }
 \description{
 Applies \code{cv_fun} to the folds using \code{future_lapply} and combines
-the results across folds using \code{combine_results}.
+the results across folds using \code{\link{combine_results}}.
 }
 \examples{
 ###############################################################################

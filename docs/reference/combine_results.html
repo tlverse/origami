@@ -8,10 +8,12 @@
 
 <title>Combine Results from Different Folds — combine_results • origami</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -22,8 +24,9 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -31,11 +34,12 @@
 
 
 
-<meta property="og:title" content="Combine Results from Different Folds — combine_results" />
 
-<meta property="og:description" content="Applies Combiners: functions that collapse across a list of similarly
-structured results, to a list of such lists." />
+<meta property="og:title" content="Combine Results from Different Folds — combine_results" />
+<meta property="og:description" content="Applies Combiners: functions that collapse across a list of
+similarly structured results, to a list of such lists." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -59,6 +63,7 @@ structured results, to a list of such lists." />
   gtag('config', 'UA-115145808-1');
 </script>
 
+
   </head>
 
   <body>
@@ -75,7 +80,7 @@ structured results, to a list of such lists." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">origami</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
       </span>
     </div>
 
@@ -94,7 +99,6 @@ structured results, to a list of such lists." />
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/tlverse/origami">
@@ -109,6 +113,7 @@ structured results, to a list of such lists." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -120,64 +125,57 @@ structured results, to a list of such lists." />
     </div>
 
     <div class="ref-description">
-    
-    <p>Applies <a href='Combiners.html'>Combiners</a>: functions that collapse across a list of similarly
-structured results, to a list of such lists.</p>
-    
+    <p>Applies <code><a href='Combiners.html'>Combiners</a></code>: functions that collapse across a list of
+similarly structured results, to a list of such lists.</p>
     </div>
 
     <pre class="usage"><span class='fu'>combine_results</span>(<span class='no'>results</span>, <span class='kw'>combiners</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>smart_combiners</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>results</th>
-      <td><p>(list) - a list of lists, corresponding to each result, with
-the inner lists corresponding to results from each fold.</p></td>
+      <td><p>A <code>list</code> of <code>list</code>s, corresponding to each result,
+with the inner <code>list</code>s corresponding to results from each fold.</p></td>
     </tr>
     <tr>
       <th>combiners</th>
-      <td><p>(list) - a list with the same names results, containing
+      <td><p>A <code>list</code> with the same names as results, containing
 combiner function names or functions for each result.</p></td>
     </tr>
     <tr>
       <th>smart_combiners</th>
-      <td><p>(logical) - if combiners are missing, should they be
-guessed from the data type of the results.</p></td>
+      <td><p>A <code>logical</code> indicating whether combiners should
+be guessed from the data type of the results if they are missing.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list of combined results.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>In theory you should never call this function directly, because it
  is called automatically by cross_validate. The defaults, combiners guessed
  based on data type, should work in most cases.</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='Combiners.html'>Combiners</a></p></div>
-    
+    <div class='dont-index'><p><code><a href='Combiners.html'>Combiners</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-
       <li><a href="#see-also">See also</a></li>
-          </ul>
+    </ul>
 
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -185,13 +183,16 @@ guessed from the data type of the results.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

@@ -7,17 +7,21 @@
 fold_from_foldvec(v, folds)
 }
 \arguments{
-\item{v}{An identifier of the fold in which observations fall for CV.}
+\item{v}{An identifier of the fold in which observations fall for
+cross-validation.}
 
-\item{folds}{A vector of the fold status for each observation for CV.}
+\item{folds}{A vector of the fold status for each observation for
+cross-validation.}
 }
 \description{
 For V-fold type cross-validation. This takes a fold vector (validation set
 IDs) and builds a fold object for fold V.
 }
 \seealso{
-Other fold generation functions: \code{\link{fold_funs}},
-  \code{\link{folds2foldvec}}, \code{\link{make_folds}},
-  \code{\link{make_repeated_folds}}
+Other fold generation functions: 
+\code{\link{fold_funs}},
+\code{\link{folds2foldvec}()},
+\code{\link{make_folds}()},
+\code{\link{make_repeated_folds}()}
 }
 \concept{fold generation functions}

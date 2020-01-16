@@ -1,16 +1,19 @@
 Package: origami
 Title: Generalized Framework for Cross-Validation
-Version: 1.0.2
+Version: 1.0.3
 Authors@R: c(
-  person("Jeremy", "Coyle", email = "jeremyrcoyle@gmail.com",
-         role = c("aut", "cre", "cph"),
-         comment = c(ORCID = "0000-0002-9874-6649")),
-  person("Nima", "Hejazi", email = "nh@nimahejazi.org",
-         role = "aut",
-         comment = c(ORCID = "0000-0002-7127-2789")),
-  person("Ivana", "Malenica", email = "imalenica@berkeley.edu",
-         role = "ctb",
-         comment = c(ORCID = "0000-0002-7404-8088"))
+    person("Jeremy", "Coyle", email = "jeremyrcoyle@gmail.com",
+           role = c("aut", "cre", "cph"),
+           comment = c(ORCID = "0000-0002-9874-6649")),
+    person("Nima", "Hejazi", email = "nh@nimahejazi.org",
+           role = "aut",
+           comment = c(ORCID = "0000-0002-7127-2789")),
+    person("Ivana", "Malenica", email = "imalenica@berkeley.edu",
+           role = "ctb",
+           comment = c(ORCID = "0000-0002-7404-8088")),
+    person("Rachael", "Phillips", email = "rachaelvphillips@berkeley.edu",
+           role = "ctb",
+           comment = c(ORCID = "0000-0002-8474-591X"))
   )
 Maintainer: Jeremy Coyle <jeremyrcoyle@gmail.com>
 Description: A general framework for the application of cross-validation schemes
@@ -26,6 +29,7 @@ Imports:
     abind,
     methods,
     data.table,
+    assertthat,
     future,
     future.apply,
     listenv
@@ -39,4 +43,4 @@ Suggests:
     randomForest
 LazyData: true
 VignetteBuilder: knitr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2

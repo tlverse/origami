@@ -7,21 +7,21 @@
 combine_results(results, combiners = NULL, smart_combiners = TRUE)
 }
 \arguments{
-\item{results}{(list) - a list of lists, corresponding to each result, with
-the inner lists corresponding to results from each fold.}
+\item{results}{A \code{list} of \code{list}s, corresponding to each result,
+with the inner \code{list}s corresponding to results from each fold.}
 
-\item{combiners}{(list) - a list with the same names results, containing
+\item{combiners}{A \code{list} with the same names as results, containing
 combiner function names or functions for each result.}
 
-\item{smart_combiners}{(logical) - if combiners are missing, should they be
-guessed from the data type of the results.}
+\item{smart_combiners}{A \code{logical} indicating whether combiners should
+be guessed from the data type of the results if they are missing.}
 }
 \value{
 A list of combined results.
 }
 \description{
-Applies \link{Combiners}: functions that collapse across a list of similarly
-structured results, to a list of such lists.
+Applies \code{\link{Combiners}}: functions that collapse across a list of
+similarly structured results, to a list of such lists.
 }
 \details{
 In theory you should never call this function directly, because it
@@ -29,5 +29,5 @@ In theory you should never call this function directly, because it
  based on data type, should work in most cases.
 }
 \seealso{
-\link{Combiners}
+\code{\link{Combiners}}
 }

@@ -8,10 +8,12 @@
 
 <title>Make List of Folds for cross-validation — make_folds • origami</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
@@ -22,8 +24,9 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -31,10 +34,11 @@
 
 
 
-<meta property="og:title" content="Make List of Folds for cross-validation — make_folds" />
 
+<meta property="og:title" content="Make List of Folds for cross-validation — make_folds" />
 <meta property="og:description" content="Generates a list of folds for a variety of cross-validation schemes." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -58,6 +62,7 @@
   gtag('config', 'UA-115145808-1');
 </script>
 
+
   </head>
 
   <body>
@@ -74,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">origami</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
       </span>
     </div>
 
@@ -93,7 +98,6 @@
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/tlverse/origami">
@@ -108,6 +112,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -119,14 +124,17 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Generates a list of folds for a variety of cross-validation schemes.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>make_folds</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fold_fun</span> <span class='kw'>=</span> <span class='no'>folds_vfold</span>, <span class='kw'>cluster_ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>strata_ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>make_folds</span>(
+  <span class='kw'>n</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>fold_fun</span> <span class='kw'>=</span> <span class='no'>folds_vfold</span>,
+  <span class='kw'>cluster_ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>strata_ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>
+)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -134,7 +142,8 @@
       <th>n</th>
       <td><p>- either an integer indicating the number of observations to
 cross-validate over, or an object from which to guess the number of
-observations; can also be computed from strata_ids or cluster_ids.</p></td>
+observations; can also be computed from <code>strata_ids</code> or
+<code>cluster_ids</code>.</p></td>
     </tr>
     <tr>
       <th>fold_fun</th>
@@ -144,7 +153,7 @@ See <code><a href='fold_funs.html'>fold_funs</a></code> for a list of possibilit
     <tr>
       <th>cluster_ids</th>
       <td><p>- a vector of cluster ids. Clusters are treated as a unit
-- that is, all observations within a cluster are placed in either the
+-- that is, all observations within a cluster are placed in either the
 training or validation set.</p></td>
     </tr>
     <tr>
@@ -158,33 +167,32 @@ distribution in the training and validation sets.</p></td>
       <td><p>other arguments to be passed to <code>fold_fun</code>.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list of folds objects. Each fold consists of a list with a
  <code>training</code> index vector, a <code>validation</code> index vector, and a
  <code>fold_index</code> (its order in the list of folds).</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other fold generation functions: <code><a href='fold_from_foldvec.html'>fold_from_foldvec</a></code>,
-  <code><a href='fold_funs.html'>fold_funs</a></code>, <code><a href='folds2foldvec.html'>folds2foldvec</a></code>,
-  <code><a href='make_repeated_folds.html'>make_repeated_folds</a></code></p></div>
-    
+    <div class='dont-index'><p>Other fold generation functions: 
+<code><a href='fold_from_foldvec.html'>fold_from_foldvec</a>()</code>,
+<code><a href='fold_funs.html'>fold_funs</a></code>,
+<code><a href='folds2foldvec.html'>folds2foldvec</a>()</code>,
+<code><a href='make_repeated_folds.html'>make_repeated_folds</a>()</code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#see-also">See also</a></li>
-          </ul>
+    </ul>
 
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -192,13 +200,16 @@ distribution in the training and validation sets.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
