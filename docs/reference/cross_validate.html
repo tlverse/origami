@@ -126,7 +126,7 @@ the results across folds using combine_results." />
 
     <div class="ref-description">
     <p>Applies <code>cv_fun</code> to the folds using <code>future_lapply</code> and combines
-the results across folds using <code>combine_results</code>.</p>
+the results across folds using <code><a href='combine_results.html'>combine_results</a></code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>cross_validate</span>(
@@ -144,44 +144,48 @@ the results across folds using <code>combine_results</code>.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>cv_fun</th>
-      <td><p>a function that takes a 'fold' as it's first argument and
- returns a list of results from that fold. NOTE: the use of an argument named
-'X' is specifically disallowed in any input function for compliance with the
- functions <code>lapply</code> and <code><a href='https://rdrr.io/pkg/future.apply/man/future_lapply.html'>future.apply::future_lapply</a></code>.</p></td>
+      <td><p>A function that takes a 'fold' as it's first argument and
+returns a list of results from that fold. NOTE: the use of an argument
+named 'X' is specifically disallowed in any input function for compliance
+with the functions <code><a href='https://rdrr.io/pkg/future.apply/man/future_lapply.html'>future_lapply</a></code> and
+<code>lapply</code>.</p></td>
     </tr>
     <tr>
       <th>folds</th>
-      <td><p>a list of folds to loop over generated using
+      <td><p>A list of folds to loop over generated using
 <code><a href='make_folds.html'>make_folds</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>other arguments passed to <code>cvfun</code>.</p></td>
+      <td><p>Other arguments passed to <code>cvfun</code>.</p></td>
     </tr>
     <tr>
       <th>use_future</th>
-      <td><p><code>logical</code> option for whether to run the main loop of
-cross-validation with <code>future_lapply</code> or with <code>lapply</code>.</p></td>
+      <td><p>A <code>logical</code> option for whether to run the main loop
+of cross-validation with <code><a href='https://rdrr.io/pkg/future.apply/man/future_lapply.html'>future_lapply</a></code> or with
+<code>lapply</code>.</p></td>
     </tr>
     <tr>
       <th>.combine</th>
-      <td><p>(logical) - should <code><a href='combine_results.html'>combine_results</a></code> be called.</p></td>
+      <td><p>A <code>logical</code> indicating if <code><a href='combine_results.html'>combine_results</a></code>
+should be called.</p></td>
     </tr>
     <tr>
       <th>.combine_control</th>
-      <td><p>(list) - arguments to <code><a href='combine_results.html'>combine_results</a></code>.</p></td>
+      <td><p>A <code>list</code> of arguments to
+<code><a href='combine_results.html'>combine_results</a></code>.</p></td>
     </tr>
     <tr>
       <th>.old_results</th>
-      <td><p>(list) - the returned result from a previous call to
-This function. Will be combined with the current results. This is useful
-for adding additional CV folds to a results object.</p></td>
+      <td><p>A <code>list</code> containing the returned result from a
+previous call to this function. Will be combined with the current results.
+This is useful for adding additional CV folds to a results object.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list of results, combined across folds.</p>
+    <p>A <code>list</code> of results, combined across folds.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>###############################################################################</span>

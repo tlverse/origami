@@ -36,8 +36,8 @@
 
 
 <meta property="og:title" content="Combine Results from Different Folds — combine_results" />
-<meta property="og:description" content="Applies Combiners: functions that collapse across a list of similarly
-structured results, to a list of such lists." />
+<meta property="og:description" content="Applies Combiners: functions that collapse across a list of
+similarly structured results, to a list of such lists." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -125,8 +125,8 @@ structured results, to a list of such lists." />
     </div>
 
     <div class="ref-description">
-    <p>Applies <a href='Combiners.html'>Combiners</a>: functions that collapse across a list of similarly
-structured results, to a list of such lists.</p>
+    <p>Applies <code><a href='Combiners.html'>Combiners</a></code>: functions that collapse across a list of
+similarly structured results, to a list of such lists.</p>
     </div>
 
     <pre class="usage"><span class='fu'>combine_results</span>(<span class='no'>results</span>, <span class='kw'>combiners</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>smart_combiners</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
@@ -136,18 +136,18 @@ structured results, to a list of such lists.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>results</th>
-      <td><p>(list) - a list of lists, corresponding to each result, with
-the inner lists corresponding to results from each fold.</p></td>
+      <td><p>A <code>list</code> of <code>list</code>s, corresponding to each result,
+with the inner <code>list</code>s corresponding to results from each fold.</p></td>
     </tr>
     <tr>
       <th>combiners</th>
-      <td><p>(list) - a list with the same names results, containing
+      <td><p>A <code>list</code> with the same names as results, containing
 combiner function names or functions for each result.</p></td>
     </tr>
     <tr>
       <th>smart_combiners</th>
-      <td><p>(logical) - if combiners are missing, should they be
-guessed from the data type of the results.</p></td>
+      <td><p>A <code>logical</code> indicating whether combiners should
+be guessed from the data type of the results if they are missing.</p></td>
     </tr>
     </table>
 
@@ -161,7 +161,7 @@ guessed from the data type of the results.</p></td>
  based on data type, should work in most cases.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='Combiners.html'>Combiners</a></p></div>
+    <div class='dont-index'><p><code><a href='Combiners.html'>Combiners</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

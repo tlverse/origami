@@ -37,7 +37,8 @@
 
 <meta property="og:title" content="Build a Fold Vector from a Fold Object — folds2foldvec" />
 <meta property="og:description" content="For V-fold type cross-validation. This takes a fold object and returns a fold
-vector (validation set IDs) for use with other tools like cv.glmnet." />
+vector (containing the validation set IDs) for use with other tools like
+cv.glmnet." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -126,7 +127,8 @@ vector (validation set IDs) for use with other tools like cv.glmnet." />
 
     <div class="ref-description">
     <p>For V-fold type cross-validation. This takes a fold object and returns a fold
-vector (validation set IDs) for use with other tools like <code>cv.glmnet</code>.</p>
+vector (containing the validation set IDs) for use with other tools like
+<code><a href='https://rdrr.io/pkg/glmnet/man/cv.glmnet.html'>cv.glmnet</a></code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>folds2foldvec</span>(<span class='no'>folds</span>)</pre>
@@ -136,8 +138,9 @@ vector (validation set IDs) for use with other tools like <code>cv.glmnet</code>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>folds</th>
-      <td><p>A <code>fold</code> object as produced by <code>make_folds</code>, from
-which a <code>numeric</code> vector of the validation set fold IDs are returned.</p></td>
+      <td><p>A <code>fold</code> object as produced by <code><a href='make_folds.html'>make_folds</a></code>,
+from which a <code>numeric</code> vector of the validation set fold IDs are
+returned.</p></td>
     </tr>
     </table>
 
