@@ -20,3 +20,4 @@
 ^README\.Rmd$
 ^README-.*\.png$
 ^README\.html$
+^CRAN-RELEASE$
