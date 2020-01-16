@@ -7,12 +7,14 @@
 folds2foldvec(folds)
 }
 \arguments{
-\item{folds}{A \code{fold} object as produced by \code{make_folds}, from
-which a \code{numeric} vector of the validation set fold IDs are returned.}
+\item{folds}{A \code{fold} object as produced by \code{\link{make_folds}},
+from which a \code{numeric} vector of the validation set fold IDs are
+returned.}
 }
 \description{
 For V-fold type cross-validation. This takes a fold object and returns a fold
-vector (validation set IDs) for use with other tools like \code{cv.glmnet}.
+vector (containing the validation set IDs) for use with other tools like
+\code{\link[glmnet]{cv.glmnet}}.
 }
 \seealso{
 Other fold generation functions: 

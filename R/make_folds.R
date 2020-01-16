@@ -6,11 +6,12 @@
 #'
 #' @param n - either an integer indicating the number of observations to
 #'  cross-validate over, or an object from which to guess the number of
-#'  observations; can also be computed from strata_ids or cluster_ids.
+#'  observations; can also be computed from \code{strata_ids} or
+#'  \code{cluster_ids}.
 #' @param fold_fun - A function indicating the cross-validation scheme to use.
 #'  See \code{\link{fold_funs}} for a list of possibilities.
 #' @param cluster_ids - a vector of cluster ids. Clusters are treated as a unit
-#'  - that is, all observations within a cluster are placed in either the
+#'  -- that is, all observations within a cluster are placed in either the
 #'  training or validation set.
 #' @param strata_ids - a vector of strata ids. Strata are balanced: insofar as
 #'  possible the distribution in the sample should be the same as the
@@ -22,7 +23,6 @@
 #'  \code{fold_index} (its order in the list of folds).
 #'
 #' @export
-#
 make_folds <- function(n = NULL,
                        fold_fun = folds_vfold,
                        cluster_ids = NULL,
@@ -80,9 +80,13 @@ make_folds <- function(n = NULL,
 
 #' Convert ID Folds to Observation Folds
 #'
-#' This function convertsf olds that subset ids to folds that subset observations
+#' This function convertsf olds that subset ids to folds that subset
+#'  observations
+#'
 #' @param idfolds folds that subset ids
-#' @param cluster_ids a vector of cluster ids indicating which observations are in which clusters
+#' @param cluster_ids a vector of cluster ids indicating which observations are
+#'  in which clusters
+#'
 #' @export
 id_folds_to_folds <- function(idfolds, cluster_ids) {
   idfac <- factor(cluster_ids)
@@ -176,16 +180,15 @@ strata_folds <- function(fold_fun, cluster_ids, strata_ids, ...) {
 #' Repeated Cross-Validation
 #'
 #' Implementation of repeated window cross-validation: generates fold objects
-#' for repeated cross-validation by making repeated calls to \link{make_folds}
-#' and concatenating the results.
+#' for repeated cross-validation by making repeated calls to
+#' \code{\link{make_folds}} and concatenating the results.
 #'
 #' @family fold generation functions
 #'
-#' @param repeats integer; number of repeats
-#' @param ... arguments passed to \link{make_folds}
+#' @param repeats An integer indicating the number of repeats.
+#' @param ... Arguments passed to \code{\link{make_folds}}.
 #'
 #' @export
-#
 make_repeated_folds <- function(repeats, ...) {
   all_folds <- lapply(seq_len(repeats), function(x) make_folds(...))
   folds <- unlist(all_folds, recursive = FALSE)

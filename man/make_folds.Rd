@@ -15,13 +15,14 @@ make_folds(
 \arguments{
 \item{n}{- either an integer indicating the number of observations to
 cross-validate over, or an object from which to guess the number of
-observations; can also be computed from strata_ids or cluster_ids.}
+observations; can also be computed from \code{strata_ids} or
+\code{cluster_ids}.}
 
 \item{fold_fun}{- A function indicating the cross-validation scheme to use.
 See \code{\link{fold_funs}} for a list of possibilities.}
 
 \item{cluster_ids}{- a vector of cluster ids. Clusters are treated as a unit
-- that is, all observations within a cluster are placed in either the
+-- that is, all observations within a cluster are placed in either the
 training or validation set.}
 
 \item{strata_ids}{- a vector of strata ids. Strata are balanced: insofar as

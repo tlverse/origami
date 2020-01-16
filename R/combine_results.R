@@ -2,12 +2,11 @@
 #'
 #' Maps data types into standard combiners that should be sensible.
 #'
-#' @param result - a single result; flexibly accepts several object classes.
+#' @param result A single result; flexibly accepts several object classes.
 #'
 #' @importFrom data.table rbindlist
 #'
 #' @return A function to combine a list of such results.
-#
 guess_combiner <- function(result) {
   switch(class(result)[1],
     data.table = data.table::rbindlist,
@@ -27,15 +26,15 @@ guess_combiner <- function(result) {
 
 #' Combine Results from Different Folds
 #'
-#' Applies \link{Combiners}: functions that collapse across a list of similarly
-#' structured results, to a list of such lists.
+#' Applies \code{\link{Combiners}}: functions that collapse across a list of
+#' similarly structured results, to a list of such lists.
 #'
-#' @param results (list) - a list of lists, corresponding to each result, with
-#'  the inner lists corresponding to results from each fold.
-#' @param combiners (list) - a list with the same names results, containing
+#' @param results A \code{list} of \code{list}s, corresponding to each result,
+#'  with the inner \code{list}s corresponding to results from each fold.
+#' @param combiners A \code{list} with the same names as results, containing
 #'  combiner function names or functions for each result.
-#' @param smart_combiners (logical) - if combiners are missing, should they be
-#'  guessed from the data type of the results.
+#' @param smart_combiners A \code{logical} indicating whether combiners should
+#'  be guessed from the data type of the results if they are missing.
 #'
 #' @details In theory you should never call this function directly, because it
 #'  is called automatically by cross_validate. The defaults, combiners guessed
@@ -43,10 +42,9 @@ guess_combiner <- function(result) {
 #'
 #' @return A list of combined results.
 #'
-#' @seealso \link{Combiners}
+#' @seealso \code{\link{Combiners}}
 #'
 #' @export
-#
 combine_results <- function(results,
                             combiners = NULL,
                             smart_combiners = TRUE) {
@@ -67,7 +65,6 @@ combine_results <- function(results,
   } else {
     combined <- results
   }
-
   return(combined)
 }
 
@@ -78,20 +75,18 @@ combine_results <- function(results,
 #' Combiners are functions that collapse across a list of similarly structured
 #' results. These are standard idioms for combining lists of certain data types.
 #'
-#' @param x (list) - a list of similar results to be combined.
+#' @param x A \code{list} of similar results to be combined.
 #'
 #' @return A combined results object.
 #'
 #' @rdname Combiners
 #'
 #' @name Combiners
-#
 NULL
 
 #' @rdname Combiners
 #'
 #' @export
-#
 combiner_rbind <- function(x) {
   do.call(rbind, x)
 }
@@ -99,7 +94,6 @@ combiner_rbind <- function(x) {
 #' @rdname Combiners
 #'
 #' @export
-#
 combiner_c <- function(x) {
   do.call(c, x)
 }
@@ -107,7 +101,6 @@ combiner_c <- function(x) {
 #' @rdname Combiners
 #'
 #' @export
-#
 combiner_factor <- function(x) {
   unlist(x)
 }
@@ -117,7 +110,6 @@ combiner_factor <- function(x) {
 #' @importFrom abind abind
 #'
 #' @export
-#
 combiner_array <- function(x) {
   do.call(abind::abind, c(x, along = 1))
 }

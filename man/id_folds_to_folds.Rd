@@ -9,8 +9,10 @@ id_folds_to_folds(idfolds, cluster_ids)
 \arguments{
 \item{idfolds}{folds that subset ids}
 
-\item{cluster_ids}{a vector of cluster ids indicating which observations are in which clusters}
+\item{cluster_ids}{a vector of cluster ids indicating which observations are
+in which clusters}
 }
 \description{
-This function convertsf olds that subset ids to folds that subset observations
+This function convertsf olds that subset ids to folds that subset
+ observations
 }

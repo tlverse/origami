@@ -7,9 +7,11 @@
 fold_from_foldvec(v, folds)
 }
 \arguments{
-\item{v}{An identifier of the fold in which observations fall for CV.}
+\item{v}{An identifier of the fold in which observations fall for
+cross-validation.}
 
-\item{folds}{A vector of the fold status for each observation for CV.}
+\item{folds}{A vector of the fold status for each observation for
+cross-validation.}
 }
 \description{
 For V-fold type cross-validation. This takes a fold vector (validation set

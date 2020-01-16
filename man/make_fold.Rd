@@ -7,19 +7,19 @@
 make_fold(v, training_set, validation_set)
 }
 \arguments{
-\item{v}{integer index of fold in larger scheme.}
+\item{v}{An integer index of folds in the larger scheme.}
 
-\item{training_set}{- integer vector of indexes corresponding to the
+\item{training_set}{An integer vector of indexes corresponding to the
 training set.}
 
-\item{validation_set}{- integer vector of indexes corresponding to the
+\item{validation_set}{An integer vector of indexes corresponding to the
 validation set.}
 }
 \value{
 A list containing these elements.
 }
 \description{
-Functions to make a fold. Current representation is a simple list.
+Functions to make a fold. Current representation is a simple \code{list}.
 }
 \seealso{
 \code{\link{fold_helpers}}

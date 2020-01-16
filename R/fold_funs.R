@@ -1,30 +1,30 @@
 #' Cross-Validation Schemes
 #'
 #' These functions represent different cross-validation schemes that can be used
-#' with origami. They should be used as options for the \code{fold_fun} argument
-#' to the \code{\link{make_folds}} function in this package.
-#' \code{\link{make_folds}} will call the requested function specify \code{n},
-#' based on its arguments, and pass any remaining arguments (e.g. \code{V} or
-#' \code{pvalidation}) on.
+#' with \pkg{origami}. They should be used as options for the \code{fold_fun}
+#' argument to \code{\link{make_folds}}, which will call the requested function
+#' specify \code{n}, based on its arguments, and pass any remaining arguments
+#' (e.g. \code{V} or \code{pvalidation}) on.
 #'
 #' @family fold generation functions
 #'
-#' @param n (integer) - number of observations.
-#' @param V (integer) - number of folds.
-#' @param pvalidation (double) - proportion of observation to be in validation
-#'  fold.
-#' @param first_window (integer) - number of observations in the first training
+#' @param n An integer indicating the number of observations.
+#' @param V An integer indicating the number of folds.
+#' @param pvalidation A \code{numeric} indicating the proportion of observation
+#'  to be placed in the validation fold.
+#' @param first_window An integer indicating the number of observations in the
+#'  first training sample.
+#' @param window_size An integer indicating the number of observations in each
+#'  training sample.
+#' @param validation_size An integer indicating the number of points in the
+#'  validation samples; should be equal to the largest forecast horizon.
+#' @param gap An integer indicating the number of points not included in the
+#'  training or validation samples. The default is zero.
+#' @param batch An integer indicating increases in the number of time points
+#'  added to the training set in each iteration of cross-validation. Applicable
+#'  for larger time-series. The default is one.
+#' @param t An integer indicating the number of time points per time-series
 #'  sample.
-#' @param window_size (integer) - number of observations in each training
-#'  sample.
-#' @param validation_size (integer) - number of points in the validation
-#'  samples; should be equal to the largest forecast horizon.
-#' @param gap (integer) - number of points not included in the training or
-#'  validation samples; Default is 0.
-#' @param batch (integer) - Increases the number of time-points added to the
-#'  training set each CV iteration. Applicable for larger time-series. Default
-#'  is 1.
-#' @param t (integer) - Number of time points per time-series sample.
 #'
 #' @return A list of Folds.
 #' @name fold_funs
@@ -105,7 +105,8 @@ folds_bootstrap <- function(n, V = 1000) {
 
 #' @rdname fold_funs
 #' @export
-folds_rolling_origin <- function(n, first_window, validation_size, gap = 0, batch = 1) {
+folds_rolling_origin <- function(n, first_window, validation_size, gap = 0,
+                                 batch = 1) {
   last_window <- n - (validation_size + gap)
   origins <- seq.int(first_window, last_window, by = batch)
 
@@ -121,7 +122,8 @@ folds_rolling_origin <- function(n, first_window, validation_size, gap = 0, batc
 
 #' @rdname fold_funs
 #' @export
-folds_rolling_window <- function(n, window_size, validation_size, gap = 0, batch = 1) {
+folds_rolling_window <- function(n, window_size, validation_size, gap = 0,
+                                 batch = 1) {
   last_window <- n - (validation_size + gap)
   origins <- seq.int(window_size, last_window, by = batch)
 
@@ -143,7 +145,10 @@ folds_rolling_origin_pooled <- function(n, t, first_window, validation_size,
   message(paste("Processing", n / t, "samples with", t, "time points."))
 
   # Index the observations
-  dat <- cbind.data.frame(index = seq(n), time = rep(seq(t), n / t), id = rep(seq(n / t), each = t))
+  dat <- cbind.data.frame(
+    index = seq(n), time = rep(seq(t), n / t),
+    id = rep(seq(n / t), each = t)
+  )
   ids <- unique(dat$id)
 
   # establish rolling origin forecast for time-series cross-validation
@@ -176,7 +181,10 @@ folds_rolling_window_pooled <- function(n, t, window_size, validation_size,
   message(paste("Processing", n / t, "samples with", t, "time points."))
 
   # Index the observations
-  dat <- cbind.data.frame(index = seq(n), time = rep(seq(t), n / t), id = rep(seq(n / t), each = t))
+  dat <- cbind.data.frame(
+    index = seq(n), time = rep(seq(t), n / t),
+    id = rep(seq(n / t), each = t)
+  )
   ids <- unique(dat$id)
 
   # establish rolling window forecast for time-series cross-validation
@@ -212,7 +220,10 @@ folds_vfold_rolling_origin_pooled <- function(n, t, V = 10, first_window,
   message(paste("Processing", n / t, "samples with", t, "time points."))
 
   # Index the observations
-  dat <- cbind.data.frame(index = seq(n), time = rep(seq(t), n / t), id = rep(seq(n / t), each = t))
+  dat <- cbind.data.frame(
+    index = seq(n), time = rep(seq(t), n / t),
+    id = rep(seq(n / t), each = t)
+  )
   ids <- unique(dat$id)
 
   # establish V folds for cross-validating ids
@@ -234,30 +245,40 @@ folds_vfold_rolling_origin_pooled <- function(n, t, V = 10, first_window,
 
     # Time
     folds_rolling_origin <- lapply(rolling_origin_skeleton, function(h) {
-      train <- dat[(dat$time %in% h$training_set & dat$id %in% training_ids), "index"]
-      val <- dat[(dat$time %in% h$validation_set & dat$id %in% validation_ids), "index"]
+      train <- dat[
+        (dat$time %in% h$training_set & dat$id %in% training_ids),
+        "index"
+      ]
+      val <- dat[
+        (dat$time %in% h$validation_set & dat$id %in% validation_ids),
+        "index"
+      ]
       make_fold(
-        v = (length(rolling_origin_skeleton) * (g$v - 1) + h$v), training_set = train,
-        validation_set = val
+        v = (length(rolling_origin_skeleton) * (g$v - 1) + h$v),
+        training_set = train, validation_set = val
       )
     })
   })
 
   # flatten nested structure
-  Vfolds_rolling_origin_pooled <- unlist(Vfolds_rolling_origin_pooled, recursive = FALSE)
+  Vfolds_rolling_origin_pooled <- unlist(Vfolds_rolling_origin_pooled,
+    recursive = FALSE
+  )
   return(Vfolds_rolling_origin_pooled)
 }
 
 #' @rdname fold_funs
 #' @export
-
 folds_vfold_rolling_window_pooled <- function(n, t, V = 10, window_size,
                                               validation_size, gap = 0,
                                               batch = 1) {
   message(paste("Processing", n / t, "samples with", t, "time points."))
 
   # Index the observations
-  dat <- cbind.data.frame(index = seq(n), time = rep(seq(t), n / t), id = rep(seq(n / t), each = t))
+  dat <- cbind.data.frame(
+    index = seq(n), time = rep(seq(t), n / t),
+    id = rep(seq(n / t), each = t)
+  )
   ids <- unique(dat$id)
 
   # establish V folds for cross-validating ids
@@ -279,16 +300,25 @@ folds_vfold_rolling_window_pooled <- function(n, t, V = 10, window_size,
 
     # Time
     folds_rolling_window <- lapply(rolling_window_skeleton, function(h) {
-      train <- dat[(dat$time %in% h$training_set & dat$id %in% training_ids), "index"]
-      val <- dat[(dat$time %in% h$validation_set & dat$id %in% validation_ids), "index"]
+      train <- dat[
+        (dat$time %in% h$training_set & dat$id %in% training_ids),
+        "index"
+      ]
+      val <- dat[
+        (dat$time %in% h$validation_set & dat$id %in% validation_ids),
+        "index"
+      ]
       make_fold(
-        v = (length(rolling_window_skeleton) * (g$v - 1) + h$v), training_set = train,
+        v = (length(rolling_window_skeleton) * (g$v - 1) + h$v),
+        training_set = train,
         validation_set = val
       )
     })
   })
 
   # flatten nested structure
-  Vfolds_rolling_window_pooled <- unlist(Vfolds_rolling_window_pooled, recursive = FALSE)
+  Vfolds_rolling_window_pooled <- unlist(Vfolds_rolling_window_pooled,
+    recursive = FALSE
+  )
   return(Vfolds_rolling_window_pooled)
 }
