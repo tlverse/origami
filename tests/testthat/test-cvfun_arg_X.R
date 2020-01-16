@@ -34,7 +34,7 @@ test_that("cross_validate handles cv_fun with input argument 'x'", {
 test_that("cross_validate rejects cv_fun with input argument 'X'", {
   expect_error(
     cross_validate(cv_fun = nrow_X_2, folds = folds, X = mtcars),
-    "cv_fun names argument 'X'",
+    "Argument name 'X' not allowed in cv_fun",
     ignore.case = TRUE
   )
 })

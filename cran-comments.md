@@ -1,7 +1,8 @@
 ## Test environments
-* local OS X install, R 3.6.0
-* ubuntu 14.04 (on travis-ci), R 3.6.0
-* windows (on appveyor-ci), R 3.6.0
+* latest macOS (local), R 3.6.0
+* ubuntu 14.04 (on travis-ci), R 3.6.1
+* ubuntu 18.04 (local), R 3.6.2
+* windows (on appveyor-ci), R 3.6.1
 
 ## R CMD check results
 There were no ERRORs, WARNINGs, or NOTEs

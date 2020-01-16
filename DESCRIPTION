@@ -29,6 +29,7 @@ Imports:
     abind,
     methods,
     data.table,
+    assertthat,
     future,
     future.apply,
     listenv
