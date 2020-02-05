@@ -1,3 +1,7 @@
+# origami 1.0.4
+* Fix the incorrect use of `future.apply` by including `future.seed = TRUE`,
+   as per https://github.com/tlverse/origami/issues/48
+
 # origami 1.0.3
 * A maintenance release addressing reported issues, including changes to unit
    tests that relied on Suggested packages dependencies.
