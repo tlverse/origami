@@ -32,6 +32,8 @@ folds_rolling_window(n, window_size, validation_size, gap = 0, batch = 1)
 folds_rolling_origin_pooled(
   n,
   t,
+  id = NULL,
+  time = NULL,
   first_window,
   validation_size,
   gap = 0,
@@ -41,6 +43,8 @@ folds_rolling_origin_pooled(
 folds_rolling_window_pooled(
   n,
   t,
+  id = NULL,
+  time = NULL,
   window_size,
   validation_size,
   gap = 0,
@@ -91,8 +95,12 @@ for larger time-series. The default is one.}
 \item{window_size}{An integer indicating the number of observations in each
 training sample.}
 
-\item{t}{An integer indicating the number of time points per time-series
-sample.}
+\item{t}{An integer indicating the total amount of time to consider per 
+time-series sample.
+ @param time An optional vector of integers of time points observed for each 
+ subject.
+ @param id An optional vector of unique identifiers which correspond to time 
+ vector, and can be used to subset time vector.}
 }
 \value{
 A list of Folds.
