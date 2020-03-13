@@ -17,10 +17,8 @@ vector (containing the validation set IDs) for use with other tools like
 \code{\link[glmnet]{cv.glmnet}}.
 }
 \seealso{
-Other fold generation functions: 
-\code{\link{fold_from_foldvec}()},
-\code{\link{fold_funs}},
-\code{\link{make_folds}()},
-\code{\link{make_repeated_folds}()}
+Other fold generation functions: \code{\link{fold_from_foldvec}},
+  \code{\link{fold_funs}}, \code{\link{make_folds}},
+  \code{\link{make_repeated_folds}}
 }
 \concept{fold generation functions}

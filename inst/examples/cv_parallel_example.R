@@ -26,23 +26,29 @@ cv_lm <- function(fold, data, reg_form) {
   preds <- predict(mod, newdata = valid_data)
 
   # capture results to be returned as output
-  out <- list(coef = data.frame(t(coef(mod))),
-              SE = ((preds - valid_data[, out_var_ind])^2))
+  out <- list(
+    coef = data.frame(t(coef(mod))),
+    SE = ((preds - valid_data[, out_var_ind])^2)
+  )
   return(out)
 }
 
 plan(sequential)
 time_seq <- system.time({
-    results_seq <- cross_validate(cv_fun = cv_lm, folds = folds, data = mtcars,
-                                  reg_form = "mpg ~ .")
+  results_seq <- cross_validate(
+    cv_fun = cv_lm, folds = folds, data = mtcars,
+    reg_form = "mpg ~ ."
+  )
 })
 
 plan(multicore)
 time_mc <- system.time({
-    results_mc <- cross_validate(cv_fun = cv_lm, folds = folds, data = mtcars,
-                                 reg_form = "mpg ~ .")
+  results_mc <- cross_validate(
+    cv_fun = cv_lm, folds = folds, data = mtcars,
+    reg_form = "mpg ~ ."
+  )
 })
 
-if(availableCores() > 1) {
-    time_mc["elapsed"] < 1.2 * time_seq["elapsed"]
+if (availableCores() > 1) {
+  time_mc["elapsed"] < 1.2 * time_seq["elapsed"]
 }

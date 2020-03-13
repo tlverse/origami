@@ -4,15 +4,8 @@
 \alias{cross_validate}
 \title{Main Cross-Validation Function}
 \usage{
-cross_validate(
-  cv_fun,
-  folds,
-  ...,
-  use_future = TRUE,
-  .combine = TRUE,
-  .combine_control = list(),
-  .old_results = NULL
-)
+cross_validate(cv_fun, folds, ..., use_future = TRUE, .combine = TRUE,
+  .combine_control = list(), .old_results = NULL)
 }
 \arguments{
 \item{cv_fun}{A function that takes a 'fold' as it's first argument and

@@ -23,8 +23,12 @@
 #' @param batch An integer indicating increases in the number of time points
 #'  added to the training set in each iteration of cross-validation. Applicable
 #'  for larger time-series. The default is one.
-#' @param t An integer indicating the number of time points per time-series
-#'  sample.
+#' @param t An integer indicating the total amount of time to consider per
+#' time-series sample.
+#'  @param time An optional vector of integers of time points observed for each
+#'  subject.
+#'  @param id An optional vector of unique identifiers which correspond to time
+#'  vector, and can be used to subset time vector.
 #'
 #' @return A list of Folds.
 #' @name fold_funs
@@ -140,16 +144,30 @@ folds_rolling_window <- function(n, window_size, validation_size, gap = 0,
 ### Samples independent
 #' @rdname fold_funs
 #' @export
-folds_rolling_origin_pooled <- function(n, t, first_window, validation_size,
+folds_rolling_origin_pooled <- function(n, t, id = NULL, time = NULL,
+                                        first_window, validation_size,
                                         gap = 0, batch = 1) {
-  message(paste("Processing", n / t, "samples with", t, "time points."))
+  if ((!is.null(id) & is.null(time)) | (is.null(id) & !is.null(time))) {
+    stop("Cannot create flexible folds (allow for variability in the amount of time observed for each id) 
+         unless both time and id argments are provided. Either provide both time and id, or neither.")
+  }
+  if (length(id) != length(time)) {
+    id <- rep(id, length(time))
+  }
 
-  # Index the observations
-  dat <- cbind.data.frame(
-    index = seq(n), time = rep(seq(t), n / t),
-    id = rep(seq(n / t), each = t)
-  )
+  if (is.null(id) & is.null(time)) {
+    dat <- cbind.data.frame(
+      index = seq(n), time = rep(seq(t), n / t),
+      id = rep(seq(n / t), each = t)
+    )
+  } else {
+    # Index times by id (allows variability in time observed for each subject)
+    dat <- cbind.data.frame(time = time, id = id)
+    dat$index <- as.numeric(rownames(dat))
+  }
+
   ids <- unique(dat$id)
+  message(paste("Processing", length(ids), "samples with", t, "time points."))
 
   # establish rolling origin forecast for time-series cross-validation
   rolling_origin_skeleton <- folds_rolling_origin(
@@ -160,11 +178,19 @@ folds_rolling_origin_pooled <- function(n, t, first_window, validation_size,
   folds_rolling_origin <- lapply(rolling_origin_skeleton, function(h) {
     train_indices <- lapply(ids, function(i) {
       train <- dat[dat$id == i, ]
-      train[h$training_set, ]$index
+      if (is.null(id) & is.null(time)) {
+        train[h$training_set, ]$index
+      } else {
+        train[which(train$time %in% h$training_set), ]$index
+      }
     })
     val_indices <- lapply(ids, function(j) {
       val <- dat[dat$id == j, ]
-      val[h$validation_set, ]$index
+      if (is.null(id) & is.null(time)) {
+        val[h$validation_set, ]$index
+      } else {
+        val[which(val$time %in% h$validation_set), ]$index
+      }
     })
     make_fold(
       v = h$v, training_set = unlist(train_indices),
@@ -176,16 +202,30 @@ folds_rolling_origin_pooled <- function(n, t, first_window, validation_size,
 
 #' @rdname fold_funs
 #' @export
-folds_rolling_window_pooled <- function(n, t, window_size, validation_size,
+folds_rolling_window_pooled <- function(n, t, id = NULL, time = NULL,
+                                        window_size, validation_size,
                                         gap = 0, batch = 1) {
-  message(paste("Processing", n / t, "samples with", t, "time points."))
+  if ((!is.null(id) & is.null(time)) | (is.null(id) & !is.null(time))) {
+    stop("Cannot create flexible folds (allow for variability in the amount of time observed for each id) 
+         unless both time and id argments are provided. Either provide both time and id, or neither.")
+  }
+  if (length(id) != length(time)) {
+    id <- rep(id, length(time))
+  }
 
-  # Index the observations
-  dat <- cbind.data.frame(
-    index = seq(n), time = rep(seq(t), n / t),
-    id = rep(seq(n / t), each = t)
-  )
+  if (is.null(id) & is.null(time)) {
+    dat <- cbind.data.frame(
+      index = seq(n), time = rep(seq(t), n / t),
+      id = rep(seq(n / t), each = t)
+    )
+  } else {
+    # Index times by id (allows variability in time observed for each subject)
+    dat <- cbind.data.frame(time = time, id = id)
+    dat$index <- as.numeric(rownames(dat))
+  }
+
   ids <- unique(dat$id)
+  message(paste("Processing", length(ids), "samples with", t, "time points."))
 
   # establish rolling window forecast for time-series cross-validation
   rolling_window_skeleton <- folds_rolling_window(
@@ -196,11 +236,19 @@ folds_rolling_window_pooled <- function(n, t, window_size, validation_size,
   folds_rolling_window <- lapply(rolling_window_skeleton, function(h) {
     train_indices <- lapply(ids, function(i) {
       train <- dat[dat$id == i, ]
-      train[h$training_set, ]$index
+      if (is.null(id) & is.null(time)) {
+        train[h$training_set, ]$index
+      } else {
+        train[which(train$time %in% h$training_set), ]$index
+      }
     })
     val_indices <- lapply(ids, function(j) {
       val <- dat[dat$id == j, ]
-      val[h$validation_set, ]$index
+      if (is.null(id) & is.null(time)) {
+        val[h$validation_set, ]$index
+      } else {
+        val[which(val$time %in% h$validation_set), ]$index
+      }
     })
     make_fold(
       v = h$v, training_set = unlist(train_indices),
