@@ -17,10 +17,8 @@ for repeated cross-validation by making repeated calls to
 \code{\link{make_folds}} and concatenating the results.
 }
 \seealso{
-Other fold generation functions: 
-\code{\link{fold_from_foldvec}()},
-\code{\link{fold_funs}},
-\code{\link{folds2foldvec}()},
-\code{\link{make_folds}()}
+Other fold generation functions: \code{\link{fold_from_foldvec}},
+  \code{\link{fold_funs}}, \code{\link{folds2foldvec}},
+  \code{\link{make_folds}}
 }
 \concept{fold generation functions}

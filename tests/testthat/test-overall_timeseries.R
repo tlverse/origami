@@ -63,7 +63,7 @@ if (require("forecast")) {
   mses <- cross_validate(cvforecasts, folds)$mse
   mses_mean <- colMeans(mses[, c("arima", "stl")])
 
-  test_that("CV-MSE with gap and bacth matches previous value", {
+  test_that("CV-MSE with gap and batch matches previous value", {
     expect_equal(mses_mean[[1]], 6004.730, tolerance = 0.01)
   })
 
@@ -89,7 +89,7 @@ if (require("forecast")) {
     measure.vars = "AirPassengers"
   ))
 
-  ### Independent samples example
+  ### Independent sample example
   folds <- make_folds(test_data,
     fold_fun = folds_rolling_origin_pooled,
     t = 12, first_window = 4,
@@ -107,6 +107,49 @@ if (require("forecast")) {
   test_that("Size of the first fold of rolling window pooled CV", {
     expect_equal(length(folds[[1]]$training_set), 48, tolerance = 0.01)
   })
+
+  ### Independent sample example:
+  #   not the same number of time points
+  #   id based
+  test_data_id <- data.table(melt(data.table(AirPassengers), measure.vars = "AirPassengers"),
+    id = c(rep(1, 60), rep(2, 84))
+  )
+
+  folds_id1 <- make_folds(test_data_id,
+    fold_fun = folds_rolling_window_pooled,
+    t = 60, window_size = 5, id = 1, time = seq(1:60),
+    validation_size = 5, gap = 0, batch = 20
+  )
+  folds_id2 <- make_folds(test_data_id,
+    fold_fun = folds_rolling_window_pooled,
+    t = 84, window_size = 5, id = 2, time = as.matrix(seq(1:84)),
+    validation_size = 7, gap = 0, batch = 20
+  )
+  test_that("Size of CVs rolling window pooled CV, id 2", {
+    expect_equal(length(folds_id2), 4, tolerance = 0.01)
+  })
+  test_that("Size of CVs rolling window pooled CV, id 1", {
+    expect_equal(length(folds_id1), 3, tolerance = 0.01)
+  })
+
+  folds_id1 <- make_folds(test_data_id,
+    fold_fun = folds_rolling_origin_pooled,
+    t = 60, first_window = 10, id = 1, time = seq(1:60),
+    validation_size = 5, gap = 0, batch = 20
+  )
+  folds_id2 <- make_folds(test_data_id,
+    fold_fun = folds_rolling_origin_pooled,
+    t = 84, first_window = 10, id = 2, time = seq(1:84),
+    validation_size = 5, gap = 0, batch = 20
+  )
+  test_that("Size of CVs rolling origin pooled CV, id 2", {
+    expect_equal(length(folds_id2), 4, tolerance = 0.01)
+  })
+  test_that("Size of CVs rolling origin pooled CV, id 1", {
+    expect_equal(length(folds_id1), 3, tolerance = 0.01)
+  })
+
+
 
   ### Dependent samples example
   folds <- make_folds(test_data,

@@ -22,8 +22,10 @@ cv_lm <- function(fold, data, reg_form) {
   preds <- predict(mod, newdata = valid_data)
 
   # capture results to be returned as output
-  out <- list(coef = data.frame(t(coef(mod))),
-              SE = ((preds - valid_data[, out_var_ind])^2))
+  out <- list(
+    coef = data.frame(t(coef(mod))),
+    SE = ((preds - valid_data[, out_var_ind])^2)
+  )
   return(out)
 }
 
@@ -34,6 +36,8 @@ mean(resub_results$SE)
 
 # cross-validated estimate
 folds <- make_folds(mtcars)
-cv_results <- cross_validate(cv_fun = cv_lm, folds = folds, data = mtcars,
-                             reg_form = "mpg ~ .")
+cv_results <- cross_validate(
+  cv_fun = cv_lm, folds = folds, data = mtcars,
+  reg_form = "mpg ~ ."
+)
 mean(cv_results$SE)
