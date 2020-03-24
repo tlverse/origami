@@ -18,8 +18,10 @@ For V-fold type cross-validation. This takes a fold vector (validation set
 IDs) and builds a fold object for fold V.
 }
 \seealso{
-Other fold generation functions: \code{\link{fold_funs}},
-  \code{\link{folds2foldvec}}, \code{\link{make_folds}},
-  \code{\link{make_repeated_folds}}
+Other fold generation functions: 
+\code{\link{fold_funs}},
+\code{\link{folds2foldvec}()},
+\code{\link{make_folds}()},
+\code{\link{make_repeated_folds}()}
 }
 \concept{fold generation functions}

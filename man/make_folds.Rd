@@ -4,8 +4,13 @@
 \alias{make_folds}
 \title{Make List of Folds for cross-validation}
 \usage{
-make_folds(n = NULL, fold_fun = folds_vfold, cluster_ids = NULL,
-  strata_ids = NULL, ...)
+make_folds(
+  n = NULL,
+  fold_fun = folds_vfold,
+  cluster_ids = NULL,
+  strata_ids = NULL,
+  ...
+)
 }
 \arguments{
 \item{n}{- either an integer indicating the number of observations to
@@ -35,8 +40,10 @@ A list of folds objects. Each fold consists of a list with a
 Generates a list of folds for a variety of cross-validation schemes.
 }
 \seealso{
-Other fold generation functions: \code{\link{fold_from_foldvec}},
-  \code{\link{fold_funs}}, \code{\link{folds2foldvec}},
-  \code{\link{make_repeated_folds}}
+Other fold generation functions: 
+\code{\link{fold_from_foldvec}()},
+\code{\link{fold_funs}},
+\code{\link{folds2foldvec}()},
+\code{\link{make_repeated_folds}()}
 }
 \concept{fold generation functions}

@@ -1,10 +1,10 @@
 #' Cross-Validation Schemes
 #'
-#' These functions represent different cross-validation schemes that can be used
-#' with \pkg{origami}. They should be used as options for the \code{fold_fun}
-#' argument to \code{\link{make_folds}}, which will call the requested function
-#' specify \code{n}, based on its arguments, and pass any remaining arguments
-#' (e.g. \code{V} or \code{pvalidation}) on.
+#' These functions represent different cross-validation schemes that can be
+#' used with \pkg{origami}. They should be used as options for the
+#' \code{fold_fun} argument to \code{\link{make_folds}}, which will call the
+#' requested function specify \code{n}, based on its arguments, and pass any
+#' remaining arguments (e.g. \code{V} or \code{pvalidation}) on.
 #'
 #' @family fold generation functions
 #'
@@ -25,12 +25,12 @@
 #'  for larger time-series. The default is one.
 #' @param t An integer indicating the total amount of time to consider per
 #' time-series sample.
-#'  @param time An optional vector of integers of time points observed for each
+#' @param time An optional vector of integers of time points observed for each
 #'  subject.
-#'  @param id An optional vector of unique identifiers which correspond to time
-#'  vector, and can be used to subset time vector.
+#' @param id An optional vector of unique identifiers corresponding to the time
+#'  vector. These can be used to subset the time vector.
 #'
-#' @return A list of Folds.
+#' @return A list of \code{Fold}s.
 #' @name fold_funs
 NULL
 
@@ -75,9 +75,9 @@ folds_loo <- function(n) {
 }
 
 ################################################################################
+
 #' @rdname fold_funs
 #' @export
-#'
 folds_montecarlo <- function(n, V = 1000, pvalidation = 0.2) {
   stopifnot(pvalidation > 0 && pvalidation < 1)
 
@@ -141,7 +141,6 @@ folds_rolling_window <- function(n, window_size, validation_size, gap = 0,
   return(folds)
 }
 
-### Samples independent
 #' @rdname fold_funs
 #' @export
 folds_rolling_origin_pooled <- function(n, t, id = NULL, time = NULL,
@@ -149,7 +148,7 @@ folds_rolling_origin_pooled <- function(n, t, id = NULL, time = NULL,
                                         gap = 0, batch = 1) {
   if ((!is.null(id) & is.null(time)) | (is.null(id) & !is.null(time))) {
     stop("Cannot create flexible folds (allow for variability in the amount of time observed for each id) 
-         unless both time and id argments are provided. Either provide both time and id, or neither.")
+         unless both `time` and `id` argments are provided. Either provide both `time` and `id` or neither.")
   }
   if (length(id) != length(time)) {
     id <- rep(id, length(time))
@@ -207,7 +206,7 @@ folds_rolling_window_pooled <- function(n, t, id = NULL, time = NULL,
                                         gap = 0, batch = 1) {
   if ((!is.null(id) & is.null(time)) | (is.null(id) & !is.null(time))) {
     stop("Cannot create flexible folds (allow for variability in the amount of time observed for each id) 
-         unless both time and id argments are provided. Either provide both time and id, or neither.")
+         unless both `time` and `id` argments are provided. Either provide both `time` and `id` or neither.")
   }
   if (length(id) != length(time)) {
     id <- rep(id, length(time))
@@ -258,10 +257,8 @@ folds_rolling_window_pooled <- function(n, t, id = NULL, time = NULL,
   return(folds_rolling_window)
 }
 
-### Samples dependent
 #' @rdname fold_funs
 #' @export
-
 folds_vfold_rolling_origin_pooled <- function(n, t, V = 10, first_window,
                                               validation_size, gap = 0,
                                               batch = 1) {

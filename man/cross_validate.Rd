@@ -4,8 +4,15 @@
 \alias{cross_validate}
 \title{Main Cross-Validation Function}
 \usage{
-cross_validate(cv_fun, folds, ..., use_future = TRUE, .combine = TRUE,
-  .combine_control = list(), .old_results = NULL)
+cross_validate(
+  cv_fun,
+  folds,
+  ...,
+  use_future = TRUE,
+  .combine = TRUE,
+  .combine_control = list(),
+  .old_results = NULL
+)
 }
 \arguments{
 \item{cv_fun}{A function that takes a 'fold' as it's first argument and
@@ -65,8 +72,10 @@ cv_lm <- function(fold, data, reg_form) {
   preds <- predict(mod, newdata = valid_data)
 
   # capture results to be returned as output
-  out <- list(coef = data.frame(t(coef(mod))),
-              SE = ((preds - valid_data[, out_var_ind])^2))
+  out <- list(
+    coef = data.frame(t(coef(mod))),
+    SE = ((preds - valid_data[, out_var_ind])^2)
+  )
   return(out)
 }
 
@@ -77,8 +86,10 @@ mean(resub_results$SE)
 
 # cross-validated estimate
 folds <- make_folds(mtcars)
-cv_results <- cross_validate(cv_fun = cv_lm, folds = folds, data = mtcars,
-                             reg_form = "mpg ~ .")
+cv_results <- cross_validate(
+  cv_fun = cv_lm, folds = folds, data = mtcars,
+  reg_form = "mpg ~ ."
+)
 mean(cv_results$SE)
 ###############################################################################
 # This example explains how to use the cross_validate function with
@@ -108,24 +119,30 @@ cv_lm <- function(fold, data, reg_form) {
   preds <- predict(mod, newdata = valid_data)
 
   # capture results to be returned as output
-  out <- list(coef = data.frame(t(coef(mod))),
-              SE = ((preds - valid_data[, out_var_ind])^2))
+  out <- list(
+    coef = data.frame(t(coef(mod))),
+    SE = ((preds - valid_data[, out_var_ind])^2)
+  )
   return(out)
 }
 
 plan(sequential)
 time_seq <- system.time({
-    results_seq <- cross_validate(cv_fun = cv_lm, folds = folds, data = mtcars,
-                                  reg_form = "mpg ~ .")
+  results_seq <- cross_validate(
+    cv_fun = cv_lm, folds = folds, data = mtcars,
+    reg_form = "mpg ~ ."
+  )
 })
 
 plan(multicore)
 time_mc <- system.time({
-    results_mc <- cross_validate(cv_fun = cv_lm, folds = folds, data = mtcars,
-                                 reg_form = "mpg ~ .")
+  results_mc <- cross_validate(
+    cv_fun = cv_lm, folds = folds, data = mtcars,
+    reg_form = "mpg ~ ."
+  )
 })
 
-if(availableCores() > 1) {
-    time_mc["elapsed"] < 1.2 * time_seq["elapsed"]
+if (availableCores() > 1) {
+  time_mc["elapsed"] < 1.2 * time_seq["elapsed"]
 }
 }
