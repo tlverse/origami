@@ -169,4 +169,38 @@ if (require("forecast")) {
   test_that("Dimension of folds for the V-fold rolling window pooled CV", {
     expect_equal(length(folds), 10, tolerance = 0.01)
   })
+  
+  ### Example with multivariate time series with variations in what's observed:
+  # for each id, vary time measured and number of observations
+  value <- AirPassengers
+  time <- c(1:48, c(1,5:51), c(1:10,31:68))
+  id <- rep(1:3, each = 48)
+  dat <- data.table(id, time, value)
+  
+  folds <- make_folds(dat, t = 40, id = dat$id, time = dat$time, 
+                      fold_fun = folds_rolling_origin_pooled,
+                      first_window = 10, validation_size = 10, gap = 0, batch = 10
+  )
+  
+  # rows which should not be included in any folds
+  bad_index1 <- which(dat$time > 40)
+  test_that("Time included in folds does not exceed t", {
+    expect_false(any(bad_index1 %in% unlist(folds)))
+  })
+  
+  # no rows from id 3 should be included in fold 2 validation set
+  # since time 21-30 not observed for id 3, and fold 2 validation is times 21-30
+  id3 <- which(dat$id == 3)
+  test_that("Validation folds respect differences in time observed for each id", {
+    expect_false(any(id3 %in% folds[[2]]$validation_set))
+  })
+  
+  # only 7 rows from id 2 should be included in fold 1 training set
+  # since times 2-4 not observed for id 2, and fold 1 training is times 1-10
+  id2_fold1 <- which(dat$id == 2 & dat$time <= 10)
+  test_that("Training folds respect differences in time observed for each id", {
+    expect_equal(length(id2_fold1), 7)
+  })
 }
+
+
