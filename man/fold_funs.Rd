@@ -54,6 +54,8 @@ folds_rolling_window_pooled(
 folds_vfold_rolling_origin_pooled(
   n,
   t,
+  id = NULL,
+  time = NULL,
   V = 10,
   first_window,
   validation_size,
@@ -64,6 +66,8 @@ folds_vfold_rolling_origin_pooled(
 folds_vfold_rolling_window_pooled(
   n,
   t,
+  id = NULL,
+  time = NULL,
   V = 10,
   window_size,
   validation_size,
@@ -102,7 +106,7 @@ time-series sample.}
 vector. These can be used to subset the time vector.}
 
 \item{time}{An optional vector of integers of time points observed for each
-subject.}
+subject in the sample.}
 }
 \value{
 A list of \code{Fold}s.

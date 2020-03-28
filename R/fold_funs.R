@@ -24,11 +24,13 @@
 #'  added to the training set in each iteration of cross-validation. Applicable
 #'  for larger time-series. The default is one.
 #' @param t An integer indicating the total amount of time to consider per
-#' time-series sample.
+#'  time-series sample.
 #' @param time An optional vector of integers of time points observed for each
-#'  subject.
+#'  subject in the sample.
 #' @param id An optional vector of unique identifiers corresponding to the time
 #'  vector. These can be used to subset the time vector.
+#'
+#' @importFrom assertthat assert_that
 #'
 #' @return A list of \code{Fold}s.
 #' @name fold_funs
@@ -79,13 +81,13 @@ folds_loo <- function(n) {
 #' @rdname fold_funs
 #' @export
 folds_montecarlo <- function(n, V = 1000, pvalidation = 0.2) {
-  stopifnot(pvalidation > 0 && pvalidation < 1)
+  assertthat::assert_that(pvalidation > 0 && pvalidation < 1)
 
   # calculate training sample size
   ntrain <- round((1 - pvalidation) * n)
-  stopifnot(ntrain > 1)
+  assertthat::assert_that(ntrain > 1)
 
-  folds <- lapply(seq_len(V), fold_montecarlo, n, ntrain, replace = F)
+  folds <- lapply(seq_len(V), fold_montecarlo, n, ntrain, replace = FALSE)
   return(folds)
 }
 
@@ -101,7 +103,7 @@ fold_montecarlo <- function(v, n, ntrain, replace) {
 #' @rdname fold_funs
 #' @export
 folds_bootstrap <- function(n, V = 1000) {
-  folds <- lapply(seq_len(V), fold_montecarlo, n, n, replace = T)
+  folds <- lapply(seq_len(V), fold_montecarlo, n, n, replace = TRUE)
   return(folds)
 }
 
@@ -218,16 +220,16 @@ folds_rolling_window_pooled <- function(n, t, id = NULL, time = NULL,
                                         window_size, validation_size,
                                         gap = 0, batch = 1) {
   if ((!is.null(id) & is.null(time)) | (is.null(id) & !is.null(time))) {
-    stop("Cannot create flexible folds (allow for variability in the amount of 
-         time observed for each id) unless both `time` and `id` argments are 
+    stop("Cannot create flexible folds (allow for variability in the amount of
+         time observed for each id) unless both `time` and `id` argments are
          provided. Either provide both `time` and `id` or neither.")
   }
   if ((length(id) != length(time)) & (length(id) > 1)) {
-    stop("Cannot create flexible folds (allow for variability in the amount of 
-         `time` observed for each `id`) unless `time` vector is of same length 
-         as `id` vector. `time` is a vector of integers of time points observed 
+    stop("Cannot create flexible folds (allow for variability in the amount of
+         `time` observed for each `id`) unless `time` vector is of same length
+         as `id` vector. `time` is a vector of integers of time points observed
          for each subject, and `id` is a vector of unique identifiers which
-         correspond to the time vector. The `id` vector is used to subset the 
+         correspond to the time vector. The `id` vector is used to subset the
          `time` vector.")
   }
   if (length(id) == 1) {
@@ -287,24 +289,23 @@ folds_vfold_rolling_origin_pooled <- function(n, t, id = NULL, time = NULL,
                                               V = 10, first_window,
                                               validation_size, gap = 0,
                                               batch = 1) {
- 
   if ((!is.null(id) & is.null(time)) | (is.null(id) & !is.null(time))) {
-    stop("Cannot create flexible folds (allow for variability in the amount of 
-         time observed for each id) unless both `time` and `id` argments are 
+    stop("Cannot create flexible folds (allow for variability in the amount of
+         time observed for each id) unless both `time` and `id` argments are
          provided. Either provide both `time` and `id` or neither.")
   }
   if ((length(id) != length(time)) & (length(id) > 1)) {
-    stop("Cannot create flexible folds (allow for variability in the amount of 
-         `time` observed for each `id`) unless `time` vector is of same length 
-         as `id` vector. `time` is a vector of integers of time points observed 
+    stop("Cannot create flexible folds (allow for variability in the amount of
+         `time` observed for each `id`) unless `time` vector is of same length
+         as `id` vector. `time` is a vector of integers of time points observed
          for each subject, and `id` is a vector of unique identifiers which
-         correspond to the time vector. The `id` vector is used to subset the 
+         correspond to the time vector. The `id` vector is used to subset the
          `time` vector.")
   }
   if (length(id) == 1) {
     id <- rep(id, length(time))
   }
-  
+
   if (is.null(id) & is.null(time)) {
     dat <- cbind.data.frame(
       index = seq(n), time = rep(seq(t), n / t),
@@ -315,7 +316,7 @@ folds_vfold_rolling_origin_pooled <- function(n, t, id = NULL, time = NULL,
     dat <- cbind.data.frame(time = time, id = id)
     dat$index <- as.numeric(rownames(dat))
   }
-  
+
   ids <- unique(dat$id)
   message(paste("Processing", length(ids), "samples with", t, "time points."))
 
@@ -356,7 +357,7 @@ folds_vfold_rolling_origin_pooled <- function(n, t, id = NULL, time = NULL,
       })
       make_fold(
         v = (length(rolling_origin_skeleton) * (g$v - 1) + h$v),
-        training_set = unlist(train_indices), 
+        training_set = unlist(train_indices),
         validation_set = unlist(val_indices)
       )
     })
@@ -377,24 +378,23 @@ folds_vfold_rolling_window_pooled <- function(n, t, id = NULL, time = NULL,
                                               V = 10, window_size,
                                               validation_size, gap = 0,
                                               batch = 1) {
-  
   if ((!is.null(id) & is.null(time)) | (is.null(id) & !is.null(time))) {
-    stop("Cannot create flexible folds (allow for variability in the amount of 
-         time observed for each id) unless both `time` and `id` argments are 
+    stop("Cannot create flexible folds (allow for variability in the amount of
+         time observed for each id) unless both `time` and `id` argments are
          provided. Either provide both `time` and `id` or neither.")
   }
   if ((length(id) != length(time)) & (length(id) > 1)) {
-    stop("Cannot create flexible folds (allow for variability in the amount of 
-         `time` observed for each `id`) unless `time` vector is of same length 
-         as `id` vector. `time` is a vector of integers of time points observed 
+    stop("Cannot create flexible folds (allow for variability in the amount of
+         `time` observed for each `id`) unless `time` vector is of same length
+         as `id` vector. `time` is a vector of integers of time points observed
          for each subject, and `id` is a vector of unique identifiers which
-         correspond to the time vector. The `id` vector is used to subset the 
+         correspond to the time vector. The `id` vector is used to subset the
          `time` vector.")
   }
   if (length(id) == 1) {
     id <- rep(id, length(time))
   }
-  
+
   if (is.null(id) & is.null(time)) {
     dat <- cbind.data.frame(
       index = seq(n), time = rep(seq(t), n / t),
@@ -405,7 +405,7 @@ folds_vfold_rolling_window_pooled <- function(n, t, id = NULL, time = NULL,
     dat <- cbind.data.frame(time = time, id = id)
     dat$index <- as.numeric(rownames(dat))
   }
-  
+
   ids <- unique(dat$id)
   message(paste("Processing", length(ids), "samples with", t, "time points."))
 
@@ -446,7 +446,7 @@ folds_vfold_rolling_window_pooled <- function(n, t, id = NULL, time = NULL,
       })
       make_fold(
         v = (length(rolling_window_skeleton) * (g$v - 1) + h$v),
-        training_set = unlist(train_indices), 
+        training_set = unlist(train_indices),
         validation_set = unlist(val_indices)
       )
     })

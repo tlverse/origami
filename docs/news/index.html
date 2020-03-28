@@ -125,8 +125,8 @@
 <a href="#origami-1-0-4" class="anchor"></a>origami 1.0.4<small> Unreleased </small>
 </h1>
 <ul>
-<li>Fix the incorrect use of <code>future.apply</code> by including <code>future.seed = TRUE</code>, as per <a href="https://github.com/tlverse/origami/issues/48" class="uri">https://github.com/tlverse/origami/issues/48</a>
-</li>
+<li>Fix the incorrect use of <code>future.apply</code> by including <code>future.seed = TRUE</code>, as per <a href="https://github.com/tlverse/origami/issues/48" class="uri">https://github.com/tlverse/origami/issues/48</a>.</li>
+<li>Fixes to <code>folds_rolling_origin_pooled</code> and <code>folds_rolling_window_pooled</code>, as per <a href="https://github.com/tlverse/origami/pull/50" class="uri">https://github.com/tlverse/origami/pull/50</a>.</li>
 </ul>
 </div>
     <div id="origami-1-0-3" class="section level1">
@@ -150,7 +150,7 @@
 <a href="#origami-1-0-1" class="anchor"></a>origami 1.0.1<small> 2019-05-01 </small>
 </h1>
 <ul>
-<li>Adds a simple check of the current R version in the unit tests in the file tests/testthat/test-overall.R to use appropriate hard-coded values that depend on the R version. Note that these differ between R &lt; 3.6.0 and R &gt; 3.6.0 due to an important change in the default PRNG.</li>
+<li>Adds a simple check of the current R version in the unit tests in the file <code>tests/testthat/test-overall.R</code> to use appropriate hard-coded values that depend on the R version. Note that these differ between R &lt; 3.6.0 and R &gt; 3.6.0 due to an important change in the default PRNG.</li>
 </ul>
 </div>
     <div id="origami-1-0-0" class="section level1">
@@ -158,9 +158,9 @@
 <a href="#origami-1-0-0" class="anchor"></a>origami 1.0.0<small> 2018-03-06 </small>
 </h1>
 <ul>
-<li>Adds a new function folds2foldvec for easy conversion between the folds structure used by origami and other packages (e.g., glmnet).</li>
-<li>Adds an option to use lapply instead of future_lapply, for compatibility with other packages in a custom parallelization framework.</li>
-<li>Calls future_lapply from the new more modular package future.apply rather than from future, matching the author’s recommendation.</li>
+<li>Adds a new function <code>folds2foldvec</code> for easy conversion between the folds structure used by <code>origami</code> and other packages (e.g., <code>glmnet</code>).</li>
+<li>Adds an option to use <code>lapply</code> instead of <code>future_lapply</code>, for compatibility with other packages in a custom parallelization framework.</li>
+<li>Calls <code>future_lapply</code> from the new more modular package <code>future.apply</code> rather than from <code>future</code>, matching the author’s recommendation.</li>
 </ul>
 </div>
     <div id="origami-0-8-0" class="section level1">
@@ -169,7 +169,7 @@
 </h1>
 <ul>
 <li>First CRAN release.</li>
-<li>Removed origami_SuperLearner functionality temporarily.</li>
+<li>Removed <code>origami_SuperLearner</code> functionality temporarily.</li>
 </ul>
 </div>
   </div>
