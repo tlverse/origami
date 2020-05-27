@@ -179,6 +179,8 @@ folds_rolling_origin_pooled <- function(n, t, id = NULL, time = NULL,
   }
 
   ids <- unique(dat$id)
+  times <- unique(dat$time)
+  
   message(paste("Processing", length(ids), "samples with", t, "time points."))
 
   # establish rolling origin forecast for time-series cross-validation
@@ -186,28 +188,13 @@ folds_rolling_origin_pooled <- function(n, t, id = NULL, time = NULL,
     t, first_window,
     validation_size, gap, batch
   )
-
-  folds_rolling_origin <- lapply(rolling_origin_skeleton, function(h) {
-    train_indices <- lapply(ids, function(i) {
-      train <- dat[dat$id == i, ]
-      if (is.null(id) & is.null(time)) {
-        train[h$training_set, ]$index
-      } else {
-        train[which(train$time %in% h$training_set), ]$index
-      }
-    })
-    val_indices <- lapply(ids, function(j) {
-      val <- dat[dat$id == j, ]
-      if (is.null(id) & is.null(time)) {
-        val[h$validation_set, ]$index
-      } else {
-        val[which(val$time %in% h$validation_set), ]$index
-      }
-    })
-    make_fold(
-      v = h$v, training_set = unlist(train_indices),
-      validation_set = unlist(val_indices)
-    )
+  fold <- rolling_origin_skeleton[[1]]
+  folds_rolling_origin <- lapply(rolling_origin_skeleton, function(fold) {
+    train_times <- training(times)
+    valid_times <- validation(times)
+    train_idx <- which(dat$time%in%train_times)
+    valid_idx <- which(dat$time%in%valid_times)
+    fold <- make_fold(fold_index(), train_idx, valid_idx)
   })
   return(folds_rolling_origin)
 }

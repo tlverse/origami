@@ -85,16 +85,21 @@ if (require("forecast")) {
 
   #############################################################################
   # Test multiple time-series functionality
-  test_data <- data.table(melt(data.table(AirPassengers),
-    measure.vars = "AirPassengers"
-  ))
-
+  n_id <- 100
+  test_data <- data.table(id=seq_len(n_id))
+  test_data <- test_data[,list(t=seq_len(floor(runif(1)*50))),by=list(id)]
+  test_data[,X:=rnorm(.N)]
+  
+  
   ### Independent sample example
   folds <- make_folds(test_data,
     fold_fun = folds_rolling_origin_pooled,
-    t = 12, first_window = 4,
+    id = test_data$id,
+    t = max(test_data$t),
+    time = test_data$t, first_window = 4,
     validation_size = 4, gap = 0, batch = 2
   )
+
   test_that("Size of the first fold of rolling origin pooled CV", {
     expect_equal(length(folds[[1]]$training_set), 48, tolerance = 0.01)
   })
