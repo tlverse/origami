@@ -86,11 +86,11 @@ if (require("forecast")) {
   #############################################################################
   # Test multiple time-series functionality
   n_id <- 100
-  test_data <- data.table(id=seq_len(n_id))
-  test_data <- test_data[,list(t=seq_len(floor(runif(1)*50))),by=list(id)]
-  test_data[,X:=rnorm(.N)]
-  
-  
+  test_data <- data.table(id = seq_len(n_id))
+  test_data <- test_data[, list(t = seq_len(floor(runif(1) * 50))),
+                         by = list(id)]
+  test_data[, X := rnorm(.N)]
+
   ### Independent sample example
   folds <- make_folds(test_data,
     fold_fun = folds_rolling_origin_pooled,
@@ -101,7 +101,7 @@ if (require("forecast")) {
   )
 
   test_that("Size of the first fold of rolling origin pooled CV", {
-    expect_equal(length(folds[[1]]$training_set), 48, tolerance = 0.01)
+    expect_equal(length(folds[[1]]$training_set), 48)
   })
 
   folds <- make_folds(test_data,
@@ -110,13 +110,14 @@ if (require("forecast")) {
     validation_size = 4, gap = 0, batch = 2
   )
   test_that("Size of the first fold of rolling window pooled CV", {
-    expect_equal(length(folds[[1]]$training_set), 48, tolerance = 0.01)
+    expect_equal(length(folds[[1]]$training_set), 48)
   })
 
   ### Independent sample example:
   #   not the same number of time points
   #   id based
-  test_data_id <- data.table(melt(data.table(AirPassengers), measure.vars = "AirPassengers"),
+  test_data_id <- data.table(melt(data.table(AirPassengers),
+                                  measure.vars = "AirPassengers"),
     id = c(rep(1, 60), rep(2, 84))
   )
 
@@ -131,10 +132,10 @@ if (require("forecast")) {
     validation_size = 7, gap = 0, batch = 20
   )
   test_that("Size of CVs rolling window pooled CV, id 2", {
-    expect_equal(length(folds_id2), 4, tolerance = 0.01)
+    expect_equal(length(folds_id2), 4)
   })
   test_that("Size of CVs rolling window pooled CV, id 1", {
-    expect_equal(length(folds_id1), 3, tolerance = 0.01)
+    expect_equal(length(folds_id1), 3)
   })
 
   folds_id1 <- make_folds(test_data_id,
@@ -148,13 +149,11 @@ if (require("forecast")) {
     validation_size = 5, gap = 0, batch = 20
   )
   test_that("Size of CVs rolling origin pooled CV, id 2", {
-    expect_equal(length(folds_id2), 4, tolerance = 0.01)
+    expect_equal(length(folds_id2), 4)
   })
   test_that("Size of CVs rolling origin pooled CV, id 1", {
-    expect_equal(length(folds_id1), 3, tolerance = 0.01)
+    expect_equal(length(folds_id1), 3)
   })
-
-
 
   ### Dependent samples example
   folds <- make_folds(test_data,
@@ -163,7 +162,7 @@ if (require("forecast")) {
     validation_size = 2, gap = 0, batch = 2
   )
   test_that("Dimension of folds for the V-fold rolling origin pooled CV", {
-    expect_equal(length(folds), 15, tolerance = 0.01)
+    expect_equal(length(folds), 15)
   })
 
   folds <- make_folds(test_data,
@@ -172,7 +171,7 @@ if (require("forecast")) {
     validation_size = 2, gap = 0, batch = 3
   )
   test_that("Dimension of folds for the V-fold rolling window pooled CV", {
-    expect_equal(length(folds), 10, tolerance = 0.01)
+    expect_equal(length(folds), 10)
   })
 
   ### Example with multivariate time series with variations in what's observed:
@@ -197,14 +196,14 @@ if (require("forecast")) {
   # no rows from id 3 should be included in fold 2 validation set
   # since time 21-30 not observed for id 3, and fold 2 validation is times 21-30
   id3 <- which(dat$id == 3)
-  test_that("Validation folds respect differences in time observed for each id", {
+  test_that("Validation folds respect differences in time for each id", {
     expect_false(any(id3 %in% folds[[2]]$validation_set))
   })
 
   # only 7 rows from id 2 should be included in fold 1 training set
   # since times 2-4 not observed for id 2, and fold 1 training is times 1-10
   id2_fold1 <- which(dat$id == 2 & dat$time <= 10)
-  test_that("Training folds respect differences in time observed for each id", {
+  test_that("Training folds respect differences in time for each id", {
     expect_equal(length(id2_fold1), 7)
   })
 }
