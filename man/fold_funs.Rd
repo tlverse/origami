@@ -15,19 +15,19 @@
 \alias{folds_vfold_rolling_window_pooled}
 \title{Cross-Validation Schemes}
 \usage{
-folds_vfold(n, V = 10)
+folds_vfold(n, V = 10L)
 
 folds_resubstitution(n)
 
 folds_loo(n)
 
-folds_montecarlo(n, V = 1000, pvalidation = 0.2)
+folds_montecarlo(n, V = 1000L, pvalidation = 0.2)
 
-folds_bootstrap(n, V = 1000)
+folds_bootstrap(n, V = 1000L)
 
-folds_rolling_origin(n, first_window, validation_size, gap = 0, batch = 1)
+folds_rolling_origin(n, first_window, validation_size, gap = 0L, batch = 1L)
 
-folds_rolling_window(n, window_size, validation_size, gap = 0, batch = 1)
+folds_rolling_window(n, window_size, validation_size, gap = 0L, batch = 1L)
 
 folds_rolling_origin_pooled(
   n,
@@ -36,8 +36,8 @@ folds_rolling_origin_pooled(
   time = NULL,
   first_window,
   validation_size,
-  gap = 0,
-  batch = 1
+  gap = 0L,
+  batch = 1L
 )
 
 folds_rolling_window_pooled(
@@ -47,8 +47,8 @@ folds_rolling_window_pooled(
   time = NULL,
   window_size,
   validation_size,
-  gap = 0,
-  batch = 1
+  gap = 0L,
+  batch = 1L
 )
 
 folds_vfold_rolling_origin_pooled(
@@ -56,11 +56,11 @@ folds_vfold_rolling_origin_pooled(
   t,
   id = NULL,
   time = NULL,
-  V = 10,
+  V = 10L,
   first_window,
   validation_size,
-  gap = 0,
-  batch = 1
+  gap = 0L,
+  batch = 1L
 )
 
 folds_vfold_rolling_window_pooled(
@@ -68,11 +68,11 @@ folds_vfold_rolling_window_pooled(
   t,
   id = NULL,
   time = NULL,
-  V = 10,
+  V = 10L,
   window_size,
   validation_size,
-  gap = 0,
-  batch = 1
+  gap = 0L,
+  batch = 1L
 )
 }
 \arguments{

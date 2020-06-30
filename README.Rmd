@@ -26,8 +26,10 @@ knitr::opts_chunk$set(
 
 > High-powered framework for cross-validation. Fold your data like it's paper!
 
-__Authors:__ [Jeremy Coyle](https://github.com/jeremyrcoyle) and [Nima
-Hejazi](https://nimahejazi.org)
+__Authors:__ [Jeremy Coyle](https://github.com/jeremyrcoyle), [Nima
+Hejazi](https://nimahejazi.org), [Ivana
+Malenica](https://github.com/podTockom), and [Rachael
+Phillips](https://github.com/rachaelvphillips)
 
 ---
 

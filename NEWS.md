@@ -3,6 +3,9 @@
    as per https://github.com/tlverse/origami/issues/48.
 * Fixes to `folds_rolling_origin_pooled` and `folds_rolling_window_pooled`,
    as per https://github.com/tlverse/origami/pull/50.
+* time series stuff TO FILL IN
+* time series stuff TO FILL IN
+* time series stuff TO FILL IN
 
 # origami 1.0.3
 * A maintenance release addressing reported issues, including changes to unit
