@@ -3,9 +3,14 @@
    as per https://github.com/tlverse/origami/issues/48.
 * Fixes to `folds_rolling_origin_pooled` and `folds_rolling_window_pooled`,
    as per https://github.com/tlverse/origami/pull/50.
-* time series stuff TO FILL IN
-* time series stuff TO FILL IN
-* time series stuff TO FILL IN
+* Sped up all pooled time-series fold functions with `lapply`.
+* All pooled time-series fold functions (`folds_rolling_origin_pooled`,
+   `folds_rolling_window_pooled`, `folds_vfold_rolling_origin_pooled`,
+   `folds_vfold_rolling_window_pooled`) now allow for variability in the 
+   number of observations for each independent unit (i.e. subject).
+* Added test for pooled time-series cross-validation with multi-unit time-series
+   to test the update above. In this test, the total number of observations 
+   and the time-points for which there are observations varies across the units.
 
 # origami 1.0.3
 * A maintenance release addressing reported issues, including changes to unit

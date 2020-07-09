@@ -118,8 +118,10 @@ folds_rolling_origin <- function(n, first_window, validation_size, gap = 0L,
 
   folds <- lapply(seq_along(origins), function(i) {
     origin <- origins[i]
-    make_fold(v = i, training_set = seq_len(origin),
-              validation_set = origin + gap + (seq_len(validation_size)))
+    make_fold(
+      v = i, training_set = seq_len(origin),
+      validation_set = origin + gap + (seq_len(validation_size))
+    )
   })
   return(folds)
 }
@@ -181,8 +183,8 @@ folds_rolling_origin_pooled <- function(n, t, id = NULL, time = NULL,
   folds_rolling_origin <- lapply(rolling_origin_skeleton, function(fold) {
     train_times <- training(times)
     valid_times <- validation(times)
-    train_idx <- which(dat$time%in%train_times)
-    valid_idx <- which(dat$time%in%valid_times)
+    train_idx <- which(dat$time %in% train_times)
+    valid_idx <- which(dat$time %in% valid_times)
     fold <- make_fold(fold_index(), train_idx, valid_idx)
   })
   return(folds_rolling_origin)
@@ -227,8 +229,8 @@ folds_rolling_window_pooled <- function(n, t, id = NULL, time = NULL,
   folds_rolling_window <- lapply(rolling_window_skeleton, function(fold) {
     train_times <- training(times)
     valid_times <- validation(times)
-    train_idx <- which(dat$time%in%train_times)
-    valid_idx <- which(dat$time%in%valid_times)
+    train_idx <- which(dat$time %in% train_times)
+    valid_idx <- which(dat$time %in% valid_times)
     fold <- make_fold(fold_index(), train_idx, valid_idx)
   })
   return(folds_rolling_window)
@@ -280,7 +282,7 @@ folds_vfold_rolling_origin_pooled <- function(n, t, id = NULL, time = NULL,
 
     # Fold-specific Sample Index
     vfold_train_id <- vfold$training_set
-    vfold_valid_id  <- vfold$validation_set
+    vfold_valid_id <- vfold$validation_set
     vfold_train_idx <- which(dat$id %in% vfold_train_id)
     vfold_valid_idx <- which(dat$id %in% vfold_valid_id)
 
@@ -296,8 +298,8 @@ folds_vfold_rolling_origin_pooled <- function(n, t, id = NULL, time = NULL,
       make_fold(fold_idx, fold_train_idx, fold_valid_idx)
     })
   })
-  
-  folds <- unlist(Vfolds_rolling_origin_pooled, recursive=FALSE)
+
+  folds <- unlist(Vfolds_rolling_origin_pooled, recursive = FALSE)
   return(folds)
 }
 
@@ -346,7 +348,7 @@ folds_vfold_rolling_window_pooled <- function(n, t, id = NULL, time = NULL,
   Vfolds_rolling_window_pooled <- lapply(Vfolds_skeleton, function(vfold) {
     # Fold-specific Sample Index
     vfold_train_id <- vfold$training_set
-    vfold_valid_id  <- vfold$validation_set
+    vfold_valid_id <- vfold$validation_set
     vfold_train_idx <- which(dat$id %in% vfold_train_id)
     vfold_valid_idx <- which(dat$id %in% vfold_valid_id)
 
@@ -362,8 +364,8 @@ folds_vfold_rolling_window_pooled <- function(n, t, id = NULL, time = NULL,
       make_fold(fold_idx, fold_train_idx, fold_valid_idx)
     })
   })
-  
-  folds <- unlist(Vfolds_rolling_window_pooled, recursive=FALSE)
+
+  folds <- unlist(Vfolds_rolling_window_pooled, recursive = FALSE)
   return(folds)
 }
 
@@ -381,25 +383,31 @@ folds_vfold_rolling_window_pooled <- function(n, t, id = NULL, time = NULL,
 #' @keywords internal
 check_id_and_time <- function(id, time) {
   # check that both time and ID are provided, or that neither are provided
-  msg_time_id <- paste("Cannot create flexible folds (allow for variability",
-                       "in the amount of time observed for each id) unless",
-                       "both `time` and `id` arguments are provided. Either",
-                       "provide both `time` and `id` or neither.")
+  msg_time_id <- paste(
+    "Cannot create flexible folds (allow for variability",
+    "in the amount of time observed for each id) unless",
+    "both `time` and `id` arguments are provided. Either",
+    "provide both `time` and `id` or neither."
+  )
   assertthat::assert_that(!(!is.null(id) & is.null(time)) ||
-                          !(is.null(id) & !is.null(time)),
-                          msg = msg_time_id)
+    !(is.null(id) & !is.null(time)),
+  msg = msg_time_id
+  )
 
   # check that observed times are provided for each ID
-  msg_time_length <- paste("Cannot create flexible folds (allow for",
-                           "variability in the amount of `time` observed for",
-                           "each `id`) unless `time` vector is of same length",
-                           "as `id` vector. `time` is a vector of integers of",
-                           "time points observed for each subject, and `id`",
-                           "is a vector of unique identifiers which",
-                           "correspond to the time vector. The `id` vector",
-                           "is used to subset the `time` vector.")
+  msg_time_length <- paste(
+    "Cannot create flexible folds (allow for",
+    "variability in the amount of `time` observed for",
+    "each `id`) unless `time` vector is of same length",
+    "as `id` vector. `time` is a vector of integers of",
+    "time points observed for each subject, and `id`",
+    "is a vector of unique identifiers which",
+    "correspond to the time vector. The `id` vector",
+    "is used to subset the `time` vector."
+  )
   if (length(id) > 1) {
     assertthat::assert_that(length(id) == length(time),
-                            msg = msg_time_length)
+      msg = msg_time_length
+    )
   }
 }

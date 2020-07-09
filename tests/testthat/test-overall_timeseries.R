@@ -88,7 +88,8 @@ if (require("forecast")) {
   n_id <- 100
   test_data <- data.table(id = seq_len(n_id))
   test_data <- test_data[, list(t = seq_len(floor(runif(1) * 50))),
-                         by = list(id)]
+    by = list(id)
+  ]
   test_data[, X := rnorm(.N)]
 
   ### Independent sample example
@@ -101,7 +102,7 @@ if (require("forecast")) {
   )
 
   test_that("Size of the first fold of rolling origin pooled CV", {
-    expect_equal(length(folds[[1]]$training_set), sum(test_data$t<=4))
+    expect_equal(length(folds[[1]]$training_set), sum(test_data$t <= 4))
   })
 
   folds <- make_folds(test_data,
@@ -113,15 +114,16 @@ if (require("forecast")) {
     validation_size = 4, gap = 0, batch = 2
   )
   test_that("Size of the first fold of rolling window pooled CV", {
-    expect_equal(length(folds[[1]]$training_set), sum(test_data$t<=4))
+    expect_equal(length(folds[[1]]$training_set), sum(test_data$t <= 4))
   })
 
   ### Independent sample example:
   #   not the same number of time points
   #   id based
   test_data_id <- data.table(melt(data.table(AirPassengers),
-                                  measure.vars = "AirPassengers"),
-    id = c(rep(1, 60), rep(2, 84))
+    measure.vars = "AirPassengers"
+  ),
+  id = c(rep(1, 60), rep(2, 84))
   )
 
   folds_id1 <- make_folds(test_data_id,
@@ -143,7 +145,7 @@ if (require("forecast")) {
 
   folds_id1 <- make_folds(test_data_id,
     fold_fun = folds_rolling_origin_pooled,
-    
+
     t = 60, first_window = 10, id = 1, time = seq(1:60),
     validation_size = 5, gap = 0, batch = 20
   )
@@ -161,7 +163,6 @@ if (require("forecast")) {
 
   ### Dependent samples example
   folds <- make_folds(test_data,
-                      
     fold_fun = folds_vfold_rolling_origin_pooled,
     t = 12, first_window = 6, V = 5,
     validation_size = 2, gap = 0, batch = 2
