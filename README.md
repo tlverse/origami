@@ -23,8 +23,10 @@ v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/
 > High-powered framework for cross-validation. Fold your data like it’s
 > paper\!
 
-**Authors:** [Jeremy Coyle](https://github.com/jeremyrcoyle) and [Nima
-Hejazi](https://nimahejazi.org)
+**Authors:** [Jeremy Coyle](https://github.com/jeremyrcoyle), [Nima
+Hejazi](https://nimahejazi.org), [Ivana
+Malenica](https://github.com/podTockom), and [Rachael
+Phillips](https://github.com/rachaelvphillips)
 
 -----
 

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fold Helpers — fold_helpers • origami</title>
+<title>Check ID and Time Compatibility — check_id_and_time • origami</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Fold Helpers — fold_helpers" />
-<meta property="og:description" content="Accessors and indexers for the different parts of a fold." />
+<meta property="og:title" content="Check ID and Time Compatibility — check_id_and_time" />
+<meta property="og:description" content="Check ID and Time Compatibility" />
 
 
 
@@ -121,43 +121,32 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fold Helpers</h1>
-    <small class="dont-index">Source: <a href='https://github.com/tlverse/origami/blob/master/R/fold.R'><code>R/fold.R</code></a></small>
-    <div class="hidden name"><code>fold_helpers.Rd</code></div>
+    <h1>Check ID and Time Compatibility</h1>
+    <small class="dont-index">Source: <a href='https://github.com/tlverse/origami/blob/master/R/fold_funs.R'><code>R/fold_funs.R</code></a></small>
+    <div class="hidden name"><code>check_id_and_time.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Accessors and indexers for the different parts of a fold.</p>
+    <p>Check ID and Time Compatibility</p>
     </div>
 
-    <pre class="usage"><span class='fu'>training</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fold</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
-
-<span class='fu'>validation</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fold</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
-
-<span class='fu'>fold_index</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fold</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>check_id_and_time</span>(<span class='no'>id</span>, <span class='no'>time</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>an object to be indexed by a training set, validation set, or fold
-index. If missing, the index itself will be returned.</p></td>
+      <th>id</th>
+      <td><p>An optional vector of unique identifiers corresponding to the time
+vector. These can be used to subset the time vector.</p></td>
     </tr>
     <tr>
-      <th>fold</th>
-      <td><p>Fold; the fold used to do the indexing. If missing, <code>fold</code>
-will be pulled from the calling environment, if available.</p></td>
+      <th>time</th>
+      <td><p>An optional vector of integers of time points observed for each
+subject in the sample.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>The elements of <code>x</code> corresponding to the indexes, or the
- indexes themselves if <code>x</code> is missing.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='make_fold.html'>make_fold</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
