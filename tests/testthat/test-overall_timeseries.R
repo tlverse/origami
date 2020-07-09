@@ -101,16 +101,19 @@ if (require("forecast")) {
   )
 
   test_that("Size of the first fold of rolling origin pooled CV", {
-    expect_equal(length(folds[[1]]$training_set), 48)
+    expect_equal(length(folds[[1]]$training_set), sum(test_data$t<=4))
   })
 
   folds <- make_folds(test_data,
     fold_fun = folds_rolling_window_pooled,
-    t = 12, window_size = 4,
+    id = test_data$id,
+    t = max(test_data$t),
+    time = test_data$t,
+    window_size = 4,
     validation_size = 4, gap = 0, batch = 2
   )
   test_that("Size of the first fold of rolling window pooled CV", {
-    expect_equal(length(folds[[1]]$training_set), 48)
+    expect_equal(length(folds[[1]]$training_set), sum(test_data$t<=4))
   })
 
   ### Independent sample example:
@@ -140,6 +143,7 @@ if (require("forecast")) {
 
   folds_id1 <- make_folds(test_data_id,
     fold_fun = folds_rolling_origin_pooled,
+    
     t = 60, first_window = 10, id = 1, time = seq(1:60),
     validation_size = 5, gap = 0, batch = 20
   )
@@ -157,6 +161,7 @@ if (require("forecast")) {
 
   ### Dependent samples example
   folds <- make_folds(test_data,
+                      
     fold_fun = folds_vfold_rolling_origin_pooled,
     t = 12, first_window = 6, V = 5,
     validation_size = 2, gap = 0, batch = 2

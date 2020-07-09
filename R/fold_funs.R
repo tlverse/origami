@@ -296,7 +296,9 @@ folds_vfold_rolling_origin_pooled <- function(n, t, id = NULL, time = NULL,
       make_fold(fold_idx, fold_train_idx, fold_valid_idx)
     })
   })
-  return(Vfolds_rolling_origin_pooled)
+  
+  folds <- unlist(Vfolds_rolling_origin_pooled, recursive=FALSE)
+  return(folds)
 }
 
 ###############################################################################
@@ -360,7 +362,9 @@ folds_vfold_rolling_window_pooled <- function(n, t, id = NULL, time = NULL,
       make_fold(fold_idx, fold_train_idx, fold_valid_idx)
     })
   })
-  return(Vfolds_rolling_window_pooled)
+  
+  folds <- unlist(Vfolds_rolling_window_pooled, recursive=FALSE)
+  return(folds)
 }
 
 ###############################################################################
