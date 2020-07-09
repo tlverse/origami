@@ -20,7 +20,7 @@ be guessed from the data type of the results if they are missing.}
 A list of combined results.
 }
 \description{
-Applies \code{\link{Combiners}}: functions that collapse across a list of
+Applies \code{\link{combiners}}: functions that collapse across a list of
 similarly structured results, to a list of such lists.
 }
 \details{
@@ -29,5 +29,5 @@ In theory you should never call this function directly, because it
  based on data type, should work in most cases.
 }
 \seealso{
-\code{\link{Combiners}}
+\code{\link{combiners}}
 }

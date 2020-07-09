@@ -74,8 +74,7 @@ estimate of the mean:
 ``` r
 library(stringr)
 library(origami)
-#> origami: Generalized Cross-Validation Framework
-#> Version: 1.0.2
+#> origami v1.0.4: Generalized Framework for Cross-Validation
 set.seed(4795)
 
 data(mtcars)

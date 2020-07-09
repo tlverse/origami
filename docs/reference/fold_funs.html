@@ -36,11 +36,11 @@
 
 
 <meta property="og:title" content="Cross-Validation Schemes — fold_funs" />
-<meta property="og:description" content="These functions represent different cross-validation schemes that can be used
-with origami. They should be used as options for the fold_fun
-argument to make_folds, which will call the requested function
-specify n, based on its arguments, and pass any remaining arguments
-(e.g. V or pvalidation) on." />
+<meta property="og:description" content="These functions represent different cross-validation schemes that can be
+used with origami. They should be used as options for the
+fold_fun argument to make_folds, which will call the
+requested function specify n, based on its arguments, and pass any
+remaining arguments (e.g. V or pvalidation) on." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -83,7 +83,7 @@ specify n, based on its arguments, and pass any remaining arguments
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">origami</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
       </span>
     </div>
 
@@ -128,11 +128,11 @@ specify n, based on its arguments, and pass any remaining arguments
     </div>
 
     <div class="ref-description">
-    <p>These functions represent different cross-validation schemes that can be used
-with <span class="pkg">origami</span>. They should be used as options for the <code>fold_fun</code>
-argument to <code><a href='make_folds.html'>make_folds</a></code>, which will call the requested function
-specify <code>n</code>, based on its arguments, and pass any remaining arguments
-(e.g. <code>V</code> or <code>pvalidation</code>) on.</p>
+    <p>These functions represent different cross-validation schemes that can be
+used with <span class="pkg">origami</span>. They should be used as options for the
+<code>fold_fun</code> argument to <code><a href='make_folds.html'>make_folds</a></code>, which will call the
+requested function specify <code>n</code>, based on its arguments, and pass any
+remaining arguments (e.g. <code>V</code> or <code>pvalidation</code>) on.</p>
     </div>
 
     <pre class="usage"><span class='fu'>folds_vfold</span>(<span class='no'>n</span>, <span class='kw'>V</span> <span class='kw'>=</span> <span class='fl'>10</span>)
@@ -152,6 +152,8 @@ specify <code>n</code>, based on its arguments, and pass any remaining arguments
 <span class='fu'>folds_rolling_origin_pooled</span>(
   <span class='no'>n</span>,
   <span class='no'>t</span>,
+  <span class='kw'>id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>time</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='no'>first_window</span>,
   <span class='no'>validation_size</span>,
   <span class='kw'>gap</span> <span class='kw'>=</span> <span class='fl'>0</span>,
@@ -161,6 +163,8 @@ specify <code>n</code>, based on its arguments, and pass any remaining arguments
 <span class='fu'>folds_rolling_window_pooled</span>(
   <span class='no'>n</span>,
   <span class='no'>t</span>,
+  <span class='kw'>id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>time</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='no'>window_size</span>,
   <span class='no'>validation_size</span>,
   <span class='kw'>gap</span> <span class='kw'>=</span> <span class='fl'>0</span>,
@@ -170,6 +174,8 @@ specify <code>n</code>, based on its arguments, and pass any remaining arguments
 <span class='fu'>folds_vfold_rolling_origin_pooled</span>(
   <span class='no'>n</span>,
   <span class='no'>t</span>,
+  <span class='kw'>id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>time</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>V</span> <span class='kw'>=</span> <span class='fl'>10</span>,
   <span class='no'>first_window</span>,
   <span class='no'>validation_size</span>,
@@ -180,6 +186,8 @@ specify <code>n</code>, based on its arguments, and pass any remaining arguments
 <span class='fu'>folds_vfold_rolling_window_pooled</span>(
   <span class='no'>n</span>,
   <span class='no'>t</span>,
+  <span class='kw'>id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>time</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>V</span> <span class='kw'>=</span> <span class='fl'>10</span>,
   <span class='no'>window_size</span>,
   <span class='no'>validation_size</span>,
@@ -231,14 +239,24 @@ training sample.</p></td>
     </tr>
     <tr>
       <th>t</th>
-      <td><p>An integer indicating the number of time points per time-series
-sample.</p></td>
+      <td><p>An integer indicating the total amount of time to consider per
+time-series sample.</p></td>
+    </tr>
+    <tr>
+      <th>id</th>
+      <td><p>An optional vector of unique identifiers corresponding to the time
+vector. These can be used to subset the time vector.</p></td>
+    </tr>
+    <tr>
+      <th>time</th>
+      <td><p>An optional vector of integers of time points observed for each
+subject in the sample.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list of Folds.</p>
+    <p>A list of <code>Fold</code>s.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other fold generation functions: 
@@ -262,7 +280,7 @@ sample.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Jeremy Coyle, Nima Hejazi.</p>
+  <p>Developed by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips.</p>
 </div>
 
 <div class="pkgdown">

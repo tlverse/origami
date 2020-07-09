@@ -26,7 +26,7 @@ guess_combiner <- function(result) {
 
 #' Combine Results from Different Folds
 #'
-#' Applies \code{\link{Combiners}}: functions that collapse across a list of
+#' Applies \code{\link{combiners}}: functions that collapse across a list of
 #' similarly structured results, to a list of such lists.
 #'
 #' @param results A \code{list} of \code{list}s, corresponding to each result,
@@ -42,7 +42,7 @@ guess_combiner <- function(result) {
 #'
 #' @return A list of combined results.
 #'
-#' @seealso \code{\link{Combiners}}
+#' @seealso \code{\link{combiners}}
 #'
 #' @export
 combine_results <- function(results,
@@ -68,7 +68,7 @@ combine_results <- function(results,
   return(combined)
 }
 
-################################################################################
+###############################################################################
 
 #' Combiners
 #'
@@ -79,33 +79,33 @@ combine_results <- function(results,
 #'
 #' @return A combined results object.
 #'
-#' @rdname Combiners
+#' @rdname combiners
 #'
-#' @name Combiners
+#' @name combiners
 NULL
 
-#' @rdname Combiners
+#' @rdname combiners
 #'
 #' @export
 combiner_rbind <- function(x) {
   do.call(rbind, x)
 }
 
-#' @rdname Combiners
+#' @rdname combiners
 #'
 #' @export
 combiner_c <- function(x) {
   do.call(c, x)
 }
 
-#' @rdname Combiners
+#' @rdname combiners
 #'
 #' @export
 combiner_factor <- function(x) {
   unlist(x)
 }
 
-#' @rdname Combiners
+#' @rdname combiners
 #'
 #' @importFrom abind abind
 #'

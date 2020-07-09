@@ -53,7 +53,9 @@ cross_validate <- function(cv_fun,
 
   # main loop
   if (use_future) {
-    results <- future.apply::future_lapply(folds, wrapped_fun, ...)
+    results <- future.apply::future_lapply(folds, wrapped_fun, ...,
+      future.seed = TRUE
+    )
   } else {
     results <- lapply(folds, wrapped_fun, ...)
   }

@@ -15,56 +15,64 @@
 \alias{folds_vfold_rolling_window_pooled}
 \title{Cross-Validation Schemes}
 \usage{
-folds_vfold(n, V = 10)
+folds_vfold(n, V = 10L)
 
 folds_resubstitution(n)
 
 folds_loo(n)
 
-folds_montecarlo(n, V = 1000, pvalidation = 0.2)
+folds_montecarlo(n, V = 1000L, pvalidation = 0.2)
 
-folds_bootstrap(n, V = 1000)
+folds_bootstrap(n, V = 1000L)
 
-folds_rolling_origin(n, first_window, validation_size, gap = 0, batch = 1)
+folds_rolling_origin(n, first_window, validation_size, gap = 0L, batch = 1L)
 
-folds_rolling_window(n, window_size, validation_size, gap = 0, batch = 1)
+folds_rolling_window(n, window_size, validation_size, gap = 0L, batch = 1L)
 
 folds_rolling_origin_pooled(
   n,
   t,
+  id = NULL,
+  time = NULL,
   first_window,
   validation_size,
-  gap = 0,
-  batch = 1
+  gap = 0L,
+  batch = 1L
 )
 
 folds_rolling_window_pooled(
   n,
   t,
+  id = NULL,
+  time = NULL,
   window_size,
   validation_size,
-  gap = 0,
-  batch = 1
+  gap = 0L,
+  batch = 1L
 )
 
 folds_vfold_rolling_origin_pooled(
   n,
   t,
-  V = 10,
+  id = NULL,
+  time = NULL,
+  V = 10L,
   first_window,
   validation_size,
-  gap = 0,
-  batch = 1
+  gap = 0L,
+  batch = 1L
 )
 
 folds_vfold_rolling_window_pooled(
   n,
   t,
-  V = 10,
+  id = NULL,
+  time = NULL,
+  V = 10L,
   window_size,
   validation_size,
-  gap = 0,
-  batch = 1
+  gap = 0L,
+  batch = 1L
 )
 }
 \arguments{
@@ -91,18 +99,24 @@ for larger time-series. The default is one.}
 \item{window_size}{An integer indicating the number of observations in each
 training sample.}
 
-\item{t}{An integer indicating the number of time points per time-series
-sample.}
+\item{t}{An integer indicating the total amount of time to consider per
+time-series sample.}
+
+\item{id}{An optional vector of unique identifiers corresponding to the time
+vector. These can be used to subset the time vector.}
+
+\item{time}{An optional vector of integers of time points observed for each
+subject in the sample.}
 }
 \value{
-A list of Folds.
+A list of \code{Fold}s.
 }
 \description{
-These functions represent different cross-validation schemes that can be used
-with \pkg{origami}. They should be used as options for the \code{fold_fun}
-argument to \code{\link{make_folds}}, which will call the requested function
-specify \code{n}, based on its arguments, and pass any remaining arguments
-(e.g. \code{V} or \code{pvalidation}) on.
+These functions represent different cross-validation schemes that can be
+used with \pkg{origami}. They should be used as options for the
+\code{fold_fun} argument to \code{\link{make_folds}}, which will call the
+requested function specify \code{n}, based on its arguments, and pass any
+remaining arguments (e.g. \code{V} or \code{pvalidation}) on.
 }
 \seealso{
 Other fold generation functions: 
