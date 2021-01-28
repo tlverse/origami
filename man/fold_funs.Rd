@@ -13,6 +13,7 @@
 \alias{folds_rolling_window_pooled}
 \alias{folds_vfold_rolling_origin_pooled}
 \alias{folds_vfold_rolling_window_pooled}
+\alias{folds_subgroup}
 \title{Cross-Validation Schemes}
 \usage{
 folds_vfold(n, V = 10L)
@@ -74,6 +75,8 @@ folds_vfold_rolling_window_pooled(
   gap = 0L,
   batch = 1L
 )
+
+folds_subgroup(n, V = 10L, subgroup, strat_outcome = NULL)
 }
 \arguments{
 \item{n}{An integer indicating the number of observations.}

@@ -64,3 +64,22 @@ folds2foldvec <- function(folds) {
   fold_id <- nums[order(fold_index)]
   return(fold_id)
 }
+
+################################################################################
+
+#' @export
+`%notin%` <- Negate(`%in%`)
+
+#' @export
+fold_from_foldvec_subgroup <- function(v, foldsdf, n) {
+  validation_set <- foldsdf[,1][which(foldsdf[,2] == v)]
+  training_set <- which(seq_len(n) %notin% validation_set)
+  make_fold(v, training_set, validation_set)
+}
+
+#' @export
+fold_from_foldvec_subgroup_stratoutcome <- function(v, foldsdf1, foldsdf2, n) {
+  validation_set <- c(foldsdf1[,1][which(foldsdf1[,2] == v)], foldsdf2[,1][which(foldsdf2[,2] == v)])
+  training_set <- which(seq_len(n) %notin% validation_set)
+  make_fold(v, training_set, validation_set)
+}
