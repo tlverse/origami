@@ -369,49 +369,6 @@ folds_vfold_rolling_window_pooled <- function(n, t, id = NULL, time = NULL,
   return(folds)
 }
 
-###############################################################################
-
-#' Check ID and Time Compatibility
-#'
-#' @param id An optional vector of unique identifiers corresponding to the time
-#'  vector. These can be used to subset the time vector.
-#' @param time An optional vector of integers of time points observed for each
-#'  subject in the sample.
-#'
-#' @importFrom assertthat assert_that
-#'
-#' @keywords internal
-check_id_and_time <- function(id, time) {
-  # check that both time and ID are provided, or that neither are provided
-  msg_time_id <- paste(
-    "Cannot create flexible folds (allow for variability",
-    "in the amount of time observed for each id) unless",
-    "both `time` and `id` arguments are provided. Either",
-    "provide both `time` and `id` or neither."
-  )
-  assertthat::assert_that(!(!is.null(id) & is.null(time)) ||
-    !(is.null(id) & !is.null(time)),
-  msg = msg_time_id
-  )
-
-  # check that observed times are provided for each ID
-  msg_time_length <- paste(
-    "Cannot create flexible folds (allow for",
-    "variability in the amount of `time` observed for",
-    "each `id`) unless `time` vector is of same length",
-    "as `id` vector. `time` is a vector of integers of",
-    "time points observed for each subject, and `id`",
-    "is a vector of unique identifiers which",
-    "correspond to the time vector. The `id` vector",
-    "is used to subset the `time` vector."
-  )
-  if (length(id) > 1) {
-    assertthat::assert_that(length(id) == length(time),
-      msg = msg_time_length
-    )
-  }
-}
-
 #########################################################
 #Add option to make subgroup-specific cross-validation folds
 
@@ -434,6 +391,7 @@ fold_from_foldvec_subgroup_stratoutcome <- function(v, foldsdf1, foldsdf2, n) {
   training_set <- which(seq_len(n) %notin% validation_set)
   make_fold(v, training_set, validation_set)
 }
+
 
 #' @rdname fold_funs
 #' @export
@@ -484,3 +442,48 @@ folds_subgroup <- function(n, V = 10L, subgroup, strat_outcome = NULL) {
     return(folds)
   }
 }
+
+
+###############################################################################
+
+#' Check ID and Time Compatibility
+#'
+#' @param id An optional vector of unique identifiers corresponding to the time
+#'  vector. These can be used to subset the time vector.
+#' @param time An optional vector of integers of time points observed for each
+#'  subject in the sample.
+#'
+#' @importFrom assertthat assert_that
+#'
+#' @keywords internal
+check_id_and_time <- function(id, time) {
+  # check that both time and ID are provided, or that neither are provided
+  msg_time_id <- paste(
+    "Cannot create flexible folds (allow for variability",
+    "in the amount of time observed for each id) unless",
+    "both `time` and `id` arguments are provided. Either",
+    "provide both `time` and `id` or neither."
+  )
+  assertthat::assert_that(!(!is.null(id) & is.null(time)) ||
+    !(is.null(id) & !is.null(time)),
+  msg = msg_time_id
+  )
+
+  # check that observed times are provided for each ID
+  msg_time_length <- paste(
+    "Cannot create flexible folds (allow for",
+    "variability in the amount of `time` observed for",
+    "each `id`) unless `time` vector is of same length",
+    "as `id` vector. `time` is a vector of integers of",
+    "time points observed for each subject, and `id`",
+    "is a vector of unique identifiers which",
+    "correspond to the time vector. The `id` vector",
+    "is used to subset the `time` vector."
+  )
+  if (length(id) > 1) {
+    assertthat::assert_that(length(id) == length(time),
+      msg = msg_time_length
+    )
+  }
+}
+
