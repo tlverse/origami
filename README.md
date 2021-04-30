@@ -25,7 +25,7 @@ v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/
 
 **Authors:** [Jeremy Coyle](https://github.com/jeremyrcoyle), [Nima
 Hejazi](https://nimahejazi.org), [Ivana
-Malenica](https://github.com/podTockom), and [Rachael
+Malenica](https://github.com/imalenica), and [Rachael
 Phillips](https://github.com/rachaelvphillips)
 
 -----
