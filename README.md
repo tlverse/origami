@@ -12,6 +12,8 @@ Status](https://codecov.io/gh/tlverse/origami/branch/master/graph/badge.svg)](ht
 [![CRAN](http://www.r-pkg.org/badges/version/origami)](http://www.r-pkg.org/pkg/origami)
 [![CRAN
 downloads](https://cranlogs.r-pkg.org/badges/origami)](https://CRAN.R-project.org/package=origami)
+[![CRAN total
+downloads](http://cranlogs.r-pkg.org/badges/grand-total/origami)](https://CRAN.R-project.org/package=origami)
 [![Project Status: Active - The project has reached a stable, usable
 state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
@@ -76,7 +78,7 @@ estimate of the mean:
 ``` r
 library(stringr)
 library(origami)
-#> origami v1.0.4: Generalized Framework for Cross-Validation
+#> origami v1.0.3: Generalized Framework for Cross-Validation
 set.seed(4795)
 
 data(mtcars)
