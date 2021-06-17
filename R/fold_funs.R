@@ -29,6 +29,8 @@
 #'  subject in the sample.
 #' @param id An optional vector of unique identifiers corresponding to the time
 #'  vector. These can be used to subset the time vector.
+#'  @param subgroup Binary indicator vector of membership in the subgroup of interest for subgroup-specific cross-validation (eg data$S).
+#'  @param strat_outcome Optional binary outcome vector (eg data$Y) for subgroup-specific cross-validation if equal proportion of outcome in training and validation folds desired.
 #'
 #' @importFrom assertthat assert_that
 #'
@@ -380,11 +382,6 @@ folds_subgroup <- function(n, V = 10L, subgroup, strat_outcome = NULL) {
     
     subgroup_index <- which(subgroup == 1)
     
-    #if (length(subgroup_index) <= V) {
-    #  warning("number in subgroup <= V so using leave-one-out CV")
-    #  return(folds_loo(subgroup_index))
-    #}
-    
     folds <- rep(seq_len(V), length = length(subgroup_index))
     
     # shuffle folds
@@ -399,11 +396,6 @@ folds_subgroup <- function(n, V = 10L, subgroup, strat_outcome = NULL) {
   else {
     subgroup_index1 <- which(subgroup == 1 & strat_outcome == 1)
     subgroup_index2 <- which(subgroup == 1 & strat_outcome == 0)
-    
-    #if (length(subgroup_index) <= V) {
-    #  warning("number in subgroup <= V so using leave-one-out CV")
-    #  return(folds_loo(subgroup_index))
-    #}
     
     #Two sets of folds, one for outcome == 1 and one for outcome == 0
     folds1 <- rep(seq_len(V), length = length(subgroup_index1))

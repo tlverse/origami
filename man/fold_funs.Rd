@@ -106,7 +106,9 @@ training sample.}
 time-series sample.}
 
 \item{id}{An optional vector of unique identifiers corresponding to the time
-vector. These can be used to subset the time vector.}
+vector. These can be used to subset the time vector.
+@param subgroup Binary indicator vector of membership in the subgroup of interest for subgroup-specific cross-validation (eg data$S).
+@param strat_outcome Optional binary outcome vector (eg data$Y) for subgroup-specific cross-validation if equal proportion of outcome in training and validation folds desired.}
 
 \item{time}{An optional vector of integers of time points observed for each
 subject in the sample.}
