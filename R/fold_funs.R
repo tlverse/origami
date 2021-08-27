@@ -45,7 +45,7 @@ folds_vfold <- function(n, V = 10L) {
     warning("n <= V so using leave-one-out CV")
     return(folds_loo(n))
   }
-  folds <- rep(seq_len(V), length = n)
+  folds <- rep(x = seq_len(V), length.out = n)
 
   # shuffle folds
   folds <- sample(folds)
@@ -157,7 +157,7 @@ folds_rolling_origin_pooled <- function(n, t, id = NULL, time = NULL,
 
   # make IDs the same length as time if only one ID provided
   if (length(id) == 1L) {
-    id <- rep(id, length(time))
+    id <- rep(x = id, length.out = length(time))
   }
 
   # make skeleton dataset with IDs and times
@@ -202,7 +202,7 @@ folds_rolling_window_pooled <- function(n, t, id = NULL, time = NULL,
 
   # make IDs the same length as time if only one ID provided
   if (length(id) == 1L) {
-    id <- rep(id, length(time))
+    id <- rep(x = id, length.out = length(time))
   }
 
   # make skeleton dataset with IDs and times
@@ -249,7 +249,7 @@ folds_vfold_rolling_origin_pooled <- function(n, t, id = NULL, time = NULL,
 
   # make IDs the same length as time if only one ID provided
   if (length(id) == 1L) {
-    id <- rep(id, length(time))
+    id <- rep(x = id, length.out = length(time))
   }
 
   # make skeleton dataset with IDs and times
@@ -268,7 +268,7 @@ folds_vfold_rolling_origin_pooled <- function(n, t, id = NULL, time = NULL,
   message(paste("Processing", length(ids), "samples with", t, "time points."))
 
   # establish V folds for cross-validating ids
-  Vfold_allocation <- sample(rep(seq_len(V), length = length(ids)))
+  Vfold_allocation <- sample(rep(x = seq_len(V), length.out = length(ids)))
   Vfolds_skeleton <- lapply(seq_len(V), fold_from_foldvec, Vfold_allocation)
 
   # establish rolling origin forecast for time-series cross-validation
@@ -316,7 +316,7 @@ folds_vfold_rolling_window_pooled <- function(n, t, id = NULL, time = NULL,
 
   # make IDs the same length as time if only one ID provided
   if (length(id) == 1) {
-    id <- rep(id, length(time))
+    id <- rep(x = id, length.out = length(time))
   }
 
   # make skeleton dataset with IDs and times
@@ -335,7 +335,7 @@ folds_vfold_rolling_window_pooled <- function(n, t, id = NULL, time = NULL,
   message(paste("Processing", length(ids), "samples with", t, "time points."))
 
   # establish V folds for cross-validating ids
-  Vfold_allocation <- sample(rep(seq_len(V), length = length(ids)))
+  Vfold_allocation <- sample(rep(x = seq_len(V), length.out = length(ids)))
   Vfolds_skeleton <- lapply(seq_len(V), fold_from_foldvec, Vfold_allocation)
 
   # establish rolling origin forecast for time-series cross-validation
