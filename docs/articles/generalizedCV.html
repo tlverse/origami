@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">origami</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5</span>
       </span>
     </div>
 
@@ -79,7 +79,7 @@
       <h1 data-toc-skip>Generalized Cross-Validation with Origami</h1>
                         <h4 class="author">Jeremy Coyle &amp; Nima Hejazi</h4>
             
-            <h4 class="date">2020-07-09</h4>
+            <h4 class="date">2021-08-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/tlverse/origami/blob/master/vignettes/generalizedCV.Rmd"><code>vignettes/generalizedCV.Rmd</code></a></small>
       <div class="hidden name"><code>generalizedCV.Rmd</code></div>
@@ -103,8 +103,9 @@ empirical process conditions from CV-TMLE step [@Zheng:2010ua].
 <h2 class="hasAnchor">
 <a href="#cross-validation-with-linear-regression" class="anchor"></a>Cross-validation with linear regression</h2>
 <p>We’ll start by examining a fairly simple data set:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">mtcars</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">mtcars</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></code></pre></div>
 <pre><code>##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
 ## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
 ## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
@@ -113,8 +114,9 @@ empirical process conditions from CV-TMLE step [@Zheng:2010ua].
 ## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
 ## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</code></pre>
 <p>One might be interested in examining how the efficiency of a car, as measured by miles-per-gallon (mpg), is explained by various technical aspects of the car, with data across a variety of different models of cars. Linear regression is perhaps the simplest statistical procedure that could be used to make such deductions. Let’s try it out:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">lm_mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">mpg</span> ~ <span class="no">.</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">lm_mod</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">lm_mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">lm_mod</span><span class="op">)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = mpg ~ ., data = mtcars)
@@ -143,45 +145,51 @@ empirical process conditions from CV-TMLE step [@Zheng:2010ua].
 ## Multiple R-squared:  0.869,  Adjusted R-squared:  0.8066 
 ## F-statistic: 13.93 on 10 and 21 DF,  p-value: 3.793e-07</code></pre>
 <p>We can assess how well the model fits the data by comparing the predictions of the linear model to the true outcomes observed in the data set. This is the well known (and standard) mean squared error. We can extract that from the <code>lm</code> model object like so:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">err</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/residuals.html">resid</a></span>(<span class="no">lm_mod</span>)^<span class="fl">2</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">err</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html">resid</a></span><span class="op">(</span><span class="va">lm_mod</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></code></pre></div>
 <p>The mean squared error is 4.6092009. There is an important problem that arises when we assess the model in this way – that is, we have trained our linear regression model on the full data set and assessed the error on the full data set, using up all of our data. We, of course, are generally not interested in how well the model explains variation in the observed data; rather, we are interested in how the explanation provided by the model generalizes to a target population from which the sample is presumably derived. Having used all of our available data, we cannot honestly evaluate how well the model fits (and thus explains) variation at the population level.</p>
 <p>To resolve this issue, cross-validation allows for a particular procedure (e.g., linear regression) to be implemented over subsets of the data, evaluating how well the procedure fits on a testing (“validation”) set, thereby providing an honest evaluation of the error.</p>
 <p>We can easily add cross-validation to our linear regression procedure using <code>origami</code>. First, let us define a new function to perform linear regression on a specific partition of the data (called a “fold”):</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">cv_lm</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">fold</span>, <span class="no">data</span>, <span class="no">reg_form</span>) {
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">cv_lm</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">fold</span>, <span class="va">data</span>, <span class="va">reg_form</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># get name and index of outcome variable from regression formula</span>
-  <span class="no">out_var</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="fu">str_split</span>(<span class="no">reg_form</span>, <span class="st">" "</span>))[<span class="fl">1</span>])
-  <span class="no">out_var_ind</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">data</span>) <span class="kw">==</span> <span class="no">out_var</span>))
+  <span class="va">out_var</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_split.html">str_split</a></span><span class="op">(</span><span class="va">reg_form</span>, <span class="st">" "</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>
+  <span class="va">out_var_ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">==</span> <span class="va">out_var</span><span class="op">)</span><span class="op">)</span>
 
   <span class="co"># split up data into training and validation sets</span>
-  <span class="no">train_data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/fold_helpers.html">training</a></span>(<span class="no">data</span>)
-  <span class="no">valid_data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/fold_helpers.html">validation</a></span>(<span class="no">data</span>)
+  <span class="va">train_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fold_helpers.html">training</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
+  <span class="va">valid_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fold_helpers.html">validation</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
 
   <span class="co"># fit linear model on training set and predict on validation set</span>
-  <span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/formula.html">as.formula</a></span>(<span class="no">reg_form</span>), <span class="kw">data</span> <span class="kw">=</span> <span class="no">train_data</span>)
-  <span class="no">preds</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">mod</span>, <span class="kw">newdata</span> <span class="kw">=</span> <span class="no">valid_data</span>)
+  <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/formula.html">as.formula</a></span><span class="op">(</span><span class="va">reg_form</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">train_data</span><span class="op">)</span>
+  <span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">mod</span>, newdata <span class="op">=</span> <span class="va">valid_data</span><span class="op">)</span>
 
   <span class="co"># capture results to be returned as output</span>
-  <span class="no">out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">coef</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span>(<span class="no">mod</span>))),
-              <span class="kw">SE</span> <span class="kw">=</span> ((<span class="no">preds</span> - <span class="no">valid_data</span>[, <span class="no">out_var_ind</span>])^<span class="fl">2</span>))
-  <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">out</span>)
-}</pre></body></html></div>
+  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>coef <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+              SE <span class="op">=</span> <span class="op">(</span><span class="op">(</span><span class="va">preds</span> <span class="op">-</span> <span class="va">valid_data</span><span class="op">[</span>, <span class="va">out_var_ind</span><span class="op">]</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
 <p>Our <code>cv_lm</code> function is rather simple: we merely split the available data into a training and validation sets, using the eponymous functions provided in <code>origami</code>, fit the linear model on the training set, and evaluate the model on the testing set. This is a simple example of what <code>origami</code> considers to be <code>cv_fun</code>s – functions for using cross-validation to perform a particular routine over an input data set. Having defined such a function, we can simply generate a set of partitions using <code>origami</code>’s <code>make_folds</code> function, and apply our <code>cv_lm</code> function over the resultant <code>folds</code> object. Below, we replicate the resubstitution estimate of the error – we did this “by hand” above – using the functions <code>make_folds</code> and <code>cv_lm</code>.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">origami</span>)</pre></body></html></div>
-<pre><code>## origami v1.0.4: Generalized Framework for Cross-Validation</code></pre>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">stringr</span>) <span class="co"># used in defining the cv_lm function above</span></pre></body></html></div>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="co"># resubstitution estimate</span>
-<span class="no">resub</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/make_folds.html">make_folds</a></span>(<span class="no">mtcars</span>, <span class="kw">fold_fun</span> <span class="kw">=</span> <span class="no">folds_resubstitution</span>)<span class="kw">[[</span><span class="fl">1</span>]]
-<span class="no">resub_results</span> <span class="kw">&lt;-</span> <span class="fu">cv_lm</span>(<span class="kw">fold</span> <span class="kw">=</span> <span class="no">resub</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>, <span class="kw">reg_form</span> <span class="kw">=</span> <span class="st">"mpg ~ ."</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">resub_results</span>$<span class="no">SE</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tlverse.org/origami">origami</a></span><span class="op">)</span></code></pre></div>
+<pre><code>## origami v1.0.5: Generalized Framework for Cross-Validation</code></pre>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://stringr.tidyverse.org">stringr</a></span><span class="op">)</span> <span class="co"># used in defining the cv_lm function above</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># resubstitution estimate</span>
+<span class="va">resub</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_folds.html">make_folds</a></span><span class="op">(</span><span class="va">mtcars</span>, fold_fun <span class="op">=</span> <span class="va">folds_resubstitution</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
+<span class="va">resub_results</span> <span class="op">&lt;-</span> <span class="fu">cv_lm</span><span class="op">(</span>fold <span class="op">=</span> <span class="va">resub</span>, data <span class="op">=</span> <span class="va">mtcars</span>, reg_form <span class="op">=</span> <span class="st">"mpg ~ ."</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">resub_results</span><span class="op">$</span><span class="va">SE</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 4.609201</code></pre>
 <p>This (very nearly) matches the estimate of the error that we obtained above.</p>
 <p>We can more honestly evaluate the error by <em>V-fold cross-validation</em>, which partitions the data into <strong>v subsets</strong>, fitting the model on <span class="math inline">\(v - 1\)</span> of the subsets and evaluating on the subset that was held out for testing. This is repeated such that each subset is used for testing. We can easily apply our <code>cv_lm</code> function using <code>origami</code>’s <code>cross_validate</code> (n.b., by default this performs 10-fold cross-validation):</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="co"># cross-validated estimate</span>
-<span class="no">folds</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/make_folds.html">make_folds</a></span>(<span class="no">mtcars</span>)
-<span class="no">cvlm_results</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/cross_validate.html">cross_validate</a></span>(<span class="kw">cv_fun</span> <span class="kw">=</span> <span class="no">cv_lm</span>, <span class="kw">folds</span> <span class="kw">=</span> <span class="no">folds</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>,
-                               <span class="kw">reg_form</span> <span class="kw">=</span> <span class="st">"mpg ~ ."</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">cvlm_results</span>$<span class="no">SE</span>)</pre></body></html></div>
-<pre><code>## [1] 10.31819</code></pre>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># cross-validated estimate</span>
+<span class="va">folds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_folds.html">make_folds</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>
+<span class="va">cvlm_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cross_validate.html">cross_validate</a></span><span class="op">(</span>cv_fun <span class="op">=</span> <span class="va">cv_lm</span>, folds <span class="op">=</span> <span class="va">folds</span>, data <span class="op">=</span> <span class="va">mtcars</span>,
+                               reg_form <span class="op">=</span> <span class="st">"mpg ~ ."</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">cvlm_results</span><span class="op">$</span><span class="va">SE</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 14.80119</code></pre>
 <p>Having performed 10-fold cross-validation, we quickly notice that our previous estimate of the model error (by resubstitution) was quite optimistic. The honest estimate of the error is several times larger.</p>
 <hr>
 </div>
@@ -213,34 +221,37 @@ empirical process conditions from CV-TMLE step [@Zheng:2010ua].
 <h2 class="hasAnchor">
 <a href="#cross-validation-with-random-forests" class="anchor"></a>Cross-validation with random forests</h2>
 <p>To examine <code>origami</code> further, let us return to our example analysis using the <code>mtcars</code> data set. Here, we will write a new <code>cv_fun</code> type object. As an example, we will use L. Breiman’s <code>randomForest</code>:</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">cv_rf</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">fold</span>, <span class="no">data</span>, <span class="no">reg_form</span>) {
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">cv_rf</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">fold</span>, <span class="va">data</span>, <span class="va">reg_form</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># get name and index of outcome variable from regression formula</span>
-  <span class="no">out_var</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="fu"><a href="https://stringr.tidyverse.org/reference/str_split.html">str_split</a></span>(<span class="no">reg_form</span>, <span class="st">" "</span>))[<span class="fl">1</span>])
-  <span class="no">out_var_ind</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">data</span>) <span class="kw">==</span> <span class="no">out_var</span>))
+  <span class="va">out_var</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_split.html">str_split</a></span><span class="op">(</span><span class="va">reg_form</span>, <span class="st">" "</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>
+  <span class="va">out_var_ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="op">==</span> <span class="va">out_var</span><span class="op">)</span><span class="op">)</span>
 
   <span class="co"># define training and validation sets based on input object of class "folds"</span>
-  <span class="no">train_data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/fold_helpers.html">training</a></span>(<span class="no">data</span>)
-  <span class="no">valid_data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/fold_helpers.html">validation</a></span>(<span class="no">data</span>)
+  <span class="va">train_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fold_helpers.html">training</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
+  <span class="va">valid_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fold_helpers.html">validation</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
 
   <span class="co"># fit Random Forest regression on training set and predict on holdout set</span>
-  <span class="no">mod</span> <span class="kw">&lt;-</span> <span class="fu">randomForest</span>(<span class="kw">formula</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html">as.formula</a></span>(<span class="no">reg_form</span>), <span class="kw">data</span> <span class="kw">=</span> <span class="no">train_data</span>)
-  <span class="no">preds</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">mod</span>, <span class="kw">newdata</span> <span class="kw">=</span> <span class="no">valid_data</span>)
+  <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu">randomForest</span><span class="op">(</span>formula <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html">as.formula</a></span><span class="op">(</span><span class="va">reg_form</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">train_data</span><span class="op">)</span>
+  <span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">mod</span>, newdata <span class="op">=</span> <span class="va">valid_data</span><span class="op">)</span>
 
   <span class="co"># define output object to be returned as list (for flexibility)</span>
-  <span class="no">out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">coef</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="no">mod</span>$<span class="no">coefs</span>),
-              <span class="kw">SE</span> <span class="kw">=</span> ((<span class="no">preds</span> - <span class="no">valid_data</span>[, <span class="no">out_var_ind</span>])^<span class="fl">2</span>))
-  <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">out</span>)
-}</pre></body></html></div>
+  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>coef <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">coefs</span><span class="op">)</span>,
+              SE <span class="op">=</span> <span class="op">(</span><span class="op">(</span><span class="va">preds</span> <span class="op">-</span> <span class="va">valid_data</span><span class="op">[</span>, <span class="va">out_var_ind</span><span class="op">]</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
 <p>Above, in writing our <code>cv_rf</code> function to cross-validate <code>randomForest</code>, we used our previous function <code>cv_lm</code> as an example. For now, individual <code>cv_fun</code>s must be written by hand; however, in future releases, a wrapper may be available to support auto-generating <code>cv_fun</code>s to be used with <code>origami</code>.</p>
 <p>Below, we use <code>cross_validate</code> to apply our new <code>cv_rf</code> function over the <code>folds</code> object generated by <code>make_folds</code>.</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">randomForest</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www.stat.berkeley.edu/~breiman/RandomForests/">randomForest</a></span><span class="op">)</span></code></pre></div>
 <pre><code>## randomForest 4.6-14</code></pre>
 <pre><code>## Type rfNews() to see new features/changes/bug fixes.</code></pre>
-<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">folds</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/make_folds.html">make_folds</a></span>(<span class="no">mtcars</span>)
-<span class="no">cvrf_results</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/cross_validate.html">cross_validate</a></span>(<span class="kw">cv_fun</span> <span class="kw">=</span> <span class="no">cv_rf</span>, <span class="kw">folds</span> <span class="kw">=</span> <span class="no">folds</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">mtcars</span>,
-                               <span class="kw">reg_form</span> <span class="kw">=</span> <span class="st">"mpg ~ ."</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">cvrf_results</span>$<span class="no">SE</span>)</pre></body></html></div>
-<pre><code>## [1] 6.149974</code></pre>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">folds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_folds.html">make_folds</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>
+<span class="va">cvrf_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cross_validate.html">cross_validate</a></span><span class="op">(</span>cv_fun <span class="op">=</span> <span class="va">cv_rf</span>, folds <span class="op">=</span> <span class="va">folds</span>, data <span class="op">=</span> <span class="va">mtcars</span>,
+                               reg_form <span class="op">=</span> <span class="st">"mpg ~ ."</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">cvrf_results</span><span class="op">$</span><span class="va">SE</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 5.57319</code></pre>
 <p>Using 10-fold cross-validation (the default), we obtain an honest estimate of the prediction error of random forests. From this, we gather that the use of <code>origami</code>’s <code>cross_validate</code> procedure can be generalized to arbitrary esimation techniques, given availability of an appropriate <code>cv_fun</code> function.</p>
 <hr>
 </div>
@@ -248,8 +259,9 @@ empirical process conditions from CV-TMLE step [@Zheng:2010ua].
 <h2 class="hasAnchor">
 <a href="#cross-validation-with-dependence-time-series" class="anchor"></a>Cross-validation with dependence: time series</h2>
 <p>Cross-validation can also be used for forecast model selection in a time series setting. Here, the partitioning scheme mirrors the application of the forecasting model: We’ll train the data on past observations (either all available or a recent subset), and then use the model forecast (predict), the next few observations. Consider the <code>AirPassengers</code> dataset, a monthly time series of passenger air traffic in thousands of people.</p>
-<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">AirPassengers</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">AirPassengers</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">AirPassengers</span><span class="op">)</span></code></pre></div>
 <pre><code>##      Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
 ## 1949 112 118 132 129 121 135 148 148 136 119 104 118
 ## 1950 115 126 141 135 125 149 170 170 158 133 114 140
@@ -264,44 +276,46 @@ empirical process conditions from CV-TMLE step [@Zheng:2010ua].
 ## 1959 360 342 406 396 420 472 548 559 463 407 362 405
 ## 1960 417 391 419 461 472 535 622 606 508 461 390 432</code></pre>
 <p>Suppose we want to pick between two forecasting models, <code>stl</code>, and <code>arima</code> (the details of these models are not important for this example). We can do that by evaluating their forecasting performance.</p>
-<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">forecast</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pkg.robjhyndman.com/forecast/">forecast</a></span><span class="op">)</span></code></pre></div>
 <pre><code>## Registered S3 method overwritten by 'quantmod':
 ##   method            from
 ##   as.zoo.data.frame zoo</code></pre>
-<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="no">folds</span> <span class="kw">=</span> <span class="fu"><a href="../reference/make_folds.html">make_folds</a></span>(<span class="no">AirPassengers</span>, <span class="kw">fold_fun</span><span class="kw">=</span><span class="no">folds_rolling_origin</span>,
-                   <span class="kw">first_window</span> <span class="kw">=</span> <span class="fl">36</span>, <span class="kw">validation_size</span> <span class="kw">=</span> <span class="fl">24</span>)
-<span class="no">fold</span> <span class="kw">=</span> <span class="no">folds</span><span class="kw">[[</span><span class="fl">1</span>]]
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">folds</span> <span class="op">=</span> <span class="fu"><a href="../reference/make_folds.html">make_folds</a></span><span class="op">(</span><span class="va">AirPassengers</span>, fold_fun<span class="op">=</span><span class="va">folds_rolling_origin</span>,
+                   first_window <span class="op">=</span> <span class="fl">36</span>, validation_size <span class="op">=</span> <span class="fl">24</span><span class="op">)</span>
+<span class="va">fold</span> <span class="op">=</span> <span class="va">folds</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
 
 <span class="co"># function to calculate cross-validated squared error</span>
-<span class="no">cv_forecasts</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">fold</span>, <span class="no">data</span>) {
-  <span class="no">train_data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/fold_helpers.html">training</a></span>(<span class="no">data</span>)
-  <span class="no">valid_data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/fold_helpers.html">validation</a></span>(<span class="no">data</span>)
-  <span class="no">valid_size</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">valid_data</span>)
+<span class="va">cv_forecasts</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">fold</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">train_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fold_helpers.html">training</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
+  <span class="va">valid_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fold_helpers.html">validation</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
+  <span class="va">valid_size</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">valid_data</span><span class="op">)</span>
 
-  <span class="no">train_ts</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span>(<span class="no">train_data</span>), <span class="kw">frequency</span> <span class="kw">=</span> <span class="fl">12</span>)
+  <span class="va">train_ts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/ts.html">ts</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="va">train_data</span><span class="op">)</span>, frequency <span class="op">=</span> <span class="fl">12</span><span class="op">)</span>
 
   <span class="co"># borrowed from AirPassengers help</span>
-  <span class="no">arima_fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/arima.html">arima</a></span>(<span class="no">train_ts</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>),
-                     <span class="kw">seasonal</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">order</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>),
-                                     <span class="kw">period</span> <span class="kw">=</span> <span class="fl">12</span>))
-  <span class="no">raw_arima_pred</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">arima_fit</span>, <span class="kw">n.ahead</span> <span class="kw">=</span> <span class="no">valid_size</span>)
-  <span class="no">arima_pred</span> <span class="kw">&lt;-</span> <span class="fl">10</span>^<span class="no">raw_arima_pred</span>$<span class="no">pred</span>
-  <span class="no">arima_MSE</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>((<span class="no">arima_pred</span> - <span class="no">valid_data</span>)^<span class="fl">2</span>)
+  <span class="va">arima_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/arima.html">arima</a></span><span class="op">(</span><span class="va">train_ts</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,
+                     seasonal <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,
+                                     period <span class="op">=</span> <span class="fl">12</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">raw_arima_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">arima_fit</span>, n.ahead <span class="op">=</span> <span class="va">valid_size</span><span class="op">)</span>
+  <span class="va">arima_pred</span> <span class="op">&lt;-</span> <span class="fl">10</span><span class="op">^</span><span class="va">raw_arima_pred</span><span class="op">$</span><span class="va">pred</span>
+  <span class="va">arima_MSE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">arima_pred</span> <span class="op">-</span> <span class="va">valid_data</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>
 
   <span class="co"># stl model</span>
-  <span class="no">stl_fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/forecast/man/forecast.stl.html">stlm</a></span>(<span class="no">train_ts</span>, <span class="kw">s.window</span> <span class="kw">=</span> <span class="fl">12</span>)
-  <span class="no">raw_stl_pred</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/forecast/man/forecast.html">forecast</a></span>(<span class="no">stl_fit</span>, <span class="kw">h</span> <span class="kw">=</span> <span class="no">valid_size</span>)
-  <span class="no">stl_pred</span> <span class="kw">&lt;-</span> <span class="fl">10</span>^<span class="no">raw_stl_pred</span>$<span class="no">mean</span>
-  <span class="no">stl_MSE</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>((<span class="no">stl_pred</span> - <span class="no">valid_data</span>)^<span class="fl">2</span>)
+  <span class="va">stl_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/forecast.stl.html">stlm</a></span><span class="op">(</span><span class="va">train_ts</span>, s.window <span class="op">=</span> <span class="fl">12</span><span class="op">)</span>
+  <span class="va">raw_stl_pred</span> <span class="op">=</span> <span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/forecast.html">forecast</a></span><span class="op">(</span><span class="va">stl_fit</span>, h <span class="op">=</span> <span class="va">valid_size</span><span class="op">)</span>
+  <span class="va">stl_pred</span> <span class="op">&lt;-</span> <span class="fl">10</span><span class="op">^</span><span class="va">raw_stl_pred</span><span class="op">$</span><span class="va">mean</span>
+  <span class="va">stl_MSE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">stl_pred</span> <span class="op">-</span> <span class="va">valid_data</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>
 
-  <span class="no">out</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">mse</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw">fold</span> <span class="kw">=</span> <span class="fu"><a href="../reference/fold_helpers.html">fold_index</a></span>(),
-                               <span class="kw">arima</span> <span class="kw">=</span> <span class="no">arima_MSE</span>, <span class="kw">stl</span> <span class="kw">=</span> <span class="no">stl_MSE</span>))
-  <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">out</span>)
-}
+  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>mse <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>fold <span class="op">=</span> <span class="fu"><a href="../reference/fold_helpers.html">fold_index</a></span><span class="op">(</span><span class="op">)</span>,
+                               arima <span class="op">=</span> <span class="va">arima_MSE</span>, stl <span class="op">=</span> <span class="va">stl_MSE</span><span class="op">)</span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span>
+<span class="op">}</span>
 
-<span class="no">mses</span> <span class="kw">=</span> <span class="fu"><a href="../reference/cross_validate.html">cross_validate</a></span>(<span class="kw">cv_fun</span> <span class="kw">=</span> <span class="no">cv_forecasts</span>, <span class="kw">folds</span> <span class="kw">=</span> <span class="no">folds</span>,
-                      <span class="kw">data</span> <span class="kw">=</span> <span class="no">AirPassengers</span>)$<span class="no">mse</span>
-<span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span>(<span class="no">mses</span>[, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"arima"</span>, <span class="st">"stl"</span>)])</pre></body></html></div>
+<span class="va">mses</span> <span class="op">=</span> <span class="fu"><a href="../reference/cross_validate.html">cross_validate</a></span><span class="op">(</span>cv_fun <span class="op">=</span> <span class="va">cv_forecasts</span>, folds <span class="op">=</span> <span class="va">folds</span>,
+                      data <span class="op">=</span> <span class="va">AirPassengers</span><span class="op">)</span><span class="op">$</span><span class="va">mse</span>
+<span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span><span class="op">(</span><span class="va">mses</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"arima"</span>, <span class="st">"stl"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <pre><code>##    arima      stl 
 ## 667.2477 925.7137</code></pre>
 <hr>
@@ -309,13 +323,13 @@ empirical process conditions from CV-TMLE step [@Zheng:2010ua].
 <div id="session-information" class="section level2">
 <h2 class="hasAnchor">
 <a href="#session-information" class="anchor"></a>Session Information</h2>
-<pre><code>## R version 3.6.3 (2020-02-29)
+<pre><code>## R version 4.1.1 (2021-08-10)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
-## Running under: Ubuntu 18.04.4 LTS
+## Running under: Ubuntu 20.04.3 LTS
 ## 
 ## Matrix products: default
-## BLAS:   /usr/lib/x86_64-linux-gnu/openblas/libblas.so.3
-## LAPACK: /usr/lib/x86_64-linux-gnu/libopenblasp-r0.2.20.so
+## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3
+## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3
 ## 
 ## locale:
 ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
@@ -329,26 +343,28 @@ empirical process conditions from CV-TMLE step [@Zheng:2010ua].
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] forecast_8.12       randomForest_4.6-14 stringr_1.4.0      
-## [4] origami_1.0.4      
+## [1] forecast_8.15       randomForest_4.6-14 stringr_1.4.0      
+## [4] origami_1.0.5      
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] zoo_1.8-8          tidyselect_1.1.0   xfun_0.15          urca_1.3-0        
-##  [5] purrr_0.3.4        listenv_0.8.0      lattice_0.20-41    colorspace_1.4-1  
-##  [9] vctrs_0.3.1        generics_0.0.2     htmltools_0.5.0    yaml_2.2.1        
-## [13] rlang_0.4.6        pkgdown_1.5.1      pillar_1.4.4       glue_1.4.1        
-## [17] TTR_0.23-6         lifecycle_0.2.0    quantmod_0.4.17    timeDate_3043.102 
-## [21] munsell_0.5.0      gtable_0.3.0       future_1.17.0      codetools_0.2-16  
-## [25] memoise_1.1.0      evaluate_0.14      knitr_1.29         tseries_0.10-47   
-## [29] lmtest_0.9-37      curl_4.3           parallel_3.6.3     xts_0.12-0        
-## [33] Rcpp_1.0.5         scales_1.1.1       backports_1.1.8    desc_1.2.0        
-## [37] abind_1.4-5        fs_1.4.2           fracdiff_1.5-1     ggplot2_3.3.2     
-## [41] digest_0.6.25      stringi_1.4.6      dplyr_1.0.0        grid_3.6.3        
-## [45] rprojroot_1.3-2    quadprog_1.5-8     tools_3.6.3        magrittr_1.5      
-## [49] tibble_3.0.1       crayon_1.3.4       future.apply_1.6.0 pkgconfig_2.0.3   
-## [53] MASS_7.3-51.6      ellipsis_0.3.1     data.table_1.12.8  assertthat_0.2.1  
-## [57] rmarkdown_2.3      R6_2.4.1           globals_0.12.5     nlme_3.1-148      
-## [61] nnet_7.3-14        compiler_3.6.3</code></pre>
+##  [1] Rcpp_1.0.7         lattice_0.20-44    listenv_0.8.0      zoo_1.8-9         
+##  [5] assertthat_0.2.1   rprojroot_2.0.2    digest_0.6.27      lmtest_0.9-38     
+##  [9] utf8_1.2.2         parallelly_1.27.0  R6_2.5.1           evaluate_0.14     
+## [13] ggplot2_3.3.5      pillar_1.6.2       rlang_0.4.11       curl_4.3.2        
+## [17] data.table_1.14.0  TTR_0.24.2         fracdiff_1.5-1     rmarkdown_2.10    
+## [21] pkgdown_1.6.1      textshaping_0.3.5  desc_1.3.0         munsell_0.5.0     
+## [25] compiler_4.1.1     xfun_0.25          pkgconfig_2.0.3    systemfonts_1.0.2 
+## [29] urca_1.3-0         globals_0.14.0     htmltools_0.5.2    nnet_7.3-16       
+## [33] tidyselect_1.1.1   tibble_3.1.4       quadprog_1.5-8     codetools_0.2-18  
+## [37] fansi_0.5.0        future_1.22.1      crayon_1.4.1       dplyr_1.0.7       
+## [41] grid_4.1.1         nlme_3.1-152       gtable_0.3.0       lifecycle_1.0.0   
+## [45] DBI_1.1.1          magrittr_2.0.1     scales_1.1.1       quantmod_0.4.18   
+## [49] future.apply_1.8.1 stringi_1.7.4      cachem_1.0.6       fs_1.5.0          
+## [53] tseries_0.10-48    timeDate_3043.102  xts_0.12.1         ellipsis_0.3.2    
+## [57] ragg_1.1.3         generics_0.1.0     vctrs_0.3.8        tools_4.1.1       
+## [61] glue_1.4.2         purrr_0.3.4        abind_1.4-5        parallel_4.1.1    
+## [65] fastmap_1.1.0      yaml_2.2.1         colorspace_2.0-2   memoise_2.0.0     
+## [69] knitr_1.33</code></pre>
 <hr>
 </div>
 <div id="references" class="section level2 unnumbered">
@@ -380,7 +396,7 @@ empirical process conditions from CV-TMLE step [@Zheng:2010ua].
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

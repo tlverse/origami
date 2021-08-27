@@ -83,7 +83,7 @@ the results across folds using combine_results." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">origami</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5</span>
       </span>
     </div>
 
@@ -132,15 +132,15 @@ the results across folds using combine_results." />
 the results across folds using <code><a href='combine_results.html'>combine_results</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cross_validate</span>(
-  <span class='no'>cv_fun</span>,
-  <span class='no'>folds</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>use_future</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>.combine</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>.combine_control</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-  <span class='kw'>.old_results</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>cross_validate</span><span class='op'>(</span>
+  <span class='va'>cv_fun</span>,
+  <span class='va'>folds</span>,
+  <span class='va'>...</span>,
+  use_future <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  .combine <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  .combine_control <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+  .old_results <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,7 +150,7 @@ the results across folds using <code><a href='combine_results.html'>combine_resu
       <td><p>A function that takes a 'fold' as it's first argument and
 returns a list of results from that fold. NOTE: the use of an argument
 named 'X' is specifically disallowed in any input function for compliance
-with the functions <code><a href='https://rdrr.io/pkg/future.apply/man/future_lapply.html'>future_lapply</a></code> and
+with the functions <code><a href='https://future.apply.futureverse.org/reference/future_lapply.html'>future_lapply</a></code> and
 <code>lapply</code>.</p></td>
     </tr>
     <tr>
@@ -165,7 +165,7 @@ with the functions <code><a href='https://rdrr.io/pkg/future.apply/man/future_la
     <tr>
       <th>use_future</th>
       <td><p>A <code>logical</code> option for whether to run the main loop
-of cross-validation with <code><a href='https://rdrr.io/pkg/future.apply/man/future_lapply.html'>future_lapply</a></code> or with
+of cross-validation with <code><a href='https://future.apply.futureverse.org/reference/future_lapply.html'>future_lapply</a></code> or with
 <code>lapply</code>.</p></td>
     </tr>
     <tr>
@@ -194,95 +194,101 @@ This is useful for adding additional CV folds to a results object.</p></td>
     <pre class="examples"><div class='input'><span class='co'>###############################################################################</span>
 <span class='co'># This example explains how to use the cross_validate function naively.</span>
 <span class='co'>###############################################################################</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>mtcars</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
 
 <span class='co'># resubstitution MSE</span>
-<span class='no'>r</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>.</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/residuals.html'>resid</a></span>(<span class='no'>r</span>)^<span class='fl'>2</span>)</div><div class='output co'>#&gt; [1] 4.609201</div><div class='input'>
+<span class='va'>r</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>.</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/residuals.html'>resid</a></span><span class='op'>(</span><span class='va'>r</span><span class='op'>)</span><span class='op'>^</span><span class='fl'>2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 4.609201</div><div class='input'>
 <span class='co'># function to calculate cross-validated squared error</span>
-<span class='no'>cv_lm</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>fold</span>, <span class='no'>data</span>, <span class='no'>reg_form</span>) {
+<span class='va'>cv_lm</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>fold</span>, <span class='va'>data</span>, <span class='va'>reg_form</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='co'># get name and index of outcome variable from regression formula</span>
-  <span class='no'>out_var</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span>(<span class='kw pkg'>stringr</span><span class='kw ns'>::</span><span class='fu'><a href='https://stringr.tidyverse.org/reference/str_split.html'>str_split</a></span>(<span class='no'>reg_form</span>, <span class='st'>" "</span>))[<span class='fl'>1</span>])
-  <span class='no'>out_var_ind</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>data</span>) <span class='kw'>==</span> <span class='no'>out_var</span>))
+  <span class='va'>out_var</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span><span class='op'>(</span><span class='fu'>stringr</span><span class='fu'>::</span><span class='fu'><a href='https://stringr.tidyverse.org/reference/str_split.html'>str_split</a></span><span class='op'>(</span><span class='va'>reg_form</span>, <span class='st'>" "</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span>
+  <span class='va'>out_var_ind</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span> <span class='op'>==</span> <span class='va'>out_var</span><span class='op'>)</span><span class='op'>)</span>
 
   <span class='co'># split up data into training and validation sets</span>
-  <span class='no'>train_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='fold_helpers.html'>training</a></span>(<span class='no'>data</span>)
-  <span class='no'>valid_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='fold_helpers.html'>validation</a></span>(<span class='no'>data</span>)
+  <span class='va'>train_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='fold_helpers.html'>training</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>
+  <span class='va'>valid_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='fold_helpers.html'>validation</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>
 
   <span class='co'># fit linear model on training set and predict on validation set</span>
-  <span class='no'>mod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/formula.html'>as.formula</a></span>(<span class='no'>reg_form</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>train_data</span>)
-  <span class='no'>preds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>mod</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>valid_data</span>)
+  <span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/formula.html'>as.formula</a></span><span class='op'>(</span><span class='va'>reg_form</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>train_data</span><span class='op'>)</span>
+  <span class='va'>preds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>mod</span>, newdata <span class='op'>=</span> <span class='va'>valid_data</span><span class='op'>)</span>
 
   <span class='co'># capture results to be returned as output</span>
-  <span class='no'>out</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>coef</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/coef.html'>coef</a></span>(<span class='no'>mod</span>))),
-    <span class='kw'>SE</span> <span class='kw'>=</span> ((<span class='no'>preds</span> - <span class='no'>valid_data</span>[, <span class='no'>out_var_ind</span>])^<span class='fl'>2</span>)
-  )
-  <span class='fu'><a href='https://rdrr.io/r/base/function.html'>return</a></span>(<span class='no'>out</span>)
-}
+  <span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    coef <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/coef.html'>coef</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
+    SE <span class='op'>=</span> <span class='op'>(</span><span class='op'>(</span><span class='va'>preds</span> <span class='op'>-</span> <span class='va'>valid_data</span><span class='op'>[</span>, <span class='va'>out_var_ind</span><span class='op'>]</span><span class='op'>)</span><span class='op'>^</span><span class='fl'>2</span><span class='op'>)</span>
+  <span class='op'>)</span>
+  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>out</span><span class='op'>)</span>
+<span class='op'>}</span>
 
 <span class='co'># replicate the resubstitution estimate</span>
-<span class='no'>resub</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='make_folds.html'>make_folds</a></span>(<span class='no'>mtcars</span>, <span class='kw'>fold_fun</span> <span class='kw'>=</span> <span class='no'>folds_resubstitution</span>)<span class='kw'>[[</span><span class='fl'>1</span>]]
-<span class='no'>resub_results</span> <span class='kw'>&lt;-</span> <span class='fu'>cv_lm</span>(<span class='kw'>fold</span> <span class='kw'>=</span> <span class='no'>resub</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>reg_form</span> <span class='kw'>=</span> <span class='st'>"mpg ~ ."</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>resub_results</span>$<span class='no'>SE</span>)</div><div class='output co'>#&gt; [1] 4.609201</div><div class='input'>
+<span class='va'>resub</span> <span class='op'>&lt;-</span> <span class='fu'><a href='make_folds.html'>make_folds</a></span><span class='op'>(</span><span class='va'>mtcars</span>, fold_fun <span class='op'>=</span> <span class='va'>folds_resubstitution</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
+<span class='va'>resub_results</span> <span class='op'>&lt;-</span> <span class='fu'>cv_lm</span><span class='op'>(</span>fold <span class='op'>=</span> <span class='va'>resub</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, reg_form <span class='op'>=</span> <span class='st'>"mpg ~ ."</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>resub_results</span><span class='op'>$</span><span class='va'>SE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 4.609201</div><div class='input'>
 <span class='co'># cross-validated estimate</span>
-<span class='no'>folds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='make_folds.html'>make_folds</a></span>(<span class='no'>mtcars</span>)
-<span class='no'>cv_results</span> <span class='kw'>&lt;-</span> <span class='fu'>cross_validate</span>(
-  <span class='kw'>cv_fun</span> <span class='kw'>=</span> <span class='no'>cv_lm</span>, <span class='kw'>folds</span> <span class='kw'>=</span> <span class='no'>folds</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>,
-  <span class='kw'>reg_form</span> <span class='kw'>=</span> <span class='st'>"mpg ~ ."</span>
-)
-<span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span>(<span class='no'>cv_results</span>$<span class='no'>SE</span>)</div><div class='output co'>#&gt; [1] 12.78283</div><div class='input'><span class='co'>###############################################################################</span>
+<span class='va'>folds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='make_folds.html'>make_folds</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
+<span class='va'>cv_results</span> <span class='op'>&lt;-</span> <span class='fu'>cross_validate</span><span class='op'>(</span>
+  cv_fun <span class='op'>=</span> <span class='va'>cv_lm</span>, folds <span class='op'>=</span> <span class='va'>folds</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>,
+  reg_form <span class='op'>=</span> <span class='st'>"mpg ~ ."</span>
+<span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>cv_results</span><span class='op'>$</span><span class='va'>SE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 12.78283</div><div class='input'><span class='co'>###############################################################################</span>
 <span class='co'># This example explains how to use the cross_validate function with</span>
 <span class='co'># parallelization using the framework of the future package.</span>
 <span class='co'>###############################################################################</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/message.html'>suppressMessages</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>data.table</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>future</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>mtcars</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/message.html'>suppressMessages</a></span><span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://r-datatable.com'>data.table</a></span><span class='op'>)</span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://future.futureverse.org'>future</a></span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
 
 <span class='co'># make a lot of folds</span>
-<span class='no'>folds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='make_folds.html'>make_folds</a></span>(<span class='no'>mtcars</span>, <span class='kw'>fold_fun</span> <span class='kw'>=</span> <span class='no'>folds_bootstrap</span>, <span class='kw'>V</span> <span class='kw'>=</span> <span class='fl'>1000</span>)
+<span class='va'>folds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='make_folds.html'>make_folds</a></span><span class='op'>(</span><span class='va'>mtcars</span>, fold_fun <span class='op'>=</span> <span class='va'>folds_bootstrap</span>, V <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span>
 
 <span class='co'># function to calculate cross-validated squared error for linear regression</span>
-<span class='no'>cv_lm</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>fold</span>, <span class='no'>data</span>, <span class='no'>reg_form</span>) {
+<span class='va'>cv_lm</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>fold</span>, <span class='va'>data</span>, <span class='va'>reg_form</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='co'># get name and index of outcome variable from regression formula</span>
-  <span class='no'>out_var</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span>(<span class='fu'>str_split</span>(<span class='no'>reg_form</span>, <span class='st'>" "</span>))[<span class='fl'>1</span>])
-  <span class='no'>out_var_ind</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>data</span>) <span class='kw'>==</span> <span class='no'>out_var</span>))
+  <span class='va'>out_var</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span><span class='op'>(</span><span class='fu'><a href='https://stringr.tidyverse.org/reference/str_split.html'>str_split</a></span><span class='op'>(</span><span class='va'>reg_form</span>, <span class='st'>" "</span><span class='op'>)</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span>
+  <span class='va'>out_var_ind</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span> <span class='op'>==</span> <span class='va'>out_var</span><span class='op'>)</span><span class='op'>)</span>
 
   <span class='co'># split up data into training and validation sets</span>
-  <span class='no'>train_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='fold_helpers.html'>training</a></span>(<span class='no'>data</span>)
-  <span class='no'>valid_data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='fold_helpers.html'>validation</a></span>(<span class='no'>data</span>)
+  <span class='va'>train_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='fold_helpers.html'>training</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>
+  <span class='va'>valid_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='fold_helpers.html'>validation</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>
 
   <span class='co'># fit linear model on training set and predict on validation set</span>
-  <span class='no'>mod</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/formula.html'>as.formula</a></span>(<span class='no'>reg_form</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>train_data</span>)
-  <span class='no'>preds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>mod</span>, <span class='kw'>newdata</span> <span class='kw'>=</span> <span class='no'>valid_data</span>)
+  <span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/formula.html'>as.formula</a></span><span class='op'>(</span><span class='va'>reg_form</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>train_data</span><span class='op'>)</span>
+  <span class='va'>preds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>mod</span>, newdata <span class='op'>=</span> <span class='va'>valid_data</span><span class='op'>)</span>
 
   <span class='co'># capture results to be returned as output</span>
-  <span class='no'>out</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(
-    <span class='kw'>coef</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/coef.html'>coef</a></span>(<span class='no'>mod</span>))),
-    <span class='kw'>SE</span> <span class='kw'>=</span> ((<span class='no'>preds</span> - <span class='no'>valid_data</span>[, <span class='no'>out_var_ind</span>])^<span class='fl'>2</span>)
-  )
-  <span class='fu'><a href='https://rdrr.io/r/base/function.html'>return</a></span>(<span class='no'>out</span>)
-}
+  <span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    coef <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/coef.html'>coef</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
+    SE <span class='op'>=</span> <span class='op'>(</span><span class='op'>(</span><span class='va'>preds</span> <span class='op'>-</span> <span class='va'>valid_data</span><span class='op'>[</span>, <span class='va'>out_var_ind</span><span class='op'>]</span><span class='op'>)</span><span class='op'>^</span><span class='fl'>2</span><span class='op'>)</span>
+  <span class='op'>)</span>
+  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>out</span><span class='op'>)</span>
+<span class='op'>}</span>
 
-<span class='fu'><a href='https://rdrr.io/pkg/future/man/plan.html'>plan</a></span>(<span class='no'>sequential</span>)
-<span class='no'>time_seq</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>({
-  <span class='no'>results_seq</span> <span class='kw'>&lt;-</span> <span class='fu'>cross_validate</span>(
-    <span class='kw'>cv_fun</span> <span class='kw'>=</span> <span class='no'>cv_lm</span>, <span class='kw'>folds</span> <span class='kw'>=</span> <span class='no'>folds</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>,
-    <span class='kw'>reg_form</span> <span class='kw'>=</span> <span class='st'>"mpg ~ ."</span>
-  )
-})</div><div class='output co'>#&gt; <span class='warning'>Warning: All iterations resulted in errors</span></div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/pkg/future/man/plan.html'>plan</a></span>(<span class='no'>multicore</span>)
-<span class='no'>time_mc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span>({
-  <span class='no'>results_mc</span> <span class='kw'>&lt;-</span> <span class='fu'>cross_validate</span>(
-    <span class='kw'>cv_fun</span> <span class='kw'>=</span> <span class='no'>cv_lm</span>, <span class='kw'>folds</span> <span class='kw'>=</span> <span class='no'>folds</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>,
-    <span class='kw'>reg_form</span> <span class='kw'>=</span> <span class='st'>"mpg ~ ."</span>
-  )
-})</div><div class='output co'>#&gt; <span class='warning'>Warning: All iterations resulted in errors</span></div><div class='input'>
-<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/pkg/future/man/availableCores.html'>availableCores</a></span>() <span class='kw'>&gt;</span> <span class='fl'>1</span>) {
-  <span class='no'>time_mc</span>[<span class='st'>"elapsed"</span>] <span class='kw'>&lt;</span> <span class='fl'>1.2</span> * <span class='no'>time_seq</span>[<span class='st'>"elapsed"</span>]
-}</div><div class='output co'>#&gt; elapsed 
+<span class='fu'><a href='https://future.futureverse.org/reference/plan.html'>plan</a></span><span class='op'>(</span><span class='va'>sequential</span><span class='op'>)</span>
+<span class='va'>time_seq</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='op'>{</span>
+  <span class='va'>results_seq</span> <span class='op'>&lt;-</span> <span class='fu'>cross_validate</span><span class='op'>(</span>
+    cv_fun <span class='op'>=</span> <span class='va'>cv_lm</span>, folds <span class='op'>=</span> <span class='va'>folds</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>,
+    reg_form <span class='op'>=</span> <span class='st'>"mpg ~ ."</span>
+  <span class='op'>)</span>
+<span class='op'>}</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: All iterations resulted in errors</span></div><div class='input'>
+<span class='fu'><a href='https://future.futureverse.org/reference/plan.html'>plan</a></span><span class='op'>(</span><span class='va'>multicore</span><span class='op'>)</span>
+<span class='va'>time_mc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.time.html'>system.time</a></span><span class='op'>(</span><span class='op'>{</span>
+  <span class='va'>results_mc</span> <span class='op'>&lt;-</span> <span class='fu'>cross_validate</span><span class='op'>(</span>
+    cv_fun <span class='op'>=</span> <span class='va'>cv_lm</span>, folds <span class='op'>=</span> <span class='va'>folds</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>,
+    reg_form <span class='op'>=</span> <span class='st'>"mpg ~ ."</span>
+  <span class='op'>)</span>
+<span class='op'>}</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: All iterations resulted in errors</span></div><div class='input'>
+<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://future.futureverse.org/reference/re-exports.html'>availableCores</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>&gt;</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>time_mc</span><span class='op'>[</span><span class='st'>"elapsed"</span><span class='op'>]</span> <span class='op'>&lt;</span> <span class='fl'>1.2</span> <span class='op'>*</span> <span class='va'>time_seq</span><span class='op'>[</span><span class='st'>"elapsed"</span><span class='op'>]</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; elapsed 
 #&gt;   FALSE </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -299,7 +305,7 @@ This is useful for adding additional CV folds to a results object.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -145,7 +145,6 @@ if (require("forecast")) {
 
   folds_id1 <- make_folds(test_data_id,
     fold_fun = folds_rolling_origin_pooled,
-
     t = 60, first_window = 10, id = 1, time = seq(1:60),
     validation_size = 5, gap = 0, batch = 20
   )

@@ -39,6 +39,7 @@ Suggests:
     rmarkdown,
     knitr,
     stringr,
+    glmnet,
     forecast,
     randomForest
 LazyData: true
