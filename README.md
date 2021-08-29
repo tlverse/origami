@@ -29,11 +29,11 @@ Phillips](https://github.com/rachaelvphillips)
 
 -----
 
-## Description
+## What’s `origami`?
 
-`origami` is an R package that provides a general framework for the
-application of cross-validation schemes to particular functions. By
-allowing arbitrary lists of results, `origami` accommodates a range of
+The `origami` R package provides a general framework for the application
+of cross-validation schemes to particular functions. By allowing
+arbitrary lists of results, `origami` accommodates a range of
 cross-validation applications.
 
 -----
