@@ -3,10 +3,7 @@
 
 # R/`origami` <img src="./hex/origami-sticker.png" align="right" width='125'/>
 
-[![Travis-CI Build
-Status](https://travis-ci.org/tlverse/origami.svg?branch=master)](https://travis-ci.org/tlverse/origami)
-[![Build
-status](https://ci.appveyor.com/api/projects/status/bfe2jd9a065jhql7?svg=true)](https://ci.appveyor.com/project/tlverse/origami)
+[![R-CMD-check](https://github.com/tlverse/origami/workflows/R-CMD-check/badge.svg)](https://github.com/tlverse/origami/actions)
 [![Coverage
 Status](https://codecov.io/gh/tlverse/origami/branch/master/graph/badge.svg)](https://codecov.io/gh/tlverse/origami)
 [![CRAN](http://www.r-pkg.org/badges/version/origami)](http://www.r-pkg.org/pkg/origami)
@@ -32,11 +29,11 @@ Phillips](https://github.com/rachaelvphillips)
 
 -----
 
-## Description
+## What’s `origami`?
 
-`origami` is an R package that provides a general framework for the
-application of cross-validation schemes to particular functions. By
-allowing arbitrary lists of results, `origami` accommodates a range of
+The `origami` R package provides a general framework for the application
+of cross-validation schemes to particular functions. By allowing
+arbitrary lists of results, `origami` accommodates a range of
 cross-validation applications.
 
 -----
@@ -78,7 +75,7 @@ estimate of the mean:
 ``` r
 library(stringr)
 library(origami)
-#> origami v1.0.3: Generalized Framework for Cross-Validation
+#> origami v1.0.4: Generalized Framework for Cross-Validation
 set.seed(4795)
 
 data(mtcars)
@@ -90,7 +87,6 @@ head(mtcars)
 #> Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
 #> Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
 #> Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
-
 # build a cv_fun that wraps around lm
 cv_lm <- function(fold, data, reg_form) {
   # get name and index of outcome variable from regression formula
@@ -133,11 +129,8 @@ If you encounter any bugs or have any specific feature requests, please
 
 ## Contributions
 
-It is our hope that `origami` will grow to be adopted as a backend for
-most any procedure requiring cross-validation, including its integration
-into larger machine learning frameworks. To that end, contributions are
-very welcome, though we ask that interested contributors consult our
-[contribution
+Contributions are very welcome. Interested contributors should consult
+our [contribution
 guidelines](https://github.com/tlverse/origami/blob/master/CONTRIBUTING.md)
 prior to submitting a pull request.
 
@@ -166,7 +159,7 @@ After using the `origami` R package, please cite it:
 
 ## License
 
-© 2017-2020 [Jeremy R. Coyle](https://github.com/jeremyrcoyle)
+© 2017-2021 [Jeremy R. Coyle](https://github.com/jeremyrcoyle)
 
 The contents of this repository are distributed under the GPL-3 license.
 See file `LICENSE` for details.

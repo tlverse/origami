@@ -1,6 +1,6 @@
 Package: origami
 Title: Generalized Framework for Cross-Validation
-Version: 1.0.4
+Version: 1.0.5
 Authors@R: c(
     person("Jeremy", "Coyle", email = "jeremyrcoyle@gmail.com",
            role = c("aut", "cre", "cph"),
@@ -39,8 +39,9 @@ Suggests:
     rmarkdown,
     knitr,
     stringr,
+    glmnet,
     forecast,
     randomForest
 LazyData: true
 VignetteBuilder: knitr
-RoxygenNote: 7.1.1.9000
+RoxygenNote: 7.1.2
