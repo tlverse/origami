@@ -124,6 +124,15 @@
       <small>Source: <a href='https://github.com/tlverse/origami/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="origami-105" class="section level1">
+<h1 class="page-header" data-toc-text="1.0.5">
+<a href="#origami-105" class="anchor"></a>origami 1.0.5<small> Unreleased </small>
+</h1>
+<ul>
+<li>Addition of <code>glmnet</code> to package <code>Suggests</code> since used in the vignette.</li>
+<li>Resolve issue stemming from the partial matching of argument names (<a href="https://github.com/tlverse/origami/issues/56" class="uri">https://github.com/tlverse/origami/issues/56</a>) by specifying throughout.</li>
+</ul>
+</div>
     <div id="origami-104" class="section level1">
 <h1 class="page-header" data-toc-text="1.0.4">
 <a href="#origami-104" class="anchor"></a>origami 1.0.4<small> Unreleased </small>
@@ -132,7 +141,7 @@
 <li>Fix the incorrect use of <code>future.apply</code> by including <code>future.seed = TRUE</code>, as per <a href="https://github.com/tlverse/origami/issues/48" class="uri">https://github.com/tlverse/origami/issues/48</a>.</li>
 <li>Fixes to <code>folds_rolling_origin_pooled</code> and <code>folds_rolling_window_pooled</code>, as per <a href="https://github.com/tlverse/origami/pull/50" class="uri">https://github.com/tlverse/origami/pull/50</a>.</li>
 <li>Sped up all pooled time-series fold functions with <code>lapply</code>.</li>
-<li>All pooled time-series fold functions (<code>folds_rolling_origin_pooled</code>, <code>folds_rolling_window_pooled</code>, <code>folds_vfold_rolling_origin_pooled</code>, <code>folds_vfold_rolling_window_pooled</code>) now allow for variability in the number of observations for each independent unit (i.e. subject).</li>
+<li>All pooled time-series fold functions (<code>folds_rolling_origin_pooled</code>, <code>folds_rolling_window_pooled</code>, <code>folds_vfold_rolling_origin_pooled</code>, <code>folds_vfold_rolling_window_pooled</code>) now allow for variability in the number of observations for each independent unit (i.e., the subject).</li>
 <li>Added test for pooled time-series cross-validation with multi-unit time-series to test the update above. In this test, the total number of observations and the time-points for which there are observations varies across the units.</li>
 </ul>
 </div>

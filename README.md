@@ -75,7 +75,7 @@ estimate of the mean:
 ``` r
 library(stringr)
 library(origami)
-#> origami v1.0.3: Generalized Framework for Cross-Validation
+#> origami v1.0.4: Generalized Framework for Cross-Validation
 set.seed(4795)
 
 data(mtcars)
@@ -87,7 +87,6 @@ head(mtcars)
 #> Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
 #> Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
 #> Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
-
 # build a cv_fun that wraps around lm
 cv_lm <- function(fold, data, reg_form) {
   # get name and index of outcome variable from regression formula

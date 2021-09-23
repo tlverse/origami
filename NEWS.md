@@ -1,3 +1,8 @@
+# origami 1.0.5
+* Addition of `glmnet` to package `Suggests` since used in the vignette.
+* Resolve issue stemming from the partial matching of argument names
+  (https://github.com/tlverse/origami/issues/56) by specifying throughout.
+
 # origami 1.0.4
 * Fix the incorrect use of `future.apply` by including `future.seed = TRUE`,
    as per https://github.com/tlverse/origami/issues/48.
@@ -6,10 +11,10 @@
 * Sped up all pooled time-series fold functions with `lapply`.
 * All pooled time-series fold functions (`folds_rolling_origin_pooled`,
    `folds_rolling_window_pooled`, `folds_vfold_rolling_origin_pooled`,
-   `folds_vfold_rolling_window_pooled`) now allow for variability in the 
-   number of observations for each independent unit (i.e. subject).
+   `folds_vfold_rolling_window_pooled`) now allow for variability in the
+   number of observations for each independent unit (i.e., the subject).
 * Added test for pooled time-series cross-validation with multi-unit time-series
-   to test the update above. In this test, the total number of observations 
+   to test the update above. In this test, the total number of observations
    and the time-points for which there are observations varies across the units.
 
 # origami 1.0.3
