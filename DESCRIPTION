@@ -18,11 +18,12 @@ Authors@R: c(
 Maintainer: Jeremy Coyle <jeremyrcoyle@gmail.com>
 Description: A general framework for the application of cross-validation schemes
     to particular functions. By allowing arbitrary lists of results, origami
-    accommodates a range of cross-validation applications.
+    accommodates a range of cross-validation applications. This implementation
+    was first described by Coyle and Hejazi (2018) <doi:10.21105/joss.00512>.
 Depends:
     R (>= 3.0.0),
 License: GPL-3
-URL: https://tlverse.org/origami
+URL: https://tlverse.org/origami/
 BugReports: https://github.com/tlverse/origami/issues
 Encoding: UTF-8
 Imports:
