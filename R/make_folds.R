@@ -46,6 +46,15 @@ make_folds <- function(n = NULL,
     }
   }
 
+  if ("t" %in% names(formals(fold_fun)) &
+    (!is.null(cluster_ids) | !is.null(strata_ids))) {
+    stop(
+      "cluster_ids and strata_ids are not supported by fold functions ",
+      "for time series cross-validation schemes. See the time series fold ",
+      "function's specific arguments to check what is supported."
+    )
+  }
+
   if (!is.null(strata_ids)) {
     stopifnot(length(strata_ids) == n)
 
@@ -128,26 +137,47 @@ cluster_folds <- function(fold_fun, cluster_ids, ...) {
 
 ################################################################################
 
-# generate folds separaetly for each strata, and then collapse
+# generate folds separately for each strata, and then collapse
 strata_folds <- function(fold_fun, cluster_ids, strata_ids, ...) {
-  # convert strata to numeric 1:n
-  idfac <- factor(strata_ids)
+
+  # order strata by increasing prevalence, so rarest strata is listed first
+  ordered <- names(sort(prop.table(table(strata_ids)), decreasing = FALSE))
+  idfac <- sort(factor(strata_ids, levels = ordered))
   nstrata <- length(levels(idfac))
   stratanums <- as.numeric(idfac)
 
-  # generate strata specific folds
+  ##### generate strata-specific folds
+  # create list args for calling make_folds
+  args <- list(...)
+  if (is.null(args$V) & "V" %in% names(formals(fold_fun))) {
+    args$V <- formals(fold_fun)$V
+  }
+  args$fold_fun <- fold_fun
+  args$cluster_ids <- cluster_ids
+  # if number of observations in rarest strata < V, then V needs to change for
+  # all strata-specific folds, so V is same across all strata-specific folds
+  n_rare <- sum(stratanums == 1)
+  if (!is.null(args$V) && n_rare < args$V) {
+    warning(paste0(
+      "The number of observations in the most rare strata is ", n_rare,
+      ", and V is ", args$V, ", so using leave-one-out CV, i.e. setting V = n"
+    ))
+    args$V <- n_rare
+  }
   strata_folds <- lapply(seq_len(nstrata), function(strata) {
-    n_in_strata <- sum(stratanums == strata)
-    idfolds <- make_folds(
-      n = n_in_strata, fold_fun = fold_fun,
-      cluster_ids = cluster_ids[stratanums == strata],
-      strata_ids = NULL, ...
-    )
+    args_strata <- args
+    args_strata$n <- sum(stratanums == strata)
+    if (is.null(args$cluster_ids)) {
+      args_strata <- args_strata[names(args_strata) %in% names(formals(fold_fun))]
+      suppressWarnings(do.call(args$fold_fun, args_strata))
+    } else {
+      args_strata$cluster_ids <- args$cluster_ids[stratanums == strata]
+      do.call(make_folds, args_strata)
+    }
   })
 
-  # collapse strata folds
+  ###### collapse strata-specific folds
   V <- length(strata_folds[[1]])
-
   folds <- lapply(seq_len(V), function(v) {
     # convert to indexes on the observations
     converted_folds <- lapply(seq_len(nstrata), function(strata) {
@@ -160,18 +190,17 @@ strata_folds <- function(fold_fun, cluster_ids, strata_ids, ...) {
     })
 
     # collapse across strata
-    make_fold(v = v, training_set = unlist(lapply(
-      converted_folds,
-      function(fold) {
-        training(fold = fold)
-      }
-    )), validation_set = unlist(lapply(
-      converted_folds,
-      function(fold) {
-        validation(fold = fold)
-      }
-    )))
+    make_fold(
+      v = v,
+      training_set = unlist(
+        lapply(converted_folds, function(fold) training(fold = fold))
+      ),
+      validation_set = unlist(
+        lapply(converted_folds, function(fold) validation(fold = fold))
+      )
+    )
   })
+
   return(folds)
 }
 
