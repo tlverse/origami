@@ -148,3 +148,11 @@ test_that("Reorder strata order and set V same for all strata with clusters", {
   expect_warning(make_folds(cluster_ids = cluster_ids, strata_ids = strata_ids))
 })
 
+test_that("make_folds error with time series fold_fun and strata/clusters", {
+  expect_error(make_folds(
+    cluster_ids = c(1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4),
+    strata_ids = c(1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0),
+    fold_fun = folds_rolling_origin
+  ))
+})
+
