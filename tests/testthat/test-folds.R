@@ -134,3 +134,17 @@ test_that("Error if we can't guess n", {
 # Simple bootstrap fold test
 folds <- make_folds(n = n, fold_fun = folds_bootstrap, V = 10)
 test_splits(folds)
+
+############################
+# tests when number of observations in a strata < V
+test_that("Reorder strata order and set V same for all strata", {
+  strata_ids <- c(rep(0, 15), rep(1, 9))
+  expect_warning(make_folds(strata_ids = strata_ids))
+})
+
+test_that("Reorder strata order and set V same for all strata with clusters", {
+  cluster_ids <- c(1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4)
+  strata_ids <- c(1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0)
+  expect_warning(make_folds(cluster_ids = cluster_ids, strata_ids = strata_ids))
+})
+
