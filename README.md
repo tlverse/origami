@@ -20,14 +20,14 @@ v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.00512/status.svg)](https://doi.org/10.21105/joss.00512)
 
 > High-powered framework for cross-validation. Fold your data like it’s
-> paper\!
+> paper!
 
 **Authors:** [Jeremy Coyle](https://github.com/jeremyrcoyle), [Nima
 Hejazi](https://nimahejazi.org), [Ivana
 Malenica](https://github.com/podTockom), and [Rachael
 Phillips](https://github.com/rachaelvphillips)
 
------
+------------------------------------------------------------------------
 
 ## What’s `origami`?
 
@@ -36,7 +36,7 @@ of cross-validation schemes to particular functions. By allowing
 arbitrary lists of results, `origami` accommodates a range of
 cross-validation applications.
 
------
+------------------------------------------------------------------------
 
 ## Installation
 
@@ -54,7 +54,7 @@ You can install a stable release of `origami` from GitHub via
 devtools::install_github("tlverse/origami")
 ```
 
------
+------------------------------------------------------------------------
 
 ## Usage
 
@@ -63,7 +63,7 @@ For details on how best to use `origami`, please consult the package
 vignette](https://origami.tlverse.org/articles/generalizedCV.html)
 online, or do so from within [R](https://www.r-project.org/).
 
------
+------------------------------------------------------------------------
 
 ## Example
 
@@ -75,7 +75,7 @@ estimate of the mean:
 ``` r
 library(stringr)
 library(origami)
-#> origami v1.0.4: Generalized Framework for Cross-Validation
+#> origami v1.0.5: Generalized Framework for Cross-Validation
 set.seed(4795)
 
 data(mtcars)
@@ -87,6 +87,7 @@ head(mtcars)
 #> Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
 #> Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
 #> Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+
 # build a cv_fun that wraps around lm
 cv_lm <- function(fold, data, reg_form) {
   # get name and index of outcome variable from regression formula
@@ -118,14 +119,14 @@ For details on how to write wrappers (`cv_fun`s) for use with
 `origami::cross_validate`, please consult the documentation and
 vignettes that accompany the package.
 
------
+------------------------------------------------------------------------
 
 ## Issues
 
 If you encounter any bugs or have any specific feature requests, please
 [file an issue](https://github.com/tlverse/origami/issues).
 
------
+------------------------------------------------------------------------
 
 ## Contributions
 
@@ -134,28 +135,26 @@ our [contribution
 guidelines](https://github.com/tlverse/origami/blob/master/CONTRIBUTING.md)
 prior to submitting a pull request.
 
------
+------------------------------------------------------------------------
 
 ## Citation
 
 After using the `origami` R package, please cite it:
 
-``` 
-    @article{coyle2018origami,
-      author = {Coyle, Jeremy R and Hejazi, Nima S},
-      title = {origami: A Generalized Framework for Cross-Validation in R},
-      journal = {The Journal of Open Source Software},
-      volume = {3},
-      number = {21},
-      month = {January},
-      year  = {2018},
-      publisher = {The Open Journal},
-      doi = {10.21105/joss.00512},
-      url = {https://doi.org/10.21105/joss.00512}
-    }
-```
+        @article{coyle2018origami,
+          author = {Coyle, Jeremy R and Hejazi, Nima S},
+          title = {origami: A Generalized Framework for Cross-Validation in R},
+          journal = {The Journal of Open Source Software},
+          volume = {3},
+          number = {21},
+          month = {January},
+          year  = {2018},
+          publisher = {The Open Journal},
+          doi = {10.21105/joss.00512},
+          url = {https://doi.org/10.21105/joss.00512}
+        }
 
------
+------------------------------------------------------------------------
 
 ## License
 

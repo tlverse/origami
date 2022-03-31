@@ -1,7 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://tlverse.org/origami/404.html</loc>
+  </url>
+  <url>
+    <loc>http://tlverse.org/origami/CONTRIBUTING.html</loc>
+  </url>
+  <url>
+    <loc>http://tlverse.org/origami/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>http://tlverse.org/origami/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>http://tlverse.org/origami/NEWS.html</loc>
+  </url>
+  <url>
+    <loc>http://tlverse.org/origami/TODO.html</loc>
+  </url>
+  <url>
+    <loc>http://tlverse.org/origami/articles/generalizedCV.html</loc>
+  </url>
+  <url>
+    <loc>http://tlverse.org/origami/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>http://tlverse.org/origami/authors.html</loc>
+  </url>
+  <url>
+    <loc>http://tlverse.org/origami/cran-comments.html</loc>
+  </url>
+  <url>
     <loc>http://tlverse.org/origami/index.html</loc>
+  </url>
+  <url>
+    <loc>http://tlverse.org/origami/news/index.html</loc>
   </url>
   <url>
     <loc>http://tlverse.org/origami/reference/check_id_and_time.html</loc>
@@ -28,10 +61,34 @@
     <loc>http://tlverse.org/origami/reference/folds2foldvec.html</loc>
   </url>
   <url>
+    <loc>http://tlverse.org/origami/reference/folds_bootstrap.html</loc>
+  </url>
+  <url>
+    <loc>http://tlverse.org/origami/reference/folds_loo.html</loc>
+  </url>
+  <url>
+    <loc>http://tlverse.org/origami/reference/folds_montecarlo.html</loc>
+  </url>
+  <url>
+    <loc>http://tlverse.org/origami/reference/folds_resubstitution.html</loc>
+  </url>
+  <url>
+    <loc>http://tlverse.org/origami/reference/folds_rolling_origin.html</loc>
+  </url>
+  <url>
+    <loc>http://tlverse.org/origami/reference/folds_rolling_window.html</loc>
+  </url>
+  <url>
+    <loc>http://tlverse.org/origami/reference/folds_vfold.html</loc>
+  </url>
+  <url>
     <loc>http://tlverse.org/origami/reference/guess_combiner.html</loc>
   </url>
   <url>
     <loc>http://tlverse.org/origami/reference/id_folds_to_folds.html</loc>
+  </url>
+  <url>
+    <loc>http://tlverse.org/origami/reference/index.html</loc>
   </url>
   <url>
     <loc>http://tlverse.org/origami/reference/make_fold.html</loc>
@@ -43,9 +100,9 @@
     <loc>http://tlverse.org/origami/reference/make_repeated_folds.html</loc>
   </url>
   <url>
-    <loc>http://tlverse.org/origami/reference/wrap_in_try.html</loc>
+    <loc>http://tlverse.org/origami/reference/origami-package.html</loc>
   </url>
   <url>
-    <loc>http://tlverse.org/origami/articles/generalizedCV.html</loc>
+    <loc>http://tlverse.org/origami/reference/wrap_in_try.html</loc>
   </url>
 </urlset>
