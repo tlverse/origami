@@ -156,3 +156,9 @@ test_that("make_folds error with time series fold_fun and strata/clusters", {
   ))
 })
 
+test_that("folds2foldvec", {
+  strata_ids <- c(rep(0, 10), rep(1, 10))
+  folds <- suppressWarnings(make_folds(strata_ids = strata_ids))
+  vecfolds <- folds2foldvec(folds)
+  expect_equal(vecfolds, rep(seq_len(10),2))
+})
