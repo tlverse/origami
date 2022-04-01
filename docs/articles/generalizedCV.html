@@ -82,7 +82,7 @@
                         <h4 data-toc-skip class="author">Jeremy Coyle
 &amp; Nima Hejazi</h4>
             
-            <h4 data-toc-skip class="date">2022-03-31</h4>
+            <h4 data-toc-skip class="date">2022-04-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/tlverse/origami/blob/HEAD/vignettes/generalizedCV.Rmd" class="external-link"><code>vignettes/generalizedCV.Rmd</code></a></small>
       <div class="hidden name"><code>generalizedCV.Rmd</code></div>
@@ -252,7 +252,7 @@ this performs 10-fold cross-validation):</p>
 <span class="va">cvlm_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cross_validate.html">cross_validate</a></span><span class="op">(</span>cv_fun <span class="op">=</span> <span class="va">cv_lm</span>, folds <span class="op">=</span> <span class="va">folds</span>, data <span class="op">=</span> <span class="va">mtcars</span>,
                                reg_form <span class="op">=</span> <span class="st">"mpg ~ ."</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">cvlm_results</span><span class="op">$</span><span class="va">SE</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] 13.46782</span></code></pre>
+<pre><code><span class="co">## [1] 13.46816</span></code></pre>
 <p>Having performed 10-fold cross-validation, we quickly notice that our
 previous estimate of the model error (by resubstitution) was quite
 optimistic. The honest estimate of the error is several times
@@ -381,7 +381,7 @@ by <code>make_folds</code>.</p>
 <span class="va">cvrf_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cross_validate.html">cross_validate</a></span><span class="op">(</span>cv_fun <span class="op">=</span> <span class="va">cv_rf</span>, folds <span class="op">=</span> <span class="va">folds</span>, data <span class="op">=</span> <span class="va">mtcars</span>,
                                reg_form <span class="op">=</span> <span class="st">"mpg ~ ."</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">cvrf_results</span><span class="op">$</span><span class="va">SE</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] 5.924024</span></code></pre>
+<pre><code><span class="co">## [1] 5.718973</span></code></pre>
 <p>Using 10-fold cross-validation (the default), we obtain an honest
 estimate of the prediction error of random forests. From this, we gather
 that the use of <code>origami</code>’s <code>cross_validate</code>

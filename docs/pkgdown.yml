@@ -3,7 +3,7 @@ pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
   generalizedCV: generalizedCV.html
-last_built: 2022-03-31T21:09Z
+last_built: 2022-04-01T20:35Z
 urls:
   reference: http://tlverse.org/origami/reference
   article: http://tlverse.org/origami/articles
