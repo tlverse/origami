@@ -42,7 +42,10 @@ NULL
 #' @export
 folds_vfold <- function(n, V = 10L) {
   if (n <= V) {
-    warning("n <= V so using leave-one-out CV")
+    warning(paste0(
+      "n (the number of units, clusters, or clusters in a specific strata) is ",
+      n, " and V is ", V, ", so using leave-one-out CV, i.e. setting V = n"
+    ))
     return(folds_loo(n))
   }
   folds <- rep(x = seq_len(V), length.out = n)
