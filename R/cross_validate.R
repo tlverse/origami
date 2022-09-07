@@ -23,7 +23,7 @@
 #'  This is useful for adding additional CV folds to a results object.
 #'
 #' @importFrom assertthat assert_that
-#' @importFrom future future values plan sequential multicore multisession
+#' @importFrom future future plan sequential multicore multisession
 #' @importFrom future.apply future_lapply
 #' @importFrom listenv listenv
 #' @import methods
