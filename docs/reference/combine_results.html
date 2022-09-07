@@ -24,7 +24,7 @@ similarly structured results, to a list of such lists."><!-- mathjax --><script 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">origami</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.7</span>
       </span>
     </div>
 
@@ -67,7 +67,7 @@ similarly structured results, to a list of such lists.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">combine_results</span><span class="op">(</span><span class="va">results</span>, combiners <span class="op">=</span> <span class="cn">NULL</span>, smart_combiners <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">combine_results</span><span class="op">(</span><span class="va">results</span>, combiners <span class="op">=</span> <span class="cn">NULL</span>, smart_combiners <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -75,16 +75,23 @@ similarly structured results, to a list of such lists.</p>
     <dl><dt>results</dt>
 <dd><p>A <code>list</code> of <code>list</code>s, corresponding to each result,
 with the inner <code>list</code>s corresponding to results from each fold.</p></dd>
+
+
 <dt>combiners</dt>
 <dd><p>A <code>list</code> with the same names as results, containing
 combiner function names or functions for each result.</p></dd>
+
+
 <dt>smart_combiners</dt>
 <dd><p>A <code>logical</code> indicating whether combiners should
 be guessed from the data type of the results if they are missing.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of combined results.</p>
+    
+
+<p>A list of combined results.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -105,13 +112,11 @@ be guessed from the data type of the results if they are missing.</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael
-Phillips.</p>
+  <p></p><p>Developed by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

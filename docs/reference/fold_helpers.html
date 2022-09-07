@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">origami</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.7</span>
       </span>
     </div>
 
@@ -65,11 +65,11 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">training</span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, fold <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="fu">validation</span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, fold <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="fu">fold_index</span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, fold <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">training</span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, fold <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">validation</span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, fold <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">fold_index</span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, fold <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -77,13 +77,18 @@
     <dl><dt>x</dt>
 <dd><p>an object to be indexed by a training set, validation set, or fold
 index. If missing, the index itself will be returned.</p></dd>
+
+
 <dt>fold</dt>
 <dd><p>Fold; the fold used to do the indexing. If missing, <code>fold</code>
 will be pulled from the calling environment, if available.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>The elements of <code>x</code> corresponding to the indexes, or the
+    
+
+<p>The elements of <code>x</code> corresponding to the indexes, or the
  indexes themselves if <code>x</code> is missing.</p>
     </div>
     <div id="see-also">
@@ -99,13 +104,11 @@ will be pulled from the calling environment, if available.</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael
-Phillips.</p>
+  <p></p><p>Developed by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

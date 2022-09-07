@@ -27,7 +27,7 @@ remaining arguments (e.g. V or pvalidation) on."><!-- mathjax --><script src="ht
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">origami</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.7</span>
       </span>
     </div>
 
@@ -73,105 +73,128 @@ remaining arguments (e.g. <code>V</code> or <code>pvalidation</code>) on.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">folds_vfold</span><span class="op">(</span><span class="va">n</span>, V <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span>
-
-<span class="fu">folds_resubstitution</span><span class="op">(</span><span class="va">n</span><span class="op">)</span>
-
-<span class="fu">folds_loo</span><span class="op">(</span><span class="va">n</span><span class="op">)</span>
-
-<span class="fu">folds_montecarlo</span><span class="op">(</span><span class="va">n</span>, V <span class="op">=</span> <span class="fl">1000L</span>, pvalidation <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span>
-
-<span class="fu">folds_bootstrap</span><span class="op">(</span><span class="va">n</span>, V <span class="op">=</span> <span class="fl">1000L</span><span class="op">)</span>
-
-<span class="fu">folds_rolling_origin</span><span class="op">(</span><span class="va">n</span>, <span class="va">first_window</span>, <span class="va">validation_size</span>, gap <span class="op">=</span> <span class="fl">0L</span>, batch <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span>
-
-<span class="fu">folds_rolling_window</span><span class="op">(</span><span class="va">n</span>, <span class="va">window_size</span>, <span class="va">validation_size</span>, gap <span class="op">=</span> <span class="fl">0L</span>, batch <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span>
-
-<span class="fu">folds_rolling_origin_pooled</span><span class="op">(</span>
-  <span class="va">n</span>,
-  <span class="va">t</span>,
-  id <span class="op">=</span> <span class="cn">NULL</span>,
-  time <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">first_window</span>,
-  <span class="va">validation_size</span>,
-  gap <span class="op">=</span> <span class="fl">0L</span>,
-  batch <span class="op">=</span> <span class="fl">1L</span>
-<span class="op">)</span>
-
-<span class="fu">folds_rolling_window_pooled</span><span class="op">(</span>
-  <span class="va">n</span>,
-  <span class="va">t</span>,
-  id <span class="op">=</span> <span class="cn">NULL</span>,
-  time <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">window_size</span>,
-  <span class="va">validation_size</span>,
-  gap <span class="op">=</span> <span class="fl">0L</span>,
-  batch <span class="op">=</span> <span class="fl">1L</span>
-<span class="op">)</span>
-
-<span class="fu">folds_vfold_rolling_origin_pooled</span><span class="op">(</span>
-  <span class="va">n</span>,
-  <span class="va">t</span>,
-  id <span class="op">=</span> <span class="cn">NULL</span>,
-  time <span class="op">=</span> <span class="cn">NULL</span>,
-  V <span class="op">=</span> <span class="fl">10L</span>,
-  <span class="va">first_window</span>,
-  <span class="va">validation_size</span>,
-  gap <span class="op">=</span> <span class="fl">0L</span>,
-  batch <span class="op">=</span> <span class="fl">1L</span>
-<span class="op">)</span>
-
-<span class="fu">folds_vfold_rolling_window_pooled</span><span class="op">(</span>
-  <span class="va">n</span>,
-  <span class="va">t</span>,
-  id <span class="op">=</span> <span class="cn">NULL</span>,
-  time <span class="op">=</span> <span class="cn">NULL</span>,
-  V <span class="op">=</span> <span class="fl">10L</span>,
-  <span class="va">window_size</span>,
-  <span class="va">validation_size</span>,
-  gap <span class="op">=</span> <span class="fl">0L</span>,
-  batch <span class="op">=</span> <span class="fl">1L</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">folds_vfold</span><span class="op">(</span><span class="va">n</span>, V <span class="op">=</span> <span class="fl">10L</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">folds_resubstitution</span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">folds_loo</span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">folds_montecarlo</span><span class="op">(</span><span class="va">n</span>, V <span class="op">=</span> <span class="fl">1000L</span>, pvalidation <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">folds_bootstrap</span><span class="op">(</span><span class="va">n</span>, V <span class="op">=</span> <span class="fl">1000L</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">folds_rolling_origin</span><span class="op">(</span><span class="va">n</span>, <span class="va">first_window</span>, <span class="va">validation_size</span>, gap <span class="op">=</span> <span class="fl">0L</span>, batch <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">folds_rolling_window</span><span class="op">(</span><span class="va">n</span>, <span class="va">window_size</span>, <span class="va">validation_size</span>, gap <span class="op">=</span> <span class="fl">0L</span>, batch <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">folds_rolling_origin_pooled</span><span class="op">(</span></span>
+<span>  <span class="va">n</span>,</span>
+<span>  <span class="va">t</span>,</span>
+<span>  id <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  time <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">first_window</span>,</span>
+<span>  <span class="va">validation_size</span>,</span>
+<span>  gap <span class="op">=</span> <span class="fl">0L</span>,</span>
+<span>  batch <span class="op">=</span> <span class="fl">1L</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">folds_rolling_window_pooled</span><span class="op">(</span></span>
+<span>  <span class="va">n</span>,</span>
+<span>  <span class="va">t</span>,</span>
+<span>  id <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  time <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">window_size</span>,</span>
+<span>  <span class="va">validation_size</span>,</span>
+<span>  gap <span class="op">=</span> <span class="fl">0L</span>,</span>
+<span>  batch <span class="op">=</span> <span class="fl">1L</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">folds_vfold_rolling_origin_pooled</span><span class="op">(</span></span>
+<span>  <span class="va">n</span>,</span>
+<span>  <span class="va">t</span>,</span>
+<span>  id <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  time <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  V <span class="op">=</span> <span class="fl">10L</span>,</span>
+<span>  <span class="va">first_window</span>,</span>
+<span>  <span class="va">validation_size</span>,</span>
+<span>  gap <span class="op">=</span> <span class="fl">0L</span>,</span>
+<span>  batch <span class="op">=</span> <span class="fl">1L</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">folds_vfold_rolling_window_pooled</span><span class="op">(</span></span>
+<span>  <span class="va">n</span>,</span>
+<span>  <span class="va">t</span>,</span>
+<span>  id <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  time <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  V <span class="op">=</span> <span class="fl">10L</span>,</span>
+<span>  <span class="va">window_size</span>,</span>
+<span>  <span class="va">validation_size</span>,</span>
+<span>  gap <span class="op">=</span> <span class="fl">0L</span>,</span>
+<span>  batch <span class="op">=</span> <span class="fl">1L</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>n</dt>
 <dd><p>An integer indicating the number of observations.</p></dd>
+
+
 <dt>V</dt>
 <dd><p>An integer indicating the number of folds.</p></dd>
+
+
 <dt>pvalidation</dt>
 <dd><p>A <code>numeric</code> indicating the proportion of observation
 to be placed in the validation fold.</p></dd>
+
+
 <dt>first_window</dt>
 <dd><p>An integer indicating the number of observations in the
 first training sample.</p></dd>
+
+
 <dt>validation_size</dt>
 <dd><p>An integer indicating the number of points in the
 validation samples; should be equal to the largest forecast horizon.</p></dd>
+
+
 <dt>gap</dt>
 <dd><p>An integer indicating the number of points not included in the
 training or validation samples. The default is zero.</p></dd>
+
+
 <dt>batch</dt>
 <dd><p>An integer indicating increases in the number of time points
 added to the training set in each iteration of cross-validation. Applicable
 for larger time-series. The default is one.</p></dd>
+
+
 <dt>window_size</dt>
 <dd><p>An integer indicating the number of observations in each
 training sample.</p></dd>
+
+
 <dt>t</dt>
 <dd><p>An integer indicating the total amount of time to consider per
 time-series sample.</p></dd>
+
+
 <dt>id</dt>
 <dd><p>An optional vector of unique identifiers corresponding to the time
 vector. These can be used to subset the time vector.</p></dd>
+
+
 <dt>time</dt>
 <dd><p>An optional vector of integers of time points observed for each
 subject in the sample.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of <code>Fold</code>s.</p>
+    
+
+<p>A list of <code>Fold</code>s.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -190,13 +213,11 @@ subject in the sample.</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael
-Phillips.</p>
+  <p></p><p>Developed by Jeremy Coyle, Nima Hejazi, Ivana Malenica, Rachael Phillips.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
