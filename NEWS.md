@@ -1,3 +1,11 @@
+# origami 1.0.7
+* Removal of unused import `future::values` given its deprecation.
+
+# origami 1.0.6
+* Fixes to stratified cross-validation bugs.
+* More informative warnings when n (sample size) is less than or equal to V
+  (number of folds).
+
 # origami 1.0.5
 * Addition of `glmnet` to package `Suggests` since used in the vignette.
 * Resolve issue stemming from the partial matching of argument names

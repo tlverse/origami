@@ -16,9 +16,9 @@
 ^hex$
 ^cran-comments.md$
 ^revdep$
-^NEWS\.md$
 ^README\.md$
 ^README\.Rmd$
 ^README-.*\.png$
 ^README\.html$
 ^CRAN-RELEASE$
+^CRAN-SUBMISSION$
