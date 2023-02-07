@@ -13,6 +13,7 @@
 \alias{folds_rolling_window_pooled}
 \alias{folds_vfold_rolling_origin_pooled}
 \alias{folds_vfold_rolling_window_pooled}
+\alias{folds_subgroup}
 \title{Cross-Validation Schemes}
 \usage{
 folds_vfold(n, V = 10L)
@@ -74,6 +75,8 @@ folds_vfold_rolling_window_pooled(
   gap = 0L,
   batch = 1L
 )
+
+folds_subgroup(n, V = 10L, subgroup, strat_outcome = NULL)
 }
 \arguments{
 \item{n}{An integer indicating the number of observations.}
@@ -103,7 +106,9 @@ training sample.}
 time-series sample.}
 
 \item{id}{An optional vector of unique identifiers corresponding to the time
-vector. These can be used to subset the time vector.}
+vector. These can be used to subset the time vector.
+@param subgroup Binary indicator vector of membership in the subgroup of interest for subgroup-specific cross-validation (eg data$S).
+@param strat_outcome Optional binary outcome vector (eg data$Y) for subgroup-specific cross-validation if equal proportion of outcome in training and validation folds desired.}
 
 \item{time}{An optional vector of integers of time points observed for each
 subject in the sample.}

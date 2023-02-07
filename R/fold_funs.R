@@ -29,6 +29,8 @@
 #'  subject in the sample.
 #' @param id An optional vector of unique identifiers corresponding to the time
 #'  vector. These can be used to subset the time vector.
+#'  @param subgroup Binary indicator vector of membership in the subgroup of interest for subgroup-specific cross-validation (eg data$S).
+#'  @param strat_outcome Optional binary outcome vector (eg data$Y) for subgroup-specific cross-validation if equal proportion of outcome in training and validation folds desired.
 #'
 #' @importFrom assertthat assert_that
 #'
@@ -372,6 +374,50 @@ folds_vfold_rolling_window_pooled <- function(n, t, id = NULL, time = NULL,
   return(folds)
 }
 
+#########################################################
+#Add option to make subgroup-specific cross-validation folds
+
+#' @rdname fold_funs
+#' @export
+folds_subgroup <- function(n, V = 10L, subgroup, strat_outcome = NULL) {
+  
+  if(is.null(strat_outcome)==TRUE){
+    
+    subgroup_index <- which(subgroup == 1)
+    
+    folds <- rep(seq_len(V), length = length(subgroup_index))
+    
+    # shuffle folds
+    folds <- sample(folds)
+    foldsdf <- data.frame(subgroup_index, folds)
+    
+    # generate fold vectors
+    folds <- lapply(seq_len(V), fold_from_foldvec_subgroup, foldsdf, n)
+    return(folds)
+    
+  }
+  else {
+    subgroup_index1 <- which(subgroup == 1 & strat_outcome == 1)
+    subgroup_index2 <- which(subgroup == 1 & strat_outcome == 0)
+    
+    #Two sets of folds, one for outcome == 1 and one for outcome == 0
+    folds1 <- rep(seq_len(V), length = length(subgroup_index1))
+    folds2 <- rep(seq_len(V), length = length(subgroup_index2))
+    
+    # shuffle folds
+    folds1 <- sample(folds1)
+    foldsdf1 <- data.frame(subgroup_index1, folds1)
+    
+    folds2 <- sample(folds2)
+    foldsdf2 <- data.frame(subgroup_index2, folds2)
+    
+    # generate fold vectors
+    folds <- lapply(seq_len(V), fold_from_foldvec_subgroup_stratoutcome, foldsdf1, foldsdf2,  n)
+    return(folds)
+  }
+}
+
+
 ###############################################################################
 
 #' Check ID and Time Compatibility
@@ -414,3 +460,4 @@ check_id_and_time <- function(id, time) {
     )
   }
 }
+
