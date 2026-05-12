@@ -7,14 +7,11 @@ on:
     branches:
       - master
       - devel
-
 name: R-CMD-check
-
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
-
     strategy:
       fail-fast: false
       matrix:
@@ -22,45 +19,37 @@ jobs:
           - {os: ubuntu-latest, r: 'release'}
           - {os: macOS-latest, r: 'release'}
           - {os: windows-latest, r: 'release'}
-
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
-
+        uses: actions/checkout@v4
       - name: Setup R
-        uses: r-lib/actions/setup-r@master
+        uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
-
-      - name: Install pandoc
-        uses: r-lib/actions/setup-pandoc@v1
-
-      - name: Install tinyTeX
-        uses: r-lib/actions/setup-tinytex@v1
-
       - name: Install system dependencies
         if: runner.os == 'Linux'
         run: |
           sudo apt install -y curl libcurl4-doc libcurl4-openssl-dev
-
-      - name: Install package dependencies
-        run: |
-          install.packages(c("remotes", "rcmdcheck", "covr", "sessioninfo"))
-          remotes::install_deps(dependencies = TRUE)
-        shell: Rscript {0}
-
+      - name: Install pandoc
+        uses: r-lib/actions/setup-pandoc@v2
+      - name: Install TinyTeX
+        uses: r-lib/actions/setup-tinytex@v2
+      - name: Setup R-check dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
       - name: Check package
-        run: |
-          options(crayon.enabled = TRUE)
-          rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
-        shell: Rscript {0}
-
+        uses: r-lib/actions/check-r-package@v2
+        with:
+          args: 'c("--no-manual", "--as-cran")'
+          error-on: '"error"'
+          check-dir: '"check"'
       - name: Upload code coverage
         if: runner.os == 'Linux'
         run: |
-          covr::codecov()
+          install.packages(c("covr", "sessioninfo"))
         shell: Rscript {0}
