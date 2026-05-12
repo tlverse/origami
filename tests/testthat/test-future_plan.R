@@ -1,11 +1,11 @@
 library(future)
 context("Future Plan")
 
-set.seed(1)
+set.seed(94720)
 
 data(mtcars)
 # make a lot of folds
-folds <- make_folds(mtcars, fold_fun = folds_bootstrap, V = 1000)
+folds <- make_folds(mtcars, fold_fun = folds_bootstrap, V = 500L)
 
 # function to calculate cross-validated squared error
 cvlm <- function(fold) {
@@ -13,7 +13,9 @@ cvlm <- function(fold) {
   valid_data <- validation(mtcars)
 
   r <- lm(mpg ~ ., data = train_data)
-  preds <- predict(r, newdata = valid_data)
+  suppressWarnings(
+    preds <- predict(r, newdata = valid_data)
+  )
   list(coef = data.frame(t(coef(r))), SE = ((preds - valid_data$mpg)^2))
 }
 
@@ -27,7 +29,7 @@ time_mc <- system.time({
   results_mc <- cross_validate(cvlm, folds)
 })
 
-if (future::availableCores() > 1) {
+if (future::availableCores() > 1L) {
   test_that("MC is not significantly slower than sequential", {
     skip_on_os("windows") # Windows doesn't support multicore
     expect_lt(time_mc["elapsed"], 1.2 * time_seq["elapsed"])

@@ -64,3 +64,9 @@ folds2foldvec <- function(folds) {
   fold_id <- nums[order(fold_index)]
   return(fold_id)
 }
+
+################################################################################
+
+is.fold <- function(x) {
+  class(x) == "fold"
+}

@@ -35,10 +35,7 @@ get_from_fold <- function(component) {
       }
       fold <- get("fold", envir = parent.frame())
     }
-
-    if (class(fold) != "fold") {
-      stop("invalid fold")
-    }
+    stopifnot(is.fold(fold))
 
     index <- fold[[component]]
 

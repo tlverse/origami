@@ -1,12 +1,15 @@
 ## Test environments
-* ubuntu 20.04 (local + GitHub Actions), R 4.2.1
-* macOS 11.6.8 (via GitHub Actions), R 4.2.1
-* windows 10.0 2022 (via GitHub Actions), R 4.2.1
+
+- linux: R 4.X.X (GitHub actions)
+- macOS: R 4.5.2 (local, GitHub actions), R 4.6.0 (macOS builder)
+- windows: R 4.X.X (GitHub actions), R under development (win-builder)
 
 ## R CMD check results
+
 There were no ERRORs, WARNINGs, or NOTEs.
 
 ## Downstream dependencies
-* There are four downstream dependencies on CRAN: `hal9001`, `haldensify`,
-  `cvCovEst`, `lmtp`.
-* There is one downstream dependency on Bioconductor: `scPCA`.
+
+- There are eight (8) downstream dependencies on CRAN: `hal9001`, `haldensify`,
+  `cvCovEst`, `crumble`, `nadir`, `transportr`, `PND.heter.cluster`
+- There is one downstream dependency on Bioconductor: `scPCA`
